@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace Event_Finder
+namespace Event_Finder.Views
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -28,6 +28,7 @@ namespace Event_Finder
         // member variables to add
         LocationIcon10m _locationIcon10m;
         LocationIcon100m _locationIcon100m;
+        Location location;
 
         public MainPage()
         {
@@ -49,7 +50,10 @@ namespace Event_Finder
             
                 // Get the location.
                 Geoposition pos = await geolocator.GetGeopositionAsync();
-                Location location = new Location(pos.Coordinate.Point.Position.Latitude, pos.Coordinate.Point.Position.Longitude);
+                
+                location = new Location(pos.Coordinate.Point.Position.Latitude, pos.Coordinate.Point.Position.Longitude);
+
+                GetEventsFromFacebook(11, pos.Coordinate.Point.Position.Latitude, pos.Coordinate.Point.Position.Longitude, new DateTime());
                 //TestingBlock.Text = GetStatusString(pos.Coordinate.)
                 // Now set the zoom level of the map based on the accuracy of our location data.
                 // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
@@ -83,8 +87,30 @@ namespace Event_Finder
                 TestingBlock.Text = "No data";
             }
             
-            
+            //
         }
+
+        async private void GetEventsFromFacebook(double offset,double latitude, double longitude, DateTime dt) 
+        {
+            var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
+
+            string query = String.Format(@"SELECT name, venue, description, pic_big FROM event WHERE contains ('irbid') OR contains('amman') AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > now()",
+                                       (offset - latitude).ToString(),
+                                       (offset + latitude).ToString(),
+                                       (offset - longitude).ToString(),
+                                       (offset + longitude).ToString());
+
+            var result = await fb.GetTaskAsync("fql",
+                new
+                {
+                    q = query
+                });
+
+            
+            // SELECT name FROM event WHERE contains('amman') AND venue.longitude > 30 AND venue.latitude > 30 AND venue.longitude < 40 AND venue.latitude < 40 AND start_time > now()
+            System.Diagnostics.Debug.WriteLine("Result: " + result.ToString());
+        }
+
 
         /// <summary>
         /// This function will give the status of your position.
