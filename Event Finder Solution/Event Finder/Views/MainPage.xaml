@@ -17,8 +17,7 @@
         <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" Grid.Row="1" Loaded="OnLoad">
 
         </bm:Map>
-        <Button Content="Button" Height="79" Width="82" Margin="7,54,0,605" Grid.Row="1" Click="Button_Click"/>
-        <DatePicker HorizontalAlignment="Left" Margin="1024,667,0,0" Grid.Row="1" VerticalAlignment="Top" >
+        <DatePicker x:Name="dateTimePicker" HorizontalAlignment="Left" Margin="1024,667,0,0" Grid.Row="1" VerticalAlignment="Top" DateChanged="DatePicker_DateChanged" >
 
         </DatePicker>
 

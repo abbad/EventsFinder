@@ -124,6 +124,7 @@
     <Compile Include="Models\Data.cs" />
     <Compile Include="ViewModel\FacebookController.cs" />
     <Compile Include="ViewModel\Constants.cs" />
+    <Compile Include="ViewModel\LocationController.cs" />
     <Compile Include="Views\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>

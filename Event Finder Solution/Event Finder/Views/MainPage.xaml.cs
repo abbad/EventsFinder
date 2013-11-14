@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Event_Finder.ViewModel;
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Event_Finder.Views
@@ -26,42 +27,50 @@ namespace Event_Finder.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private Geolocator geolocator = null;
-        // member variables to add
+
+        // icons for the locaition
         LocationIcon10m _locationIcon10m;
         LocationIcon100m _locationIcon100m;
-        Location myLocation;
+        // controller for facebook functions
         FacebookController fController;
+        // controller for geolocation. 
+        LocationController lController;
+        // myPosition
+        Geoposition myPosition;
+        // results for the query. 
+        Event_Finder.Models.Data result;
 
         public MainPage()
         {
             this.InitializeComponent();
-            geolocator = new Geolocator();
+            lController = new LocationController();
             fController = new FacebookController();
             _locationIcon10m = new LocationIcon10m();
             _locationIcon100m = new LocationIcon100m();
         }
 
-        async private void OnLoad(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Function to clean map from children.
+        /// </summary>
+        private void CleanMap()
         {
-            /*
             if (MainMap.Children.Count > 0)
             {
                 MainMap.Children.RemoveAt(0);
-            }*/
+            }
+        }
 
-            try{
-            
-                // Get the location.
-                Geoposition pos = await geolocator.GetGeopositionAsync();
-                
-                myLocation = new Location(pos.Coordinate.Point.Position.Latitude, pos.Coordinate.Point.Position.Longitude);
-                
+        private void PositionUserOnMap() 
+        {
+            Location myLocation = new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude);
+
+            try
+            {
                 // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
                 double zoomLevel = 11.0f;
 
                 // if we have GPS level accuracy
-                if (pos.Coordinate.Accuracy <= 10)
+                if (myPosition.Coordinate.Accuracy <= 10)
                 {
                     // Add the 10m icon and zoom closer.
                     MainMap.Children.Add(_locationIcon10m);
@@ -69,36 +78,37 @@ namespace Event_Finder.Views
                     zoomLevel = 13.0f;
                 }
                 // Else if we have Wi-Fi level accuracy.
-                if (pos.Coordinate.Accuracy <= 100)
+                if (myPosition.Coordinate.Accuracy <= 100)
                 {
                     // Add the 100m icon and zoom a little closer.
                     MainMap.Children.Add(_locationIcon100m);
                     MapLayer.SetPosition(_locationIcon100m, myLocation);
                     zoomLevel = 13.0f;
                 }
-                
+
                 // Set the map to the given location and zoom level.
                 MainMap.SetView(myLocation, zoomLevel);
 
-                // get list of events from facebook. 
-                string jsonListOfEvents = await fController.GetEventsFromFacebook(11, pos.Coordinate.Point.Position.Latitude, pos.Coordinate.Point.Position.Longitude, new DateTime());
 
-                Event_Finder.Models.Data result = JsonConvert.DeserializeObject<Event_Finder.Models.Data>(jsonListOfEvents);
-
-                PositionEventsInTheMap(result);
-
-               
-               
             }
             catch (System.UnauthorizedAccessException)
             {
                 TestingBlock.Text = "No data";
             }
-            
-            
         }
 
-        private void PositionEventsInTheMap(Data result)
+        async private void OnLoad(object sender, RoutedEventArgs e)
+        {
+            myPosition = await lController.GetCurrentLocation();
+            PositionUserOnMap();
+            
+            // get list of events from facebook. 
+            result = await fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, new DateTime());
+
+            PositionEventsInTheMap();
+        }
+
+        private void PositionEventsInTheMap()
         {
              foreach(var itemEvent in result.data)
                 {
@@ -165,18 +175,10 @@ namespace Event_Finder.Views
 
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-            Button btn1 = new Button();
-            btn1.Content = "Musical Events";
-            btn1.Width = 82;
-            btn1.Height = 79;
-            btn1.Margin = new Thickness(
-                30, 54, 0, 506);
-            MainGrid.Children.Add(btn1);
-            
-            //<Button Content="Button" Height="79" Width="82" Margin="7,54,0,605" Grid.Row="1" Click="Button_Click"/>
-            }
-        
+            //await fController.GetEventsFromFacebook(11, pos.Coordinate.Latitude, pos.Coordinate.Longitude, dateTimePicker.Date.UtcDateTime);
         }
+        
+    }
 }
