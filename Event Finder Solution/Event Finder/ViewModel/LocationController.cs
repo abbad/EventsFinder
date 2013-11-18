@@ -12,7 +12,6 @@ namespace Event_Finder.ViewModel
         private Geolocator geolocator = null;
         public LocationController() 
         {
-
             geolocator = new Geolocator();
         }
         
