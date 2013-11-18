@@ -20,7 +20,6 @@ namespace Event_Finder.Models
     public class Data
     {
         public Event[] data { get; set; }
-        
     }
 
 }
