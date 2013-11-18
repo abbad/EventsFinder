@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Event_Finder.ViewModel;
-
+using Event_Finder.Icons;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Event_Finder.Views
@@ -103,7 +103,7 @@ namespace Event_Finder.Views
             PositionUserOnMap();
             
             // get list of events from facebook. 
-            result = await fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, new DateTime());
+            result = await fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
 
             PositionEventsInTheMap();
         }
@@ -116,7 +116,7 @@ namespace Event_Finder.Views
                     {
                         LocationIcon100m locationIcon = new LocationIcon100m();
                         MainMap.Children.Add(locationIcon);
-                        MapLayer.SetPosition(locationIcon, new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])));
+                        //MapLayer.SetPosition(locationIcon, new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])));
                         
                     }
                     catch (Exception asda) 
