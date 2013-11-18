@@ -58,6 +58,4 @@ namespace Event_Finder.Views
             }
         }
     }
-
-
 }
