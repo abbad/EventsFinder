@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Event_Finder.Models;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Event_Finder.ViewModel
 {
-    class FacebookController
+    public class FacebookController
     {
 
         async public Task<Data> GetEventsFromFacebook(double offset, double latitude, double longitude, double dt) 
@@ -18,9 +20,17 @@ namespace Event_Finder.ViewModel
 
         }
 
-        private Data ParseEvents(String jsonListOfEvents)
+        public Data ParseEvents(String jsonListOfEvents)
         {
-            return JsonConvert.DeserializeObject<Data>(jsonListOfEvents);
+            List<string> errors = new List<string>();
+            return JsonConvert.DeserializeObject<Data>(jsonListOfEvents,
+                new JsonSerializerSettings {
+                    Error = delegate(object sender, ErrorEventArgs args)
+                    {
+                          errors.Add(args.ErrorContext.Error.Message);
+                           args.ErrorContext.Handled = true;
+                    }
+                });
         }
 
         private String makeQuery(double offset, double latitude, double longitude, double dt) 

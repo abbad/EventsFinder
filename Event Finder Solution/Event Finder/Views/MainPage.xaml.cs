@@ -116,7 +116,7 @@ namespace Event_Finder.Views
                     {
                         LocationIcon100m locationIcon = new LocationIcon100m();
                         MainMap.Children.Add(locationIcon);
-                        //MapLayer.SetPosition(locationIcon, new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])));
+                        MapLayer.SetPosition(locationIcon, new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])));
                         
                     }
                     catch (Exception asda) 
