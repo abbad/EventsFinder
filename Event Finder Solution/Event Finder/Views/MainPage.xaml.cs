@@ -112,16 +112,17 @@ namespace Event_Finder.Views
         {
              foreach(var itemEvent in result.data)
                 {
+                    LocationIcon100m locationIcon = new LocationIcon100m();
                     try
                     {
-                        LocationIcon100m locationIcon = new LocationIcon100m();
+                       
                         MainMap.Children.Add(locationIcon);
                         MapLayer.SetPosition(locationIcon, new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])));
                         
                     }
                     catch (Exception asda) 
                     {
-                    
+                        MainMap.Children.Remove(locationIcon);
                     }
                    
                 }
@@ -175,9 +176,9 @@ namespace Event_Finder.Views
 
         }
 
-        private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-            //await fController.GetEventsFromFacebook(11, pos.Coordinate.Latitude, pos.Coordinate.Longitude, dateTimePicker.Date.UtcDateTime);
+            result = await fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
         }
         
     }
