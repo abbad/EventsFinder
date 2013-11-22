@@ -13,11 +13,19 @@ namespace Event_Finder.ViewModel
     public class FacebookController
     {
 
-        async public Task<Data> GetEventsFromFacebook(double offset, double latitude, double longitude, double dt) 
-        {
-            String result = await CallFacebookApiForEvents(offset, latitude, longitude, dt);
-            return ParseEvents(result);
+        public List<Data> results;
 
+        public FacebookController() 
+        {
+            results = new List<Data>();
+        }
+
+        async public void GetEventsFromFacebook(double offset, double latitude, double longitude, double dt) 
+        {
+            String result = await CallFacebookFQL(makeQueryWithContains(offset, latitude, longitude, dt));
+            results.Add(ParseEvents(result));
+            result = await CallFacebookFQL(MakeQueryForMeAndFriendsEvents(offset, latitude, longitude, dt));
+            results.Add(ParseEvents(result));
         }
 
         public Data ParseEvents(String jsonListOfEvents)
@@ -33,7 +41,7 @@ namespace Event_Finder.ViewModel
                 });
         }
 
-        private String makeQuery(double offset, double latitude, double longitude, double dt) 
+        private String makeQueryWithContains(double offset, double latitude, double longitude, double dt) 
         {
             return String.Format(@"SELECT eid, name, description, venue FROM event WHERE contains('amman') OR contains('irbid') AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" LIMIT 40",
                                        (offset - latitude).ToString(),
@@ -43,16 +51,25 @@ namespace Event_Finder.ViewModel
                                        dt.ToString());        
         }
 
-        async private Task<string> CallFacebookApiForEvents(double offset, double latitude, double longitude, double dt)
+        private String MakeQueryForMeAndFriendsEvents(double offset, double latitude, double longitude, double dt)
+        {
+            return String.Format(@"SELECT eid, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND start_time > now() OR uid = me()) AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" ", (offset - latitude).ToString(),
+                                       (offset + latitude).ToString(),
+                                       (offset - longitude).ToString(),
+                                       (offset + longitude).ToString(),
+                                       dt.ToString());   
+        }
+
+        async private Task<string> CallFacebookFQL(String Query)
         {
             var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
 
-            string query = makeQuery(offset, latitude, longitude, dt); 
+           
 
             var result = await fb.GetTaskAsync("fql",
                 new
                 {
-                    q = query
+                    q = Query
                 });
 
             return result.ToString(); 

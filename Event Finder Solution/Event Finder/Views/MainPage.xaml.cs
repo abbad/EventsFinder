@@ -37,8 +37,6 @@ namespace Event_Finder.Views
         LocationController lController;
         // myPosition
         Geoposition myPosition;
-        // results for the query. 
-        Event_Finder.Models.Data result;
 
         public MainPage()
         {
@@ -103,13 +101,17 @@ namespace Event_Finder.Views
             PositionUserOnMap();
             
             // get list of events from facebook. 
-            result = await fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
+            fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
 
+            // this will try to poisition empty values into the map.
             PositionEventsInTheMap();
         }
 
         private void PositionEventsInTheMap()
         {
+            // loop through the list of results. 
+
+            foreach (var result in fController.results) { 
              foreach(var itemEvent in result.data)
                 {
                     LocationIcon100m locationIcon = new LocationIcon100m();
@@ -126,7 +128,7 @@ namespace Event_Finder.Views
                     }
                    
                 }
-        
+            }
         }
        
         /// <summary>
@@ -178,7 +180,8 @@ namespace Event_Finder.Views
 
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-            result = await fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
+            fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
+            PositionEventsInTheMap();
         }
         
     }
