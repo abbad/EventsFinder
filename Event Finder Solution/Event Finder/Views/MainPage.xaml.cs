@@ -18,6 +18,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Event_Finder.ViewModel;
 using Event_Finder.Icons;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Event_Finder.Views
@@ -27,16 +30,17 @@ namespace Event_Finder.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
         // icons for the locaition
         LocationIcon10m _locationIcon10m;
         LocationIcon100m _locationIcon100m;
         // controller for facebook functions
-        FacebookController fController;
+        public FacebookController fController;
         // controller for geolocation. 
         LocationController lController;
         // myPosition
-        Geoposition myPosition;
+        public Geoposition myPosition;
+        //collection of pins
+        ObservableCollection<tryPush> pushpincoll;
 
         public MainPage()
         {
@@ -91,7 +95,7 @@ namespace Event_Finder.Views
             }
             catch (System.UnauthorizedAccessException)
             {
-                TestingBlock.Text = "No data";
+               
             }
         }
 
@@ -104,32 +108,14 @@ namespace Event_Finder.Views
             fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
 
             // this will try to poisition empty values into the map.
-            PositionEventsInTheMap();
+            //PositionEventsInTheMap();
+
+            //context data
+            //MainMap.DataContext = pushpincoll;
+
+            
         }
 
-        private void PositionEventsInTheMap()
-        {
-            // loop through the list of results. 
-
-            foreach (var result in fController.results) { 
-             foreach(var itemEvent in result.data)
-                {
-                    LocationIcon100m locationIcon = new LocationIcon100m();
-                    try
-                    {
-                       
-                        MainMap.Children.Add(locationIcon);
-                        MapLayer.SetPosition(locationIcon, new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])));
-                        
-                    }
-                    catch (Exception asda) 
-                    {
-                        MainMap.Children.Remove(locationIcon);
-                    }
-                   
-                }
-            }
-        }
        
         /// <summary>
         /// This function will give the status of your position.
@@ -178,11 +164,26 @@ namespace Event_Finder.Views
 
         }
 
-        async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
+            ListOfItems.Visibility = Windows.UI.Xaml.Visibility.Visible;
             fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
-            PositionEventsInTheMap();
+            //PositionEventsInTheMap();
         }
+
+        // Omar my region
+
+  
+
+        
+
+/*       private void pushPin_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            if (!Image.IsOpen) { Image.IsOpen = true; }
+            var pushpinData = (sender as Pushpin).DataContext as tryPush;
+            String file = pushpinData.ToString();
+            // use image in popup here
+        }*/
         
     }
 }

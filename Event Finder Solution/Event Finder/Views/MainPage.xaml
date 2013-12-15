@@ -1,26 +1,119 @@
 ﻿<Page
+    x:Name="MapPage"
     x:Class="Event_Finder.Views.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Event_Finder.Views"
+    xmlns:viewModel="using:Event_Finder.ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:bm="using:Bing.Maps"
     mc:Ignorable="d">
 
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="Resources.xaml" />
+        </ResourceDictionary.MergedDictionaries>
+        <DataTemplate x:Key="LogoTemplate">
+            <bm:Pushpin bm:MapLayer.Position="{Binding Location}" >
+                <ToolTipService.ToolTip >
+                    <TextBlock Text="{Binding name}"></TextBlock>
+                </ToolTipService.ToolTip>
+            </bm:Pushpin>
+        </DataTemplate>
+            <viewModel:FacebookController x:Key="LocationList" IsDataSource="True"/>
+        </ResourceDictionary>
+    </Page.Resources>
+            
+            
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="5*" />
-            <RowDefinition Height="123*" />
+            <RowDefinition Height="72"/>
+            <RowDefinition Height="72"/>
+            <RowDefinition Height="377" />
+            <RowDefinition Height="72"/>
+            <RowDefinition Height="184*"/>
         </Grid.RowDefinitions>
-        <TextBlock FontSize="20" Width="300" FontWeight="Bold" x:Name="TestingBlock" Grid.Row="0" Height="20" Grid.Column="0" >Testing</TextBlock>
-        <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" Grid.Row="1" Loaded="OnLoad">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="199"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="196"/>
+        </Grid.ColumnDefinitions>
 
+
+        <!-- row 0 logo, name, search, toggle buttons -->
+        <TextBlock Text="EVENT FINDER" Grid.Row="0" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Grid.ColumnSpan="2" Margin="0,6" Width="324"  />
+        <SearchBox Grid.Row="0" Grid.Column="1" Width="455" Height="52" Margin="179,10,337,10" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource SearchBoxStyle1}"/>
+        <ToggleButton x:Name="MapEvents" Height="60" Width="70" Content="MAP" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="69,6,0,6" FontSize="24" FontFamily="Segoe WP SemiLight" Style="{StaticResource ToggleButtonStyle1}" RenderTransformOrigin="1.541,0.472"/>
+        <ToggleButton x:Name="GridEvents" Height="60" Width="70" Content="GRID"  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="0,6" FontSize="24" FontFamily="Segoe WP SemiLight" Style="{StaticResource ToggleButtonStyle2}" />
+
+        <!-- row 1 Categories, Event labels  -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Categories" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="40" FontFamily="Leelawadee UI" Height="53" Width="188" />
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="Events" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="40" FontFamily="Leelawadee UI" Margin="11,10,-3,9" Height="53" Width="188"/>
+
+        <!-- row 2 Categories, Events stacks -->
+
+        <StackPanel Grid.Column="0" Grid.Row="2" Background="#FF245B98">
+            <StackPanel Orientation="Vertical" Margin="0,0" >
+                <ToggleButton x:Name="MusicCat"  Content="Concerts" Height="80" Width="100"  />
+                <ToggleButton x:Name="EducationCat"   Content="Education" Height="80" Width="100" />
+                <ToggleButton x:Name="WatEver" Content="WhatEver" Height="80" Width="100" />
+                <ToggleButton  x:Name="PartyCat"  Content="Party" Height="80" Width="100" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="2">
+
+            <ListView Height="189" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="10">
+                            <TextBlock Text="{Binding Event}" />
+                            <TextBlock>
+                            <Bold>Description: </Bold>
+                            <Run Text="{Binding Description}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+         
+        </StackPanel>
+
+        <!-- row 3 Date, Legend labels -->
+        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Date" FontSize="40" />
+        <TextBlock Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Legends" FontSize="40" FontFamily="Leelawadee UI"/>
+
+        <!-- row 4 Date, Legends Stack -->
+            <Border Grid.Row="4" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <DatePicker x:Name="dateTimePicker" Style="{StaticResource DatePickerStyle1}" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged"/>
+            </Border>
+        
+        <StackPanel Grid.Row="4" Grid.Column="2" Width="200" Height="50" Orientation="Horizontal" Margin="5,72,-9,62">
+            <Image HorizontalAlignment="Left"  Width="20" Height="20" Source="ms-appx:///Assets/SmallLogo.png" />
+            <TextBlock Text="RSPV" Margin="0,20,0,15"  />
+            <Image HorizontalAlignment="Right" Margin="60,0,0,0"  Width="20" Height="20" Source="ms-appx:///Assets/SmallLogo.png" />
+            <TextBlock Text="RSPV" Margin="0,20,0,15"  />
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="2" Width="200" Height="50" Orientation="Horizontal" Margin="5,17,-9,117">
+            <Image HorizontalAlignment="Left"  Width="20" Height="20" Source="ms-appx:///Assets/SmallLogo.png" />
+            <TextBlock Text="RSPV" Margin="0,20,0,15"  />
+            <Image HorizontalAlignment="Right" Margin="60,0,0,0" Width="20" Height="20" Source="ms-appx:///Assets/SmallLogo.png" />
+            <TextBlock Text="RSPV" Margin="0,20,0,15"  />
+        </StackPanel>
+
+        <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" Grid.Row="1" Loaded="OnLoad" Grid.Column="1" Grid.RowSpan="4">
+            <bm:MapItemsControl x:Name="ListOfItems" ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{StaticResource LocationList}">
+            </bm:MapItemsControl>
+            <!--<bm:MapItemsControl ItemTemplate="{StaticResource PinTemplate}" ItemsSource="{Binding pushpincoll}" Height="100" Width="100"/>-->
+            <!--<bm:Pushpin Name="myPin" Height="100" Width="100"/>-->
+            <!-- Tapped="pushPin_Tapped" n76o fog 3nd mapItems Control-->
+            <!-- <Popup VerticalOffset="200"  HorizontalOffset="300" x:Name="Image" IsLightDismissEnabled="True" Height="2000" Width="2000" >
+                <Image Name="myImage" Height="300" Width="300" Source="Assets/Logo.scale-100.png"/>
+            </Popup>-->
         </bm:Map>
-        <DatePicker x:Name="dateTimePicker" HorizontalAlignment="Left" Margin="1024,667,0,0" Grid.Row="1" VerticalAlignment="Top" DateChanged="DatePicker_DateChanged" >
-
-        </DatePicker>
-
     </Grid>
 
 </Page>

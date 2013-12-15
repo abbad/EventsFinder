@@ -46,6 +46,7 @@ namespace Event_Finder.Views
                 message = "Login failed! Exception details: " + e.Message;
                 MessageDialog dialog = new MessageDialog(message);
                 dialog.ShowAsync();
+                btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Visible;
             }
         }
 
@@ -53,8 +54,19 @@ namespace Event_Finder.Views
         {
             if (!App.isAuthenticated)
             {
-                App.isAuthenticated = true;
-                await Authenticate();
+                try
+                {
+
+                    btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    await Authenticate();
+                    App.isAuthenticated = true;
+                }
+                catch (Exception exp) 
+                {
+                    
+                   btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                
+                }
             }
         }
     }
