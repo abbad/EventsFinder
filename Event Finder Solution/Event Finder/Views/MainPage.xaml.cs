@@ -34,21 +34,33 @@ namespace Event_Finder.Views
         LocationIcon10m _locationIcon10m;
         LocationIcon100m _locationIcon100m;
         // controller for facebook functions
-        public FacebookController fController;
+        public FacebookViewModel fController;
         // controller for geolocation. 
         LocationController lController;
         // myPosition
         public Geoposition myPosition;
         //collection of pins
-        ObservableCollection<tryPush> pushpincoll;
+        private ObservableCollection<Event> PushpinCollection { get; set; }
+
+        public ObservableCollection<Event> pushpinCollection
+        {
+            get
+            {
+                return PushpinCollection;
+            }
+        }
 
         public MainPage()
         {
             this.InitializeComponent();
             lController = new LocationController();
-            fController = new FacebookController();
+            fController = new FacebookViewModel();
             _locationIcon10m = new LocationIcon10m();
             _locationIcon100m = new LocationIcon100m();
+
+            PushpinCollection = new ObservableCollection<Event>();
+
+            DataContext = this;
         }
 
         /// <summary>
@@ -56,6 +68,7 @@ namespace Event_Finder.Views
         /// </summary>
         private void CleanMap()
         {
+           
             if (MainMap.Children.Count > 0)
             {
                 MainMap.Children.RemoveAt(0);
@@ -105,18 +118,42 @@ namespace Event_Finder.Views
             PositionUserOnMap();
             
             // get list of events from facebook. 
-            fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
+            List<Data> results = await fController.GetEventsFromFacebook(3, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
 
-            // this will try to poisition empty values into the map.
-            //PositionEventsInTheMap();
-
-            //context data
-            //MainMap.DataContext = pushpincoll;
-
+            PositionEventsInTheMap(results);
+            //PushpinCollection = new ObservableCollection<Event>();
             
+            //context data
+            MainMap.DataContext = this;
+
         }
 
-       
+
+        private void PositionEventsInTheMap(List<Data> results)
+        {
+            // loop through the list of results. 
+            if (PushpinCollection.Count != 0) 
+            {
+                PushpinCollection.Clear();
+            }
+            foreach (var result in results)
+            {
+                foreach (var itemEvent in result.data)
+                {                    
+                    try
+                    {
+                        PushpinCollection.Add(new Event { name = itemEvent.name, Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])) });
+                    }
+                    catch (Exception asda)
+                    {
+                       
+                    }
+                    
+                }
+            }
+
+        }
+
         /// <summary>
         /// This function will give the status of your position.
         /// </summary>
@@ -164,11 +201,21 @@ namespace Event_Finder.Views
 
         }
 
-        private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
+        async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-            ListOfItems.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            fController.GetEventsFromFacebook(11, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
-            //PositionEventsInTheMap();
+            //ListOfItems.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            List<Data> results =  await fController.GetEventsFromFacebook(3, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
+            PositionEventsInTheMap(results);
+        }
+
+        async private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            
+            if (e.Key == Windows.System.VirtualKey.Enter) 
+            {
+                List<Data> results = await fController.SearchEventsFromFacebook(searchBox.QueryText, 3, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
+                PositionEventsInTheMap(results);
+            }
         }
 
         // Omar my region

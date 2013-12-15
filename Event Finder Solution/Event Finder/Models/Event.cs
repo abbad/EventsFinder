@@ -12,7 +12,7 @@ namespace Event_Finder.Models
     public class Event
     {
         public Event(){
-            this.Location = new Location();
+           
         }
 
         public String name { get; set; }
@@ -21,11 +21,8 @@ namespace Event_Finder.Models
         public String description { get; set; }
         public Dictionary<string, string> venue {get; set;}
 
-        public Location Location
-        {
-            get;
-            set;
-        }
+        public Location Location { get; set; }
+       
         
     }
 

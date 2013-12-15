@@ -5,6 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Event_Finder.Views"
     xmlns:viewModel="using:Event_Finder.ViewModel"
+    xmlns:model="using:Event_Finder.Models"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:bm="using:Bing.Maps"
@@ -15,14 +16,14 @@
             <ResourceDictionary.MergedDictionaries>
             <ResourceDictionary Source="Resources.xaml" />
         </ResourceDictionary.MergedDictionaries>
-        <DataTemplate x:Key="LogoTemplate">
-            <bm:Pushpin bm:MapLayer.Position="{Binding Location}" >
+            <model:Event x:Key="Event" />
+            <DataTemplate x:Key="LogoTemplate">
+                <bm:Pushpin bm:MapLayer.Position="{Binding Location}" Background="#FFB6DE2E" />
                 <ToolTipService.ToolTip >
                     <TextBlock Text="{Binding name}"></TextBlock>
                 </ToolTipService.ToolTip>
-            </bm:Pushpin>
-        </DataTemplate>
-            <viewModel:FacebookController x:Key="LocationList" IsDataSource="True"/>
+            </DataTemplate>
+          
         </ResourceDictionary>
     </Page.Resources>
             
@@ -44,7 +45,7 @@
 
         <!-- row 0 logo, name, search, toggle buttons -->
         <TextBlock Text="EVENT FINDER" Grid.Row="0" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Grid.ColumnSpan="2" Margin="0,6" Width="324"  />
-        <SearchBox Grid.Row="0" Grid.Column="1" Width="455" Height="52" Margin="179,10,337,10" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource SearchBoxStyle1}"/>
+        <SearchBox x:Name="searchBox" Grid.Row="0" Grid.Column="1" Width="455" Height="52" Margin="179,10,337,10" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource SearchBoxStyle1}"  KeyUp="SearchBox_KeyDown" FocusOnKeyboardInput="True" />
         <ToggleButton x:Name="MapEvents" Height="60" Width="70" Content="MAP" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="69,6,0,6" FontSize="24" FontFamily="Segoe WP SemiLight" Style="{StaticResource ToggleButtonStyle1}" RenderTransformOrigin="1.541,0.472"/>
         <ToggleButton x:Name="GridEvents" Height="60" Width="70" Content="GRID"  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="0,6" FontSize="24" FontFamily="Segoe WP SemiLight" Style="{StaticResource ToggleButtonStyle2}" />
 
@@ -105,7 +106,8 @@
         </StackPanel>
 
         <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" Grid.Row="1" Loaded="OnLoad" Grid.Column="1" Grid.RowSpan="4">
-            <bm:MapItemsControl x:Name="ListOfItems" ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{StaticResource LocationList}">
+           
+            <bm:MapItemsControl x:Name="ListOfpushpins" ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}">
             </bm:MapItemsControl>
             <!--<bm:MapItemsControl ItemTemplate="{StaticResource PinTemplate}" ItemsSource="{Binding pushpincoll}" Height="100" Width="100"/>-->
             <!--<bm:Pushpin Name="myPin" Height="100" Width="100"/>-->
