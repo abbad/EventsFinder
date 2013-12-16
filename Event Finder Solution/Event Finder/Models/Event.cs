@@ -19,6 +19,10 @@ namespace Event_Finder.Models
         public String eid { get; set; }
         
         public String description { get; set; }
+
+        public String pic_square { get; set; }
+
+        public String pic_big { get; set; }
         public Dictionary<string, string> venue {get; set;}
 
         public Location Location { get; set; }

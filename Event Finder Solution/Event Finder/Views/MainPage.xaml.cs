@@ -142,7 +142,14 @@ namespace Event_Finder.Views
                 {                    
                     try
                     {
-                        PushpinCollection.Add(new Event { name = itemEvent.name, Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])) });
+                        PushpinCollection.Add(
+                            new Event { 
+                                name = itemEvent.name, 
+                                Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])),
+                                pic_square = itemEvent.pic_square,
+                                pic_big = itemEvent.pic_big,
+                                description = itemEvent.description,
+                            });
                     }
                     catch (Exception asda)
                     {
@@ -217,6 +224,8 @@ namespace Event_Finder.Views
                 PositionEventsInTheMap(results);
             }
         }
+
+      
 
         // Omar my region
 

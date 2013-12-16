@@ -16,14 +16,46 @@
             <ResourceDictionary.MergedDictionaries>
             <ResourceDictionary Source="Resources.xaml" />
         </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="toolTipStyle" TargetType="ToolTip">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate>
+                            <Border CornerRadius="5">
+                                <Border.Background>
+                                    <SolidColorBrush Color="Black" Opacity="0.5"/>
+                                </Border.Background>
+                                <ContentPresenter Margin="5">
+                                   
+                                </ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
             <model:Event x:Key="Event" />
+
+            <ControlTemplate x:Key="PushPinStyle">
+                <Grid Width="200" Height="200">
+                    <Image Source="{Binding pic_big}" Width="200" Height="200"/>
+                </Grid>
+            </ControlTemplate>
+            
             <DataTemplate x:Key="LogoTemplate">
-                <bm:Pushpin bm:MapLayer.Position="{Binding Location}" Background="#FFB6DE2E" />
-                <ToolTipService.ToolTip >
-                    <TextBlock Text="{Binding name}"></TextBlock>
-                </ToolTipService.ToolTip>
+                <bm:Pushpin bm:MapLayer.Position="{Binding Location}" Template="{StaticResource PushPinStyle}" >
+                    <ToolTipService.ToolTip >
+                        <ToolTip Style="{StaticResource toolTipStyle}">
+                            <StackPanel Margin="5" MaxWidth="200">
+                                <TextBlock Text="{Binding name}" FontWeight="Bold" FontSize="16" Foreground="White"/>
+                                <TextBlock Text="{Binding description}" Foreground="White" TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </ToolTip>
+                    </ToolTipService.ToolTip>
+                </bm:Pushpin>
             </DataTemplate>
-          
         </ResourceDictionary>
     </Page.Resources>
             
@@ -106,7 +138,7 @@
         </StackPanel>
 
         <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" Grid.Row="1" Loaded="OnLoad" Grid.Column="1" Grid.RowSpan="4">
-           
+
             <bm:MapItemsControl x:Name="ListOfpushpins" ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}">
             </bm:MapItemsControl>
             <!--<bm:MapItemsControl ItemTemplate="{StaticResource PinTemplate}" ItemsSource="{Binding pushpincoll}" Height="100" Width="100"/>-->
