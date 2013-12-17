@@ -125,6 +125,7 @@ namespace Event_Finder.Views
             
             //context data
             MainMap.DataContext = this;
+            prog.IsActive = false;
 
         }
 
@@ -136,6 +137,8 @@ namespace Event_Finder.Views
             {
                 PushpinCollection.Clear();
             }
+            
+            prog.IsActive = true;
             foreach (var result in results)
             {
                 foreach (var itemEvent in result.data)
