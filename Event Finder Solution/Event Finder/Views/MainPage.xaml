@@ -97,24 +97,25 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2" Grid.Column="2">
-
             <ListView Height="334" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="10">
                             <TextBlock Foreground="Azure" TextWrapping="Wrap">
-                            <Bold>Event: </Bold>
-                            <Run Text="{Binding name}"/>
+                                 <Bold>Event: </Bold>
+                                 <Run Text="{Binding name}"/>
                             </TextBlock>
-                            <Bold>Description: </Bold>
-                            <Run Text="{Binding Description}" />
+                            <TextBlock Foreground="Azure" TextWrapping="Wrap">
+                                <Bold>Description:</Bold>
+                                <Run Text="{Binding description}" />
                             </TextBlock>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
 
             </ListView>
-         
+
+
         </StackPanel>
 
         <!-- row 3 Date, Legend labels -->
