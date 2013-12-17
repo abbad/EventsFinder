@@ -16,24 +16,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="toolTipStyle" TargetType="ToolTip">
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <Border CornerRadius="5">
-                                <Border.Background>
-                                    <SolidColorBrush Color="Black" Opacity="0.5"/>
-                                </Border.Background>
-                                <ContentPresenter Margin="5">
-                                </ContentPresenter>
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+            
 
             <model:Event x:Key="Event" />
 
@@ -45,14 +28,6 @@
 
             <DataTemplate x:Key="LogoTemplate">
                 <bm:Pushpin  bm:MapLayer.Position="{Binding Location}" Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
-                    <ToolTipService.ToolTip >
-                        <ToolTip Style="{StaticResource toolTipStyle}">
-                            <StackPanel Margin="5" MaxWidth="200">
-                                <TextBlock Text="{Binding name}" FontWeight="Bold" FontSize="16" Foreground="White"/>
-                                <TextBlock Text="{Binding description}" Foreground="White" TextWrapping="Wrap"/>
-                            </StackPanel>
-                        </ToolTip>
-                    </ToolTipService.ToolTip>
                 </bm:Pushpin>
             </DataTemplate>
         </ResourceDictionary>
@@ -105,9 +80,7 @@
 
         </StackPanel>
 
-        <!-- row 3 Date, Legend labels -->
-
-        <!-- row 4 Date, Legends Stack -->
+        
         <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
 
         <bm:Map  Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" ShowNavigationBar="False"  x:Name="MainMap" Loaded="OnLoad" Grid.Row="2">
@@ -115,26 +88,38 @@
             <ProgressRing x:Name="prog" Height="200" Width="200"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
             <bm:MapLayer>
+                <bm:MapItemsControl x:Name="ListOfpushpins"  ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}" >
+                </bm:MapItemsControl>
+            </bm:MapLayer>
+
+            <bm:MapLayer>
                 <Grid x:Name="Infobox" Visibility="Collapsed" Margin="0,-115,-15,0">
                     <Border Width="500" Height="300" Background="Black" Opacity="0.8" BorderBrush="White" BorderThickness="2" CornerRadius="5"/>
-
-                    <StackPanel Height="300" Margin="5">
-                        <Grid Height="40">
-                            <TextBlock Text="{Binding name}" Height="Auto" FontSize="22" Width="500" TextWrapping="Wrap" HorizontalAlignment="Left" />
-                            <Button Content="X" Tapped="CloseInfobox_Tapped" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <StackPanel Height="300" Margin="5" >
+                        <Grid Height="Auto">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="259*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding name}" Height="Auto" FontSize="22" Width="500" TextWrapping="Wrap" HorizontalAlignment="Left" />
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Starting Date" Height="Auto" FontSize="18" Width="250" TextWrapping="Wrap" HorizontalAlignment="Left" />
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Ending Date" Height="Auto" FontSize="18" Width="250" TextWrapping="Wrap" HorizontalAlignment="Left" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding start_time}" Height="Auto" FontSize="18" Width="250" TextWrapping="Wrap" HorizontalAlignment="Center" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding end_time}" Height="Auto" FontSize="18" Width="250" TextWrapping="Wrap" HorizontalAlignment="Center" />
+                            <Button Grid.Row="0" Content="X" Tapped="CloseInfobox_Tapped" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                         </Grid>
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="500">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="300">
                             <TextBlock Text="{Binding description}" FontSize="20" Width="500" TextWrapping="Wrap" Height="Auto"/>
                         </ScrollViewer>
                     </StackPanel>
                 </Grid>
             </bm:MapLayer>
 
-
-            <bm:MapItemsControl x:Name="ListOfpushpins"  ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}" >
-            
-            
-            </bm:MapItemsControl>
+          
             <!--<bm:MapItemsControl ItemTemplate="{StaticResource PinTemplate}" ItemsSource="{Binding pushpincoll}" Height="100" Width="100"/>-->
             <!--<bm:Pushpin Name="myPin" Height="100" Width="100"/>-->
             <!-- Tapped="pushPin_Tapped" n76o fog 3nd mapItems Control-->

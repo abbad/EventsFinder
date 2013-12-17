@@ -130,22 +130,31 @@ namespace Event_Finder.Views
             {
                 PushpinCollection.Clear();
             }
-            
+            string venueName1 = "";
             prog.IsActive = true;
             foreach (var result in results)
             {
                 foreach (var itemEvent in result.data)
-                {                    
+                {
+                    
                     try
                     {
+                        venueName1 = itemEvent.venue["name"];
+                    }
+                    catch (Exception e) { }
+                    try
+                    {
+
                         PushpinCollection.Add(
                             new Event { 
                                 name = itemEvent.name, 
                                 Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])),
+                                venueName = venueName1,
                                 pic_square = itemEvent.pic_square,
                                 pic_big = itemEvent.pic_big,
                                 description = itemEvent.description,
                                 start_time = itemEvent.start_time,
+                                end_time = itemEvent.end_time,
                             });
                     }
                     catch (Exception asda)
