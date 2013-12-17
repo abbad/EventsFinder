@@ -220,10 +220,53 @@ namespace Event_Finder.Views
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Event selectedEvent = (Event)e.ClickedItem;
-            MainMap.SetView(selectedEvent.Location, 13.0f);
-            
+            MainMap.SetView(selectedEvent.Location, 15.0f);
+
+            if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
+            {
+                Infobox.DataContext = selectedEvent;
+
+                Infobox.Visibility = Visibility.Visible;
+
+                MapLayer.SetPosition(Infobox, MapLayer.GetPosition(selectedEvent.Location));
+            }
+            else
+            {
+                Infobox.Visibility = Visibility.Collapsed;
+            }
+
         }
 
+        private void Pushpin_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            Pushpin selectedPushpin = (Pushpin)sender;
+            Event selectedEvent = (Event)selectedPushpin.DataContext;
+            MainMap.SetView(selectedEvent.Location, 15.0f);
+            //selectedPushpin.
+                    //Ensure there is content to be displayed before modifying the infobox control
+            if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
+            {
+                Infobox.DataContext = selectedEvent;
+
+                Infobox.Visibility = Visibility.Visible;
+
+                MapLayer.SetPosition(Infobox, MapLayer.GetPosition(selectedPushpin));
+            }
+            else
+            {
+                Infobox.Visibility = Visibility.Collapsed;
+            }
+        
+        }
+
+
+
+        private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            Infobox.Visibility = Visibility.Collapsed;
+        }
+
+      
         /*
         async private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
