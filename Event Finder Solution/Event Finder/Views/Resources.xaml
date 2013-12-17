@@ -21,15 +21,15 @@
                             <ContentPresenter x:Name="HeaderContentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" Foreground="{ThemeResource DatePickerHeaderForegroundThemeBrush}" FontWeight="{ThemeResource DatePickerHeaderThemeFontWeight}" FlowDirection="{TemplateBinding FlowDirection}" Margin="{ThemeResource DatePickerHeaderThemeMargin}"/>
                             <StackPanel Margin="30,20,0,20"  Grid.Row="1">
                                 <Border x:Name="FirstPickerHost" VerticalAlignment="Center" >
-                                    <ComboBox x:Name="DayPicker" Padding="40,0,0,0" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" MinWidth="{ThemeResource DatePickerSelectorThemeMinWidth}" Background="#CC0997F5" Foreground="#FFF5ECEC"/>
+                                    <ComboBox x:Name="DayPicker" Padding="40,0,0,0" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" MinWidth="{ThemeResource DatePickerSelectorThemeMinWidth}" Background="#CC0997F5" />
                                 </Border>
                                 <Rectangle x:Name="FirstPickerSpacing" Height="{ThemeResource DatePickerSpacingThemeHeight}" Width="{ThemeResource DatePickerSpacingThemeWidth}"/>
                                 <Border x:Name="SecondPickerHost">
-                                    <ComboBox x:Name="MonthPicker" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" MinWidth="{ThemeResource DatePickerSelectorThemeMinWidth}" Background="#CC0B96F3" Padding="40,0,0,0" Foreground="#FFF8F7F7"/>
+                                    <ComboBox x:Name="MonthPicker" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" MinWidth="{ThemeResource DatePickerSelectorThemeMinWidth}" Background="#CC0B96F3" Padding="40,0,0,0" />
                                 </Border>
                                 <Rectangle x:Name="SecondPickerSpacing" Height="{ThemeResource DatePickerSpacingThemeHeight}" Width="{ThemeResource DatePickerSpacingThemeWidth}"/>
                                 <Border x:Name="ThirdPickerHost">
-                                    <ComboBox x:Name="YearPicker" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" MinWidth="{ThemeResource DatePickerSelectorThemeMinWidth}" Background="#CC0C98F5" Foreground="#FFF6EFEF" Padding="50,0,0,0"/>
+                                    <ComboBox x:Name="YearPicker" FontWeight="{TemplateBinding FontWeight}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" MinWidth="{ThemeResource DatePickerSelectorThemeMinWidth}" Background="#CC0C98F5"  Padding="50,0,0,0"/>
                                 </Border>
                             </StackPanel>
                         </Grid>
