@@ -28,10 +28,10 @@ namespace Event_Finder.ViewModel
             return results;
         }
 
-        async public Task<List<Data>> GetEventsFromFacebook(double offset, double latitude, double longitude, double dt) 
+        async public Task<List<Data>> GetEventsFromFacebook(double offset, double latitude, double longitude, double dt, double dtEndRange) 
         {
             List<Data> results = new List<Data>();
-            String result = await CallFacebookFQL(MakeQueryForMeAndFriendsEvents(offset, latitude, longitude, dt));
+            String result = await CallFacebookFQL(MakeQueryForMeAndFriendsEvents(offset, latitude, longitude, dt, dtEndRange));
             results.Add(ParseEvents(result));
             return results; 
         }
@@ -66,7 +66,7 @@ namespace Event_Finder.ViewModel
 
         private String makeQueryWithContains(double offset, double latitude, double longitude, double dt, String searchString)
         {
-            return String.Format(@"SELECT eid, pic_big, pic_square, name, description, venue FROM event WHERE contains('""{5}""') AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" LIMIT 40",
+            return String.Format(@"SELECT eid, start_time,pic_big, pic_square, name, description, venue FROM event WHERE contains('""{5}""') AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" LIMIT 40 ORDER BY start_time ASC",
                                        (offset - latitude).ToString(),
                                        (offset + latitude).ToString(),
                                        (offset - longitude).ToString(),
@@ -76,13 +76,16 @@ namespace Event_Finder.ViewModel
                                         
         }
 
-        private String MakeQueryForMeAndFriendsEvents(double offset, double latitude, double longitude, double dt)
+        private String MakeQueryForMeAndFriendsEvents(double offset, double latitude, double longitude, double dt, double dtEndRange)
         {
-            return String.Format(@"SELECT eid, pic_big,pic_square, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND start_time > now() OR uid = me()) AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" ", (offset - latitude).ToString(),
+            return String.Format(@"SELECT eid, start_time, pic_big,pic_square, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND start_time > now() OR uid = me()) AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" and start_time < ""{5}""  ORDER BY start_time ASC", 
+                                        (offset - latitude).ToString(),
                                        (offset + latitude).ToString(),
                                        (offset - longitude).ToString(),
                                        (offset + longitude).ToString(),
-                                       dt.ToString());
+                                       dt.ToString(),
+                                       dtEndRange.ToString());
+                                        
         }
 
     }

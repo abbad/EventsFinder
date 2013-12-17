@@ -53,6 +53,7 @@ namespace Event_Finder.Views
         public MainPage()
         {
             this.InitializeComponent();
+            endRangeDateTimePicker.Date = DateTime.Today.AddDays(5);
             lController = new LocationController();
             fController = new FacebookViewModel();
             _locationIcon10m = new LocationIcon10m();
@@ -61,18 +62,6 @@ namespace Event_Finder.Views
             PushpinCollection = new ObservableCollection<Event>();
 
             DataContext = this;
-        }
-
-        /// <summary>
-        /// Function to clean map from children.
-        /// </summary>
-        private void CleanMap()
-        {
-           
-            if (MainMap.Children.Count > 0)
-            {
-                MainMap.Children.RemoveAt(0);
-            }
         }
 
         private void PositionUserOnMap() 
@@ -118,10 +107,14 @@ namespace Event_Finder.Views
             PositionUserOnMap();
             
             // get list of events from facebook. 
-            List<Data> results = await fController.GetEventsFromFacebook(3, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
+            List<Data> results = await fController.GetEventsFromFacebook(3, 
+                myPosition.Coordinate.Point.Position.Latitude, 
+                myPosition.Coordinate.Point.Position.Longitude, 
+                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)
+                );
 
             PositionEventsInTheMap(results);
-            //PushpinCollection = new ObservableCollection<Event>();
             
             //context data
             MainMap.DataContext = this;
@@ -152,6 +145,7 @@ namespace Event_Finder.Views
                                 pic_square = itemEvent.pic_square,
                                 pic_big = itemEvent.pic_big,
                                 description = itemEvent.description,
+                                start_time = itemEvent.start_time,
                             });
                     }
                     catch (Exception asda)
@@ -214,10 +208,16 @@ namespace Event_Finder.Views
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             //ListOfItems.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            List<Data> results =  await fController.GetEventsFromFacebook(3, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
+            List<Data> results =  await fController.GetEventsFromFacebook(3, 
+                myPosition.Coordinate.Point.Position.Latitude, 
+                myPosition.Coordinate.Point.Position.Longitude, 
+                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)
+                );
             PositionEventsInTheMap(results);
         }
 
+        /*
         async private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
             
@@ -227,7 +227,7 @@ namespace Event_Finder.Views
                 PositionEventsInTheMap(results);
             }
         }
-
+        */
       
 
         // Omar my region

@@ -14,8 +14,8 @@
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-            <ResourceDictionary Source="Resources.xaml" />
-        </ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
             <Style x:Key="toolTipStyle" TargetType="ToolTip">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="Transparent" />
@@ -28,7 +28,7 @@
                                     <SolidColorBrush Color="Black" Opacity="0.5"/>
                                 </Border.Background>
                                 <ContentPresenter Margin="5">
-                                   
+
                                 </ContentPresenter>
                             </Border>
                         </ControlTemplate>
@@ -43,7 +43,7 @@
                     <Image Source="{Binding pic_big}" Width="200" Height="200"/>
                 </Grid>
             </ControlTemplate>
-            
+
             <DataTemplate x:Key="LogoTemplate">
                 <bm:Pushpin bm:MapLayer.Position="{Binding Location}" Template="{StaticResource PushPinStyle}" >
                     <ToolTipService.ToolTip >
@@ -58,56 +58,44 @@
             </DataTemplate>
         </ResourceDictionary>
     </Page.Resources>
-            
-            
+
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="72"/>
             <RowDefinition Height="72"/>
-            <RowDefinition Height="377" />
-            <RowDefinition Height="72"/>
-            <RowDefinition Height="184*"/>
+            <RowDefinition Height="624" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="199"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="196"/>
+            <ColumnDefinition Width="1076"/>
+            <ColumnDefinition Width="290"/>
         </Grid.ColumnDefinitions>
 
 
         <!-- row 0 logo, name, search, toggle buttons -->
-        <TextBlock Text="EVENT FINDER" Grid.Row="0" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Grid.ColumnSpan="2" Margin="0,6" Width="324"  />
-        <SearchBox x:Name="searchBox" Grid.Row="0" Grid.Column="1" Width="455" Height="52" Margin="179,10,337,10" VerticalAlignment="Center" HorizontalAlignment="Center" Style="{StaticResource SearchBoxStyle1}"  KeyUp="SearchBox_KeyDown" FocusOnKeyboardInput="True" />
-        <ToggleButton x:Name="MapEvents" Height="60" Width="70" Content="MAP" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="69,6,0,6" FontSize="24" FontFamily="Segoe WP SemiLight" Style="{StaticResource ToggleButtonStyle1}" RenderTransformOrigin="1.541,0.472"/>
-        <ToggleButton x:Name="GridEvents" Height="60" Width="70" Content="GRID"  Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" Margin="0,6" FontSize="24" FontFamily="Segoe WP SemiLight" Style="{StaticResource ToggleButtonStyle2}" />
+        <TextBlock Text="EVENT FINDER" Grid.Row="0" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Margin="0,6" Width="324"  />
 
         <!-- row 1 Categories, Event labels  -->
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="Categories" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="40" FontFamily="Leelawadee UI" Height="53" Width="188" />
-        <TextBlock Grid.Row="1" Grid.Column="2" Text="Events" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="40" FontFamily="Leelawadee UI" Margin="11,10,-3,9" Height="53" Width="188"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Events" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="40" FontFamily="Leelawadee UI" Margin="58,10,44,9" Height="53" Width="188"/>
 
         <!-- row 2 Categories, Events stacks -->
 
-        <StackPanel Grid.Column="0" Grid.Row="2" Background="#FF245B98">
-            <StackPanel Orientation="Vertical" Margin="50,25" >
-                <ToggleButton x:Name="MusicCat"  Content="Concerts" Height="80" Width="100"  />
-                <ToggleButton x:Name="EducationCat"   Content="Education" Height="80" Width="100" />
-                <ToggleButton x:Name="WatEver" Content="WhatEver" Height="80" Width="100" />
-                <ToggleButton  x:Name="PartyCat"  Content="Party" Height="80" Width="100" />
-            </StackPanel>
-        </StackPanel>
-
-        <StackPanel Grid.Row="2" Grid.Column="2">
-            <ListView Height="334" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
+            <ListView Height="619" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="10">
                             <TextBlock Foreground="Azure" TextWrapping="Wrap">
-                                 <Bold>Event: </Bold>
-                                 <Run Text="{Binding name}"/>
+                    			<Bold>
+                    				<Run Text="Event:"/>
+                    			</Bold>
+                    			<Run Text="{Binding name}"/>
                             </TextBlock>
                             <TextBlock Foreground="Azure" TextWrapping="Wrap">
-                                <Bold>Description:</Bold>
-                                <Run Text="{Binding description}" />
+                    			<Bold>
+                    				<Run Text="Date:"/>
+                    			</Bold>
+                    			<Run Text="{Binding start_time}" />
                             </TextBlock>
                         </StackPanel>
                     </DataTemplate>
@@ -119,30 +107,13 @@
         </StackPanel>
 
         <!-- row 3 Date, Legend labels -->
-        <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Date" FontSize="40" />
-        <TextBlock Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Legends" FontSize="40" FontFamily="Leelawadee UI"/>
 
         <!-- row 4 Date, Legends Stack -->
-            <Border Grid.Row="4" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <DatePicker x:Name="dateTimePicker" Style="{StaticResource DatePickerStyle1}" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged" Margin="-9,0,10,0" />
-            </Border>
-        
-        <StackPanel Grid.Row="4" Grid.Column="2" Width="200" Height="50" Orientation="Horizontal" Margin="5,72,-9,62">
-            <Image HorizontalAlignment="Left"  Width="20" Height="20" Source="ms-appx:///Assets/SmallLogo.png" />
-            <TextBlock Text="RSPV" Margin="0,20,0,15"  />
-            <Image HorizontalAlignment="Right" Margin="60,0,0,0"  Width="20" Height="20" Source="ms-appx:///Assets/SmallLogo.png" />
-            <TextBlock Text="RSPV" Margin="0,20,0,15"  />
-        </StackPanel>
-        <StackPanel Grid.Row="4" Grid.Column="2" Width="200" Height="50" Orientation="Horizontal" Margin="5,17,-9,117">
-            <Image HorizontalAlignment="Left"  Width="20" Height="20" Source="ms-appx:///Assets/SmallLogo.png" />
-            <TextBlock Text="RSPV" Margin="0,20,0,15"  />
-            <Image HorizontalAlignment="Right" Margin="60,0,0,0" Width="20" Height="20" Source="ms-appx:///Assets/SmallLogo.png" />
-            <TextBlock Text="RSPV" Margin="0,20,0,15"  />
-        </StackPanel>
+        <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
 
-        <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" Grid.Row="1" Loaded="OnLoad" Grid.Column="1" Grid.RowSpan="4">
+        <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" Loaded="OnLoad" Grid.Row="2">
 
-            <ProgressRing x:Name="prog" Height="200" Width="200"  IsActive="True"  Margin="650,400,0,0" /> 
+            <ProgressRing x:Name="prog" Height="200" Width="200"  IsActive="True"  Margin="650,400,0,0" />
             <bm:MapItemsControl x:Name="ListOfpushpins" ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}">
             </bm:MapItemsControl>
             <!--<bm:MapItemsControl ItemTemplate="{StaticResource PinTemplate}" ItemsSource="{Binding pushpincoll}" Height="100" Width="100"/>-->
@@ -152,6 +123,13 @@
                 <Image Name="myImage" Height="300" Width="300" Source="Assets/Logo.scale-100.png"/>
             </Popup>-->
         </bm:Map>
+        <DatePicker x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged" Margin="680,18,20,22" Height="32" Width="376" Grid.Row="1" />
+        <DatePicker x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged" Margin="47,18,653,22" Height="32" Width="376" Grid.Row="1" />
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40" Margin="436,10,422,14" Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Grid.Row="1" >
+        	<Run Text="Date Range"/>
+        	<LineBreak/>
+        	<Run/>
+        </TextBlock>
     </Grid>
 
 </Page>
