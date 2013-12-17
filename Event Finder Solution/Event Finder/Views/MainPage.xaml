@@ -141,6 +141,7 @@
 
         <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" Grid.Row="1" Loaded="OnLoad" Grid.Column="1" Grid.RowSpan="4">
 
+            <ProgressRing x:Name="prog" Height="200" Width="200"  IsActive="True"  Margin="650,400,0,0" /> 
             <bm:MapItemsControl x:Name="ListOfpushpins" ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}">
             </bm:MapItemsControl>
             <!--<bm:MapItemsControl ItemTemplate="{StaticResource PinTemplate}" ItemsSource="{Binding pushpincoll}" Height="100" Width="100"/>-->
