@@ -88,7 +88,7 @@
         <!-- row 2 Categories, Events stacks -->
 
         <StackPanel Grid.Column="0" Grid.Row="2" Background="#FF245B98">
-            <StackPanel Orientation="Vertical" Margin="0,0" >
+            <StackPanel Orientation="Vertical" Margin="50,25" >
                 <ToggleButton x:Name="MusicCat"  Content="Concerts" Height="80" Width="100"  />
                 <ToggleButton x:Name="EducationCat"   Content="Education" Height="80" Width="100" />
                 <ToggleButton x:Name="WatEver" Content="WhatEver" Height="80" Width="100" />
@@ -98,12 +98,14 @@
 
         <StackPanel Grid.Row="2" Grid.Column="2">
 
-            <ListView Height="189" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+            <ListView Height="334" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="10">
-                            <TextBlock Text="{Binding Event}" />
-                            <TextBlock>
+                            <TextBlock Foreground="Azure" TextWrapping="Wrap">
+                            <Bold>Event: </Bold>
+                            <Run Text="{Binding name}"/>
+                            </TextBlock>
                             <Bold>Description: </Bold>
                             <Run Text="{Binding Description}" />
                             </TextBlock>
