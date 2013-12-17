@@ -217,6 +217,13 @@ namespace Event_Finder.Views
             PositionEventsInTheMap(results);
         }
 
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            Event selectedEvent = (Event)e.ClickedItem;
+            MainMap.SetView(selectedEvent.Location, 13.0f);
+            
+        }
+
         /*
         async private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {

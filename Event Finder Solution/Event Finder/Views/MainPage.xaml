@@ -81,7 +81,7 @@
         <!-- row 2 Categories, Events stacks -->
 
         <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
-            <ListView Height="619" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
+            <ListView IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="619" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="10">
@@ -111,7 +111,7 @@
         <!-- row 4 Date, Legends Stack -->
         <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
 
-        <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" Loaded="OnLoad" Grid.Row="2">
+        <bm:Map Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" ShowNavigationBar="False"  x:Name="MainMap" Loaded="OnLoad" Grid.Row="2">
 
             <ProgressRing x:Name="prog" Height="200" Width="200"  IsActive="True"  Margin="650,400,0,0" />
             <bm:MapItemsControl x:Name="ListOfpushpins" ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}">
