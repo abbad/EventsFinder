@@ -228,7 +228,9 @@ namespace Event_Finder.Views
 
                 Infobox.Visibility = Visibility.Visible;
 
-                MapLayer.SetPosition(Infobox, MapLayer.GetPosition(selectedEvent.Location));
+                // 
+
+                MapLayer.SetPosition(Infobox, selectedEvent.Location);
             }
             else
             {
