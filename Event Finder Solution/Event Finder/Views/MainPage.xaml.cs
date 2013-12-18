@@ -105,7 +105,7 @@ namespace Event_Finder.Views
         {
             myPosition = await lController.GetCurrentLocation();
             PositionUserOnMap();
-            
+           
             // get list of events from facebook. 
             List<Data> results = await fController.GetEventsFromFacebook(3, 
                 myPosition.Coordinate.Point.Position.Latitude, 
@@ -115,7 +115,7 @@ namespace Event_Finder.Views
                 );
 
             PositionEventsInTheMap(results);
-            
+           
             //context data
             MainMap.DataContext = this;
             prog.IsActive = false;
@@ -147,6 +147,7 @@ namespace Event_Finder.Views
 
                         PushpinCollection.Add(
                             new Event { 
+                                eid = itemEvent.eid,
                                 name = itemEvent.name, 
                                 Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])),
                                 venueName = venueName1,
@@ -237,8 +238,6 @@ namespace Event_Finder.Views
 
                 Infobox.Visibility = Visibility.Visible;
 
-                // 
-
                 MapLayer.SetPosition(Infobox, selectedEvent.Location);
             }
             else
@@ -248,13 +247,16 @@ namespace Event_Finder.Views
 
         }
 
-        private void Pushpin_PointerPressed(object sender, PointerRoutedEventArgs e)
+
+
+        async private void Pushpin_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             Pushpin selectedPushpin = (Pushpin)sender;
             Event selectedEvent = (Event)selectedPushpin.DataContext;
             MainMap.SetView(selectedEvent.Location, 15.0f);
-            //selectedPushpin.
-                    //Ensure there is content to be displayed before modifying the infobox control
+
+            RootObject d = await fController.GetRSVPStatusForUser(selectedEvent.eid);
+            //Ensure there is content to be displayed before modifying the infobox control
             if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
             {
                 Infobox.DataContext = selectedEvent;
@@ -277,7 +279,9 @@ namespace Event_Finder.Views
             Infobox.Visibility = Visibility.Collapsed;
         }
 
-      
+        // function call for attending.
+        //  bool fuck = await fController.attendEvent("631997246865204");
+
         /*
         async private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {

@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Event_Finder.Models
 {
-    public class Data
+    public class RSVP
     {
-        public Event[] data { get; set; }
+        public string rsvp_status { get; set; }
+    }
 
-        public String rsvp_status { get; set; }
+    public class RootObject
+    {
+        public List<RSVP> data { get; set; }
     }
 }

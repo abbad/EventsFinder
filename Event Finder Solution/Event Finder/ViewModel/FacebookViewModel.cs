@@ -9,6 +9,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System.Collections.ObjectModel;
 using System.Collections;
+using Facebook;
 
 namespace Event_Finder.ViewModel
 {
@@ -18,6 +19,22 @@ namespace Event_Finder.ViewModel
       
         public FacebookViewModel() 
         {
+        }
+
+        async public Task<RootObject> GetRSVPStatusForUser(String eID) 
+        {
+            String result = await CallFacebookFQL(makeQueryRSVPStatus(eID));
+
+            List<string> errors = new List<string>();
+            return JsonConvert.DeserializeObject<RootObject>(result,
+                new JsonSerializerSettings
+                {
+                    Error = delegate(object sender, ErrorEventArgs args)
+                    {
+                        errors.Add(args.ErrorContext.Error.Message);
+                        args.ErrorContext.Handled = true;
+                    }
+                });
         }
 
         async public Task<List<Data>> SearchEventsFromFacebook(string searchString, double offset, double latitude, double longitude, double dt)
@@ -49,6 +66,32 @@ namespace Event_Finder.ViewModel
                 });
         }
 
+        async public Task<bool> attendEvent(string eID) {
+            var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
+            var parameters = new Dictionary<string, object>();
+            parameters["access_token"] = App.FacebookSessionClient.CurrentSession.AccessToken;
+            bool result = (bool)await fb.PostTaskAsync(String.Format(@"/{0}/attending", eID), parameters);
+
+            return result;
+        }
+
+        async public Task<bool> declineEvent(string eID) {
+            var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
+            var parameters = new Dictionary<string, object>();
+            parameters["access_token"] = App.FacebookSessionClient.CurrentSession.AccessToken;
+            bool result = (bool)await fb.PostTaskAsync(String.Format(@"/{0}/declined", eID), parameters);
+
+            return result;
+        }
+
+        async public Task<bool> maybeEvent(string eID) {
+            var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
+            var parameters = new Dictionary<string, object>();
+            parameters["access_token"] = App.FacebookSessionClient.CurrentSession.AccessToken;
+            bool result = (bool)await fb.PostTaskAsync(String.Format(@"/{0}/maybe", eID), parameters);
+
+            return result;
+        }
 
         async private Task<string> CallFacebookFQL(String Query)
         {
@@ -74,6 +117,11 @@ namespace Event_Finder.ViewModel
                                        dt.ToString(),
                                        searchString);
                                         
+        }
+
+        private String makeQueryRSVPStatus(String eid) 
+        {
+            return String.Format("SELECT rsvp_status FROM event_member WHERE eid={0} AND uid=me()", eid);
         }
 
         private String MakeQueryForMeAndFriendsEvents(double offset, double latitude, double longitude, double dt, double dtEndRange)
