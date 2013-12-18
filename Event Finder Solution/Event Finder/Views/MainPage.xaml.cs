@@ -165,6 +165,7 @@ namespace Event_Finder.Views
                     
                 }
             }
+            prog.IsActive = false;
 
         }
 
@@ -217,7 +218,7 @@ namespace Event_Finder.Views
 
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-            //ListOfItems.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            prog.IsActive = true;
             List<Data> results =  await fController.GetEventsFromFacebook(3, 
                 myPosition.Coordinate.Point.Position.Latitude, 
                 myPosition.Coordinate.Point.Position.Longitude, 
@@ -277,6 +278,21 @@ namespace Event_Finder.Views
         private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             Infobox.Visibility = Visibility.Collapsed;
+        }
+
+        private void AttendButton_Click(object sender, RoutedEventArgs e)
+        {
+            //fController.attendEvent(sender)
+        }
+
+        private void MaybeButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeclineButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         // function call for attending.

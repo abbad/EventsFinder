@@ -16,18 +16,36 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
-
             <model:Event x:Key="Event" />
-
             <ControlTemplate x:Key="PushPinStyle">
-                <Grid Width="200" Height="200">
-                    <Image Source="{Binding pic_big}" Width="200" Height="200"/>
-                </Grid>
-            </ControlTemplate>
+                <UserControl Height="235.448" Margin="0,-400,0,0" Width="291.791">
 
+                    <Grid  >
+                        <Path Data="M0,1 L99,0.5 L99.5,78.75 L19,79 L1.25,97.75 L10.5,79.5 L-0.25,79 z"
+              Fill="#FF007AF3"
+              HorizontalAlignment="Left"
+              Height="232.09"
+              Margin="-0.75,0,0,0"
+              Stretch="Fill"
+              Stroke="#FF007AF3"
+              UseLayoutRounding="True"
+              VerticalAlignment="Top"
+              Width="291.418"/>
+                        <Grid  Margin="4,4,4,23">
+                            <TextBlock HorizontalAlignment="Left"
+                       TextWrapping="Wrap"
+                       Text="{Binding name}"
+                       VerticalAlignment="Top"
+                       FontSize="26.667" />
+                            <Image Source="{Binding pic_big}" Height="50" Width="50"/>
+                        </Grid>
+
+                    </Grid>
+                </UserControl>
+            </ControlTemplate>
             <DataTemplate x:Key="LogoTemplate">
-                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}" Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
+                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}" Height="232.09" Width="291.418" Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
+                    
                 </bm:Pushpin>
             </DataTemplate>
         </ResourceDictionary>
@@ -84,8 +102,8 @@
         <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
 
         <bm:Map  Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" ShowNavigationBar="False"  x:Name="MainMap" Loaded="OnLoad" Grid.Row="2">
-            
-            <ProgressRing x:Name="prog" Height="200" Width="200"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            <ProgressRing x:Name="prog" Height="200" Width="200" Margin="420,210,0,0"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
             <bm:MapLayer>
                 <bm:MapItemsControl x:Name="ListOfpushpins"  ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}" >
@@ -93,39 +111,30 @@
             </bm:MapLayer>
 
             <bm:MapLayer>
-                <Grid x:Name="Infobox" Visibility="Collapsed" Margin="0,-115,-15,0">
-                    <Border Width="500" Height="300" Background="Black" Opacity="0.8" BorderBrush="White" BorderThickness="2" CornerRadius="5"/>
-                    <StackPanel Height="300" Margin="5" >
-                        <Grid Height="Auto">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="259*" />
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding name}" Height="Auto" FontSize="22" Width="500" TextWrapping="Wrap" HorizontalAlignment="Left" />
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Starting Date" Height="Auto" FontSize="18" Width="250" TextWrapping="Wrap" HorizontalAlignment="Left" />
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Ending Date" Height="Auto" FontSize="18" Width="250" TextWrapping="Wrap" HorizontalAlignment="Left" />
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding start_time}" Height="Auto" FontSize="18" Width="250" TextWrapping="Wrap" HorizontalAlignment="Center" />
-                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding end_time}" Height="Auto" FontSize="18" Width="250" TextWrapping="Wrap" HorizontalAlignment="Center" />
-                            <Button Grid.Row="0" Content="X" Tapped="CloseInfobox_Tapped" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                <Grid x:Name="Infobox" Visibility="Collapsed" Margin="0,-0,-0,0"  >
+
+                    <Border Width="500" Height="300" Background="#FF4C4CB0" Opacity="0.8" BorderBrush="White" BorderThickness="2" CornerRadius="50">
+                        <Button Content="X" Tapped="CloseInfobox_Tapped" HorizontalAlignment="Right" Background="Red" VerticalAlignment="Top" />
+                    </Border>
+
+                    <StackPanel Height="300" >
+                        <Grid Height="70" Margin="349,0,355,0">
+                            <TextBlock Text="{Binding name}"  Height="Auto"  FontSize="22"  TextWrapping="Wrap" HorizontalAlignment="Center" />
+
                         </Grid>
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="300">
-                            <TextBlock Text="{Binding description}" FontSize="20" Width="500" TextWrapping="Wrap" Height="Auto"/>
+                        <Image Height="50" Width="50" Source="{Binding pic_big}" HorizontalAlignment="Center" />
+                        <ScrollViewer Padding="20,0,0,0"  Width="500" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="100">
+                            <TextBlock Text="{Binding description}" FontSize="20" Width="450" TextWrapping="Wrap" Height="Auto"/>
                         </ScrollViewer>
+                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                            <Button x:Name="AttendButton" Content="Attend" Width="100" Height="50" Click="AttendButton_Click"/>
+                            <Button x:Name="MaybeButton"  Content="Maybe" Width="100" Height="50" Click="MaybeButton_Click"/>
+                            <Button x:Name="DeclineButton" Content="Decline" Width="100" Height="50" Click="DeclineButton_Click"/>
+                        </StackPanel>
                     </StackPanel>
+
                 </Grid>
             </bm:MapLayer>
-
-          
-            <!--<bm:MapItemsControl ItemTemplate="{StaticResource PinTemplate}" ItemsSource="{Binding pushpincoll}" Height="100" Width="100"/>-->
-            <!--<bm:Pushpin Name="myPin" Height="100" Width="100"/>-->
-            <!-- Tapped="pushPin_Tapped" n76o fog 3nd mapItems Control-->
-            <!-- <Popup VerticalOffset="200"  HorizontalOffset="300" x:Name="Image" IsLightDismissEnabled="True" Height="2000" Width="2000" >
-                <Image Name="myImage" Height="300" Width="300" Source="Assets/Logo.scale-100.png"/>
-            </Popup>-->
         </bm:Map>
         <DatePicker x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged" Margin="680,18,20,22" Height="32" Width="376" Grid.Row="1" />
         <DatePicker x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged" Margin="47,18,653,22" Height="32" Width="376" Grid.Row="1" />

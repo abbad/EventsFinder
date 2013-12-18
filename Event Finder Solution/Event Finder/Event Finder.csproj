@@ -123,7 +123,6 @@
     <Compile Include="Models\RSVP.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Data.cs" />
-    <Compile Include="tryPush.cs" />
     <Compile Include="ViewModel\DateTimeConverter.cs" />
     <Compile Include="ViewModel\FacebookViewModel.cs" />
     <Compile Include="ViewModel\Constants.cs" />
