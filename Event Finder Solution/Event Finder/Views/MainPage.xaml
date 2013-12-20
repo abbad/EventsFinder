@@ -18,33 +18,31 @@
             </ResourceDictionary.MergedDictionaries>
             <model:Event x:Key="Event" />
             <ControlTemplate x:Key="PushPinStyle">
-                <UserControl Height="235.448" Margin="0,-400,0,0" Width="291.791">
+                <UserControl Height="140"  Width="140">
 
                     <Grid  >
                         <Path Data="M0,1 L99,0.5 L99.5,78.75 L19,79 L1.25,97.75 L10.5,79.5 L-0.25,79 z"
-              Fill="#FF007AF3"
               HorizontalAlignment="Left"
-              Height="232.09"
-              Margin="-0.75,0,0,0"
+              Height="115"
               Stretch="Fill"
-              Stroke="#FF007AF3"
+              Stroke="#FF4A00F3"
               UseLayoutRounding="True"
               VerticalAlignment="Top"
-              Width="291.418"/>
-                        <Grid  Margin="4,4,4,23">
-                            <TextBlock HorizontalAlignment="Left"
-                       TextWrapping="Wrap"
-                       Text="{Binding name}"
-                       VerticalAlignment="Top"
-                       FontSize="26.667" />
-                            <Image Source="{Binding pic_big}" Height="50" Width="50"/>
+              Width="115" >
+                            <Path.Fill>
+                                <SolidColorBrush Color="#FF4C4CB0" Opacity="0.8"/>
+                            </Path.Fill>
+                        </Path>
+                        <Grid Height="115" Width="115"  >
+
+                            <Image Source="{Binding pic_big}" Margin="0,0,23,40" Height="115" Width="115" />
                         </Grid>
 
                     </Grid>
                 </UserControl>
             </ControlTemplate>
             <DataTemplate x:Key="LogoTemplate">
-                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}" Height="232.09" Width="291.418" Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
+                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}" Height="120" Width="120" Margin="0,-120,0,0" Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
                     
                 </bm:Pushpin>
             </DataTemplate>
@@ -110,21 +108,22 @@
                 </bm:MapItemsControl>
             </bm:MapLayer>
 
-            <bm:MapLayer>
-                <Grid x:Name="Infobox" Visibility="Collapsed" Margin="0,-0,-0,0"  >
+            <bm:MapLayer Margin="-190,-190,0,0">
+                <Grid x:Name="Infobox" Visibility="Collapsed">
 
-                    <Border Width="500" Height="300" Background="#FF4C4CB0" Opacity="0.8" BorderBrush="White" BorderThickness="2" CornerRadius="50">
+                    <Border Width="500" Height="500" Background="#FF4C4CB0" Opacity="0.8" BorderBrush="White" BorderThickness="2" CornerRadius="50">
                         <Button Content="X" Tapped="CloseInfobox_Tapped" HorizontalAlignment="Right" Background="Red" VerticalAlignment="Top" />
                     </Border>
 
-                    <StackPanel Height="300" >
-                        <Grid Height="70" Margin="349,0,355,0">
+                    <StackPanel Height="500">
+                        <Grid Height="70" Width="400">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <TextBlock Text="{Binding name}"  Height="Auto"  FontSize="22"  TextWrapping="Wrap" HorizontalAlignment="Center" />
-
+                            </ScrollViewer>
                         </Grid>
-                        <Image Height="50" Width="50" Source="{Binding pic_big}" HorizontalAlignment="Center" />
-                        <ScrollViewer Padding="20,0,0,0"  Width="500" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="100">
-                            <TextBlock Text="{Binding description}" FontSize="20" Width="450" TextWrapping="Wrap" Height="Auto"/>
+                        <Image Height="80" Width="80" Source="{Binding pic_big}" HorizontalAlignment="Center" />
+                        <ScrollViewer Padding="20,0,0,0"   Width="500" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="300">
+                            <TextBlock Text="{Binding description}"  FontSize="20" Width="450" TextWrapping="Wrap" />
                         </ScrollViewer>
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <Button x:Name="AttendButton" Content="Attend" Width="100" Height="50" Click="AttendButton_Click"/>
