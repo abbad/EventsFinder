@@ -40,6 +40,7 @@ namespace Event_Finder.Views
         // myPosition
         public Geoposition myPosition;
         //collection of pins
+        public Button btn;
         private ObservableCollection<Event> PushpinCollection { get; set; }
 
         public ObservableCollection<Event> pushpinCollection
@@ -58,7 +59,9 @@ namespace Event_Finder.Views
             fController = new FacebookViewModel();
             _locationIcon10m = new LocationIcon10m();
             _locationIcon100m = new LocationIcon100m();
-
+            btn = CreateButton();
+            MainMap.Children.Add(btn);
+            btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             PushpinCollection = new ObservableCollection<Event>();
 
             DataContext = this;
@@ -67,7 +70,7 @@ namespace Event_Finder.Views
         private void PositionUserOnMap() 
         {
             Location myLocation = new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude);
-
+            
             try
             {
                 // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
@@ -103,17 +106,25 @@ namespace Event_Finder.Views
 
         async private void OnLoad(object sender, RoutedEventArgs e)
         {
+            prog.IsActive = true;
+
+            string city;
+
+            List<Data> results;
+
             myPosition = await lController.GetCurrentLocation();
             PositionUserOnMap();
-           
-            // get list of events from facebook. 
-            List<Data> results = await fController.GetEventsFromFacebook(3, 
-                myPosition.Coordinate.Point.Position.Latitude, 
-                myPosition.Coordinate.Point.Position.Longitude, 
-                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)
-                );
 
+            if (myPosition.CivicAddress.Country == "JO")
+            {
+                city = "Amman";
+            }
+            else { city = myPosition.CivicAddress.City; }
+
+            results = await fController.GetAllEvents(city, 1, myPosition.Coordinate.Point.Position.Latitude,
+                myPosition.Coordinate.Point.Position.Longitude,
+                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
             PositionEventsInTheMap(results);
            
             //context data
@@ -136,7 +147,6 @@ namespace Event_Finder.Views
             {
                 foreach (var itemEvent in result.data)
                 {
-                    
                     try
                     {
                         venueName1 = itemEvent.venue["name"];
@@ -219,7 +229,13 @@ namespace Event_Finder.Views
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             prog.IsActive = true;
-            List<Data> results =  await fController.GetEventsFromFacebook(3, 
+            string city;
+            if (myPosition.CivicAddress.Country == "JO")
+            {
+                city = "Amman";
+            }
+            else { city = myPosition.CivicAddress.City; }
+            List<Data> results = await fController.GetAllEvents(city, 1, 
                 myPosition.Coordinate.Point.Position.Latitude, 
                 myPosition.Coordinate.Point.Position.Longitude, 
                 DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
@@ -280,23 +296,68 @@ namespace Event_Finder.Views
             Infobox.Visibility = Visibility.Collapsed;
         }
 
-        private void AttendButton_Click(object sender, RoutedEventArgs e)
+        async private void AttendButton_Click(object sender, RoutedEventArgs e)
         {
-            //fController.attendEvent(sender)
+            Button btn = (Button)sender;
+            Event selectedEvent = (Event)btn.DataContext;
+
+            bool attending = await fController.attendEvent(selectedEvent.eid);
         }
 
-        private void MaybeButton_Click(object sender, RoutedEventArgs e)
+        async private void MaybeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            Event selectedEvent = (Event)btn.DataContext;
+
+            bool maybe = await fController.maybeEvent(selectedEvent.eid);
+
+        }
+
+        async private void DeclineButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button)sender;
+            Event selectedEvent = (Event)btn.DataContext;
+
+            bool decline = await fController.declineEvent(selectedEvent.eid);
+
+        }
+
+        private void MainMap_Holding(object sender, HoldingRoutedEventArgs e)
         {
 
         }
 
-        private void DeclineButton_Click(object sender, RoutedEventArgs e)
+        private void MainMap_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-
+            btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            Location location = new Location();
+            this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out location);
+            MapLayer.SetPosition(btn, location);
+            
+            btn.Click += btn_Click;
         }
 
-        // function call for attending.
-        //  bool fuck = await fController.attendEvent("631997246865204");
+        void btn_Click(object sender, RoutedEventArgs e)
+        {
+            btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            /*
+            Point p = e.OriginalSource(this.MainGrid);
+            GeoCoordinate geo = new GeoCoordinate();
+            geo = MapMain.ViewportPointToLocation(p);*/
+        }
+
+        private Button CreateButton() 
+        {
+            
+            return new Button
+            {
+                Width = 60,
+                Height = 40,
+                Visibility = Windows.UI.Xaml.Visibility.Visible,
+                Content = "Set Position to this location",
+            };
+        
+        }
 
         /*
         async private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -311,19 +372,6 @@ namespace Event_Finder.Views
         */
       
 
-        // Omar my region
-
-  
-
-        
-
-/*       private void pushPin_Tapped(object sender, TappedRoutedEventArgs e)
-        {
-            if (!Image.IsOpen) { Image.IsOpen = true; }
-            var pushpinData = (sender as Pushpin).DataContext as tryPush;
-            String file = pushpinData.ToString();
-            // use image in popup here
-        }*/
         
     }
 }
