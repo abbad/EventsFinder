@@ -37,10 +37,14 @@ namespace Event_Finder.Views
         public FacebookViewModel fController;
         // controller for geolocation. 
         LocationController lController;
-        // myPosition
-        public Geoposition myPosition;
+        // application location
+        public Location myLocation;
         //collection of pins
-        public Button btn;
+        private Button btn;
+
+        private double offset = 0.1;
+
+        private String cityName = "";
         private ObservableCollection<Event> PushpinCollection { get; set; }
 
         public ObservableCollection<Event> pushpinCollection
@@ -67,9 +71,9 @@ namespace Event_Finder.Views
             DataContext = this;
         }
 
-        private void PositionUserOnMap() 
+        private void PositionUserOnMap(Geoposition myPosition) 
         {
-            Location myLocation = new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude);
+            myLocation = new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude);
             
             try
             {
@@ -108,20 +112,15 @@ namespace Event_Finder.Views
         {
             prog.IsActive = true;
 
-            string city;
-
             List<Data> results;
+            Geoposition myPosition = await lController.GetCurrentLocation();
+            PositionUserOnMap(myPosition);
+            // get the city name from reverse geocodeing
+            cityName = await lController.ReverseGeocodePoint(
+                new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude));
+            
 
-            myPosition = await lController.GetCurrentLocation();
-            PositionUserOnMap();
-
-            if (myPosition.CivicAddress.Country == "JO")
-            {
-                city = "Amman";
-            }
-            else { city = myPosition.CivicAddress.City; }
-
-            results = await fController.GetAllEvents(city, 1, myPosition.Coordinate.Point.Position.Latitude,
+            results = await fController.GetAllEvents(cityName, offset, myPosition.Coordinate.Point.Position.Latitude,
                 myPosition.Coordinate.Point.Position.Longitude,
                 DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
@@ -229,15 +228,16 @@ namespace Event_Finder.Views
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             prog.IsActive = true;
-            string city;
-            if (myPosition.CivicAddress.Country == "JO")
+
+            if (cityName == null)
             {
-                city = "Amman";
+                cityName = await lController.ReverseGeocodePoint(
+                    new Location(myLocation.Latitude, myLocation.Longitude));
             }
-            else { city = myPosition.CivicAddress.City; }
-            List<Data> results = await fController.GetAllEvents(city, 1, 
-                myPosition.Coordinate.Point.Position.Latitude, 
-                myPosition.Coordinate.Point.Position.Longitude, 
+
+            List<Data> results = await fController.GetAllEvents(cityName, offset,
+                myLocation.Latitude,
+                myLocation.Longitude, 
                 DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)
                 );
@@ -271,7 +271,9 @@ namespace Event_Finder.Views
             Pushpin selectedPushpin = (Pushpin)sender;
             Event selectedEvent = (Event)selectedPushpin.DataContext;
             MainMap.SetView(selectedEvent.Location, 15.0f);
+            
 
+            // to be handeled later.
             RootObject d = await fController.GetRSVPStatusForUser(selectedEvent.eid);
             //Ensure there is content to be displayed before modifying the infobox control
             if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
@@ -330,20 +332,31 @@ namespace Event_Finder.Views
         private void MainMap_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            Location location = new Location();
-            this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out location);
-            MapLayer.SetPosition(btn, location);
-            
+
+            this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out myLocation);
+            MapLayer.SetPosition(btn, myLocation);
+           
             btn.Click += btn_Click;
         }
 
-        void btn_Click(object sender, RoutedEventArgs e)
+        async void btn_Click(object sender, RoutedEventArgs e)
         {
             btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            /*
-            Point p = e.OriginalSource(this.MainGrid);
-            GeoCoordinate geo = new GeoCoordinate();
-            geo = MapMain.ViewportPointToLocation(p);*/
+            
+            cityName = await lController.ReverseGeocodePoint(
+                new Location(myLocation.Latitude, myLocation.Longitude));
+            
+            prog.IsActive = true;
+
+            List<Data> results = await fController.GetAllEvents(cityName, offset,
+                myLocation.Latitude,
+                myLocation.Longitude,
+                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)
+                );
+
+            PositionEventsInTheMap(results);
+            
         }
 
         private Button CreateButton() 
