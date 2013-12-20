@@ -20,7 +20,7 @@
             <ControlTemplate x:Key="PushPinStyle">
                 <UserControl Height="140"  Width="140">
 
-                    <Grid  >
+                    <Grid>
                         <Path Data="M0,1 L99,0.5 L99.5,78.75 L19,79 L1.25,97.75 L10.5,79.5 L-0.25,79 z"
               HorizontalAlignment="Left"
               Height="115"
@@ -42,8 +42,7 @@
                 </UserControl>
             </ControlTemplate>
             <DataTemplate x:Key="LogoTemplate">
-                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}" Height="120" Width="120" Margin="0,-120,0,0" Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
-                    
+                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}" Height="120" Width="120" Margin="0,-120,0,0" Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >                    
                 </bm:Pushpin>
             </DataTemplate>
         </ResourceDictionary>
@@ -90,15 +89,9 @@
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-
             </ListView>
-
-
         </StackPanel>
-
-        
         <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
-
         <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  Holding="MainMap_Holding" RightTapped="MainMap_RightTapped" x:Name="MainMap" Loaded="OnLoad" Grid.Row="2">
 
             <ProgressRing x:Name="prog" Height="200" Width="200" Margin="420,210,0,0"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>

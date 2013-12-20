@@ -14,7 +14,6 @@ namespace Event_Finder.ViewModel
         public LocationController() 
         {
             geolocator = new Geolocator();
-            
         }
         
         async public Task<Geoposition> GetCurrentLocation() 
@@ -26,7 +25,7 @@ namespace Event_Finder.ViewModel
 
         async public Task<String> ReverseGeocodePoint(Bing.Maps.Location l)
         {
-            
+          
             
             string key = "AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h";
             ReverseGeocodeRequest reverseGeocodeRequest = new ReverseGeocodeRequest();

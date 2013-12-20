@@ -20,7 +20,7 @@ using Event_Finder.ViewModel;
 using Event_Finder.Icons;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
-
+using Windows.UI.Popups;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Event_Finder.Views
@@ -67,7 +67,8 @@ namespace Event_Finder.Views
             MainMap.Children.Add(textBlock);
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             PushpinCollection = new ObservableCollection<Event>();
-
+            MainMap.Children.Add(_locationIcon100m);
+            _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             DataContext = this;
         }
 
@@ -92,7 +93,7 @@ namespace Event_Finder.Views
                 if (myPosition.Coordinate.Accuracy <= 100)
                 {
                     // Add the 100m icon and zoom a little closer.
-                    MainMap.Children.Add(_locationIcon100m);
+                    
                     MapLayer.SetPosition(_locationIcon100m, myLocation);
                     zoomLevel = 13.0f;
                 }
@@ -331,6 +332,7 @@ namespace Event_Finder.Views
 
         private void MainMap_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
+            
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
             this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out myLocation);
@@ -341,11 +343,28 @@ namespace Event_Finder.Views
 
         async void btn_Click(object sender, RoutedEventArgs e)
         {
+            // clear events on the map. 
+            PushpinCollection.Clear();
+
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             
-            cityName = await lController.ReverseGeocodePoint(
-                new Location(myLocation.Latitude, myLocation.Longitude));
-            
+            // position me there 
+            _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            MapLayer.SetPosition(_locationIcon100m, myLocation);
+
+            try
+            {
+                cityName = await lController.ReverseGeocodePoint(
+                    new Location(myLocation.Latitude, myLocation.Longitude));
+            }
+            catch (System.ArgumentOutOfRangeException ArgumentOutOfRangeException) 
+            {
+                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+         
+                String message = "Could not get city name!";
+                MessageDialog dialog = new MessageDialog(message);
+                dialog.ShowAsync();
+            }
             prog.IsActive = true;
 
             List<Data> results = await fController.GetAllEvents(cityName, offset,
@@ -372,6 +391,7 @@ namespace Event_Finder.Views
         
         }
 
+       
         /*
         async private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs e)
         {
