@@ -120,11 +120,12 @@ namespace Event_Finder.ViewModel
 
         private String makeQueryWithContains(double offset, double latitude, double longitude, double dt, double dtEndRange, String searchString)
         {
+            //AND venue.longitude < \''. ($long+$offset) .'\' AND venue.latitude < \''. ($lat+$offset) .'\' AND venue.longitude > \''. ($long-$offset) .'\' AND venue.latitude > \''. ($lat-$offset) .'\' ORDER BY start_time ASC '. $limit
             return String.Format(@"SELECT eid, start_time, end_time, pic_big, pic_square, name, description, venue FROM event WHERE contains('""{5}""') AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" and start_time < ""{6}"" ORDER BY start_time ASC",
-                                       (offset - latitude).ToString(),
-                                       (offset + latitude).ToString(),
-                                       (offset - longitude).ToString(),
-                                       (offset + longitude).ToString(),
+                                       (latitude - offset).ToString(),
+                                       (latitude + offset).ToString(),
+                                       (longitude- offset).ToString(),
+                                       (longitude + offset).ToString(),
                                        dt.ToString(),
                                        searchString,
                                        dtEndRange);
@@ -138,11 +139,11 @@ namespace Event_Finder.ViewModel
 
         private String MakeQueryForMeAndFriendsEvents(double offset, double latitude, double longitude, double dt, double dtEndRange)
         {
-            return String.Format(@"SELECT eid, start_time, end_time, pic_big,pic_square, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) AND start_time > now() OR uid = me()) AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" and start_time < ""{5}""  ORDER BY start_time ASC", 
-                                        (offset - latitude).ToString(),
-                                       (offset + latitude).ToString(),
-                                       (offset - longitude).ToString(),
-                                       (offset + longitude).ToString(),
+            return String.Format(@"SELECT eid, start_time, end_time, pic_big,pic_square, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) OR uid = me()) AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" and start_time < ""{5}""  ORDER BY start_time ASC", 
+                                       (latitude - offset).ToString(),
+                                       (latitude + offset).ToString(),
+                                       (longitude - offset).ToString(),
+                                       (longitude + offset).ToString(),
                                        dt.ToString(),
                                        dtEndRange.ToString());
                                         

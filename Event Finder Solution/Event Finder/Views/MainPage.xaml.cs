@@ -40,9 +40,9 @@ namespace Event_Finder.Views
         // application location
         public Location myLocation;
         //collection of pins
-        private Button btn;
+        private TextBlock textBlock;
 
-        private double offset = 0.1;
+        private double offset = 1;
 
         private String cityName = "";
         private ObservableCollection<Event> PushpinCollection { get; set; }
@@ -63,9 +63,9 @@ namespace Event_Finder.Views
             fController = new FacebookViewModel();
             _locationIcon10m = new LocationIcon10m();
             _locationIcon100m = new LocationIcon100m();
-            btn = CreateButton();
-            MainMap.Children.Add(btn);
-            btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            textBlock = CreateTextBlock();
+            MainMap.Children.Add(textBlock);
+            textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             PushpinCollection = new ObservableCollection<Event>();
 
             DataContext = this;
@@ -331,17 +331,17 @@ namespace Event_Finder.Views
 
         private void MainMap_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
-            btn.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            textBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
 
             this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out myLocation);
-            MapLayer.SetPosition(btn, myLocation);
-           
-            btn.Click += btn_Click;
+            MapLayer.SetPosition(textBlock, myLocation);
+
+            textBlock.PointerPressed += btn_Click;
         }
 
         async void btn_Click(object sender, RoutedEventArgs e)
         {
-            btn.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             
             cityName = await lController.ReverseGeocodePoint(
                 new Location(myLocation.Latitude, myLocation.Longitude));
@@ -359,15 +359,15 @@ namespace Event_Finder.Views
             
         }
 
-        private Button CreateButton() 
+        private TextBlock CreateTextBlock() 
         {
             
-            return new Button
+            return new TextBlock
             {
                 Width = 60,
                 Height = 40,
                 Visibility = Windows.UI.Xaml.Visibility.Visible,
-                Content = "Set Position to this location",
+                Text = "Set Position to this location",
             };
         
         }
