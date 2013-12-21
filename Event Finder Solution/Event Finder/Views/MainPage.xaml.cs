@@ -44,6 +44,8 @@ namespace Event_Finder.Views
 
         private double offset = 1;
 
+        MessageDialog dialog = new MessageDialog("Could not get city name!");
+
         private String cityName = "";
         private ObservableCollection<Event> PushpinCollection { get; set; }
 
@@ -58,6 +60,7 @@ namespace Event_Finder.Views
         public MainPage()
         {
             this.InitializeComponent();
+            dialog.Options = MessageDialogOptions.AcceptUserInputAfterDelay;
             endRangeDateTimePicker.Date = DateTime.Today.AddDays(5);
             lController = new LocationController();
             fController = new FacebookViewModel();
@@ -343,6 +346,7 @@ namespace Event_Finder.Views
 
         async void btn_Click(object sender, RoutedEventArgs e)
         {
+            
             System.ArgumentOutOfRangeException ex = null;
             bool open = false;
 
@@ -367,9 +371,6 @@ namespace Event_Finder.Views
                 
             }if ( ex != null && !open)
             {
-                open = true;
-                String message = "Could not get city name!";
-                MessageDialog dialog = new MessageDialog(message);
                 await dialog.ShowAsync();
                 open = false;
                 
