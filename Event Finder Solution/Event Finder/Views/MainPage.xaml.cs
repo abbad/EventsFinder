@@ -343,6 +343,8 @@ namespace Event_Finder.Views
 
         async void btn_Click(object sender, RoutedEventArgs e)
         {
+            System.ArgumentOutOfRangeException ex = null;
+
             // clear events on the map. 
             PushpinCollection.Clear();
 
@@ -357,13 +359,16 @@ namespace Event_Finder.Views
                 cityName = await lController.ReverseGeocodePoint(
                     new Location(myLocation.Latitude, myLocation.Longitude));
             }
-            catch (System.ArgumentOutOfRangeException ArgumentOutOfRangeException) 
+            catch (System.ArgumentOutOfRangeException argumentOutOfRangeException) 
             {
                 _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-         
+                ex = argumentOutOfRangeException;
+                
+            }if ( ex != null)
+            {
                 String message = "Could not get city name!";
                 MessageDialog dialog = new MessageDialog(message);
-                dialog.ShowAsync();
+                await dialog.ShowAsync();
             }
             prog.IsActive = true;
 
