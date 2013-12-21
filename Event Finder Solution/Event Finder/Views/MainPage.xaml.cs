@@ -344,6 +344,7 @@ namespace Event_Finder.Views
         async void btn_Click(object sender, RoutedEventArgs e)
         {
             System.ArgumentOutOfRangeException ex = null;
+            bool open = false;
 
             // clear events on the map. 
             PushpinCollection.Clear();
@@ -364,11 +365,14 @@ namespace Event_Finder.Views
                 _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 ex = argumentOutOfRangeException;
                 
-            }if ( ex != null)
+            }if ( ex != null && !open)
             {
+                open = true;
                 String message = "Could not get city name!";
                 MessageDialog dialog = new MessageDialog(message);
                 await dialog.ShowAsync();
+                open = false;
+                
             }
             prog.IsActive = true;
 
