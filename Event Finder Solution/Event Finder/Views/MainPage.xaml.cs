@@ -40,7 +40,7 @@ namespace Event_Finder.Views
         // application location
         public Location myLocation;
         //collection of pins
-        private TextBlock textBlock;
+        private Button textBlock;
 
         private double offset = 1;
 
@@ -338,7 +338,7 @@ namespace Event_Finder.Views
             this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out myLocation);
             MapLayer.SetPosition(textBlock, myLocation);
 
-            textBlock.PointerPressed += btn_Click;
+            textBlock.Click += btn_Click;
         }
 
         async void btn_Click(object sender, RoutedEventArgs e)
@@ -383,16 +383,16 @@ namespace Event_Finder.Views
             
         }
 
-        private TextBlock CreateTextBlock() 
+        private Button CreateTextBlock() 
         {
             
-            return new TextBlock
-            {
-                Width = 60,
-                Height = 40,
-                Visibility = Windows.UI.Xaml.Visibility.Visible,
-                Text = "Set Position to this location",
-            };
+            Button x = new Button();
+            x.Height = 80;
+            x.Width = 150;
+            x.Margin = new Thickness(-90, -110, 0, 0);//left top right bottom
+            x.Style = (Style)Application.Current.Resources["setPos"];
+
+            return x;
         
         }
 
