@@ -86,32 +86,30 @@ namespace Event_Finder.ViewModel
                 });
         }
 
-        async public Task<bool> attendEvent(string eID) {
+
+        /// <summary>
+        ///  Function that will try to reserve a person in an event.
+        /// </summary>
+        /// <param name="eID"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        async public Task<bool> RSVPEvent(string eID, String status) {
             var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
             var parameters = new Dictionary<string, object>();
             parameters["access_token"] = App.FacebookSessionClient.CurrentSession.AccessToken;
-            bool result = (bool)await fb.PostTaskAsync(String.Format(@"/{0}/attending", eID), parameters);
-
+            bool result;
+            try
+            {
+                result = (bool)await fb.PostTaskAsync(String.Format(@"/{0}/{1}", eID, status), parameters);
+            }
+            catch (Facebook.FacebookOAuthException)
+            {
+                result = false;
+            }
             return result;
         }
 
-        async public Task<bool> declineEvent(string eID) {
-            var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
-            var parameters = new Dictionary<string, object>();
-            parameters["access_token"] = App.FacebookSessionClient.CurrentSession.AccessToken;
-            bool result = (bool)await fb.PostTaskAsync(String.Format(@"/{0}/declined", eID), parameters);
 
-            return result;
-        }
-
-        async public Task<bool> maybeEvent(string eID) {
-            var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
-            var parameters = new Dictionary<string, object>();
-            parameters["access_token"] = App.FacebookSessionClient.CurrentSession.AccessToken;
-            bool result = (bool)await fb.PostTaskAsync(String.Format(@"/{0}/maybe", eID), parameters);
-
-            return result;
-        }
 
         async private Task<string> CallFacebookFQL(String Query)
         {
@@ -161,7 +159,7 @@ namespace Event_Finder.ViewModel
         private String MakeQueryForUserEvents(double dt, double dtEndRange) 
         {
             return String.Format(@"SELECT eid, start_time, end_time, pic_big, pic_square, name, description, venue FROM event WHERE eid IN (
-                SELECT eid FROM event_member WHERE uid = me()) and start_time > {0} and start_time > {1}", dt.ToString(),
+                SELECT eid FROM event_member WHERE uid = me()) and start_time > {0} and start_time < {1}", dt.ToString(),
                                        dtEndRange.ToString());
         }
 

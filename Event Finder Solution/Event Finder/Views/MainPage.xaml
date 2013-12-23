@@ -102,7 +102,7 @@
             </ListView>
             <!-- Events attending stack and item list -->
             <StackPanel >
-                <TextBlock Text="Events Attending" FontSize="30" HorizontalAlignment="Center"/>
+                <TextBlock Text="My Events" FontSize="30" HorizontalAlignment="Center"/>
                 <ListView  x:Name="AttendingListView"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="280" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding attendingPushpinCollection}" >
                     <ListView.ItemTemplate>
                         <DataTemplate>

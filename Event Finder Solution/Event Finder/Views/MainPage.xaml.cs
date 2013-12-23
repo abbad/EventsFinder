@@ -142,7 +142,8 @@ namespace Event_Finder.Views
 
             prog.IsActive = true;
             // get list of atteneded events by user.
-            attendedEvents = await fController.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+            attendedEvents = await fController.getListOfEventsAttendedByUser(
+                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
             FillAttendedEventsByUserInCollection(attendedEvents);
             // Fill everythin needed for the app to function.
@@ -203,12 +204,12 @@ namespace Event_Finder.Views
 
         private void FillEventsInPushPinCollection(List<Data> results)
         {
-
-            // a workaround for events.
+            // a workaround for my events.
             foreach (Event itemEvent in AttendingPushpinCollection)
             {
                 PushpinCollection.Add(itemEvent);
             }
+            
             string venueName1 = "";
             prog.IsActive = true;
             foreach (var result in results)
@@ -245,6 +246,8 @@ namespace Event_Finder.Views
 
             }
 
+            
+
             prog.IsActive = false;
 
         }
@@ -259,47 +262,30 @@ namespace Event_Finder.Views
             ReloadALL();
         }
 
-        async private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Event selectedEvent = (Event)e.ClickedItem;
-            MainMap.SetView(selectedEvent.Location, 15.0f);
-
-            // get whether the user is attending this event.
-            RootObject rsvp = await fController.GetRSVPStatusForUser(selectedEvent.eid);
-            SetButtonToStatus(rsvp);
-           
-            if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
-            {
-                Infobox.DataContext = selectedEvent;
-
-                Infobox.Visibility = Visibility.Visible;
-
-                MapLayer.SetPosition(Infobox, selectedEvent.Location);
-            }
-            else
-            {
-                Infobox.Visibility = Visibility.Collapsed;
-            }
+            LoadInfoBox(selectedEvent);
         }
 
-        private void SetButtonToStatus(RootObject rsvp)
+        private void SetButtonToStatus(RSVP rsvp)
         {
 
-            if (rsvp.data.Count != 0)
+            if (rsvp != null)
             {
-                if (rsvp.data[0].rsvp_status == "attending")
+                if (rsvp.rsvp_status == "attending")
                 {
                     AttendButton.IsEnabled = false;
                     DeclineButton.IsEnabled = true;
                     MaybeButton.IsEnabled = true;
                 }
-                else if (rsvp.data[0].rsvp_status == "unsure")
+                else if (rsvp.rsvp_status == "unsure")
                 {
                     DeclineButton.IsEnabled = true;
                     AttendButton.IsEnabled = true;
                     MaybeButton.IsEnabled = false;
                 }
-                else if (rsvp.data[0].rsvp_status == "declined")
+                else if (rsvp.rsvp_status == "declined")
                 {
                     DeclineButton.IsEnabled = false;
                     AttendButton.IsEnabled = true;
@@ -316,15 +302,30 @@ namespace Event_Finder.Views
             }
         }
 
-        async private void Pushpin_PointerPressed(object sender, PointerRoutedEventArgs e)
+        private void Pushpin_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             Pushpin selectedPushpin = (Pushpin)sender;
             Event selectedEvent = (Event)selectedPushpin.DataContext;
+            LoadInfoBox(selectedEvent);
+        
+        }
+
+
+        async private void LoadInfoBox(Event selectedEvent) 
+        {
             MainMap.SetView(selectedEvent.Location, 15.0f);
-            
+
             // see RSVP status of event.
-            RootObject d = await fController.GetRSVPStatusForUser(selectedEvent.eid);
-            SetButtonToStatus(d);
+            RootObject rsvp = await fController.GetRSVPStatusForUser(selectedEvent.eid);
+            if (rsvp.data.Count != 0)
+            {
+                SetButtonToStatus(rsvp.data[0]);
+            }
+            else 
+            {
+                // enable all buttons.
+                SetButtonToStatus(null);
+            }
             //Ensure there is content to be displayed before modifying the infobox control
             if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
             {
@@ -332,7 +333,7 @@ namespace Event_Finder.Views
 
                 Infobox.Visibility = Visibility.Visible;
 
-                MapLayer.SetPosition(Infobox, MapLayer.GetPosition(selectedPushpin));
+                MapLayer.SetPosition(Infobox, MapLayer.GetPosition(selectedEvent.Location));
             }
             else
             {
@@ -340,9 +341,6 @@ namespace Event_Finder.Views
             }
         
         }
-
-
-
         private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             Infobox.Visibility = Visibility.Collapsed;
@@ -353,15 +351,38 @@ namespace Event_Finder.Views
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
-            bool attending = await fController.attendEvent(selectedEvent.eid);
+            bool attending = await fController.RSVPEvent(selectedEvent.eid, "attending");
+            if (attending == true)
+            {
+                SetButtonToStatus(new RSVP { rsvp_status = "attending" });
+                // add it to the list of events the person is going.
+                AttendingPushpinCollection.Add(selectedEvent);
+            }else
+            {
+                dialog.Content = "Could not RSVP for Event";
+                await dialog.ShowAsync();
+            }
         }
 
         async private void MaybeButton_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
+            bool maybe = false;
 
-            bool maybe = await fController.maybeEvent(selectedEvent.eid);
+            maybe = await fController.RSVPEvent(selectedEvent.eid, "maybe");
+
+            if (maybe == true)
+            {
+
+                SetButtonToStatus(new RSVP { rsvp_status = "unsure" });
+                AttendingPushpinCollection.Add(selectedEvent);
+            }
+            else 
+            {
+                dialog.Content = "Could not RSVP for Event";
+                await dialog.ShowAsync();
+            }
 
         }
 
@@ -370,7 +391,19 @@ namespace Event_Finder.Views
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
-            bool decline = await fController.declineEvent(selectedEvent.eid);
+            bool decline = await fController.RSVPEvent(selectedEvent.eid, "declined");
+
+            if (decline == true) 
+            {
+
+                SetButtonToStatus(new RSVP { rsvp_status = "declined" });
+                AttendingPushpinCollection.Remove(selectedEvent);
+            }
+            else
+            {
+                dialog.Content= "Could not RSVP for Event";
+                await dialog.ShowAsync();
+            }
 
         }
 
@@ -391,8 +424,9 @@ namespace Event_Finder.Views
             textBlock.Click += btn_Click;
         }
 
-        async void btn_Click(object sender, RoutedEventArgs e)
+        private void btn_Click(object sender, RoutedEventArgs e)
         {
+            AttendingListView.IsEnabled = false;
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             
             // position me there 
@@ -400,7 +434,7 @@ namespace Event_Finder.Views
             MapLayer.SetPosition(_locationIcon100m, myLocation);
 
             ReloadALL();
-           
+            AttendingListView.IsEnabled = true;
             prog.IsActive = true;
             
         }
