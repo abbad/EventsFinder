@@ -21,6 +21,7 @@ using Event_Finder.Icons;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using Windows.UI.Popups;
+using System.Threading.Tasks;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Event_Finder.Views
@@ -47,6 +48,8 @@ namespace Event_Finder.Views
         MessageDialog dialog = new MessageDialog("Could not get city name!");
 
         private String cityName = "";
+        
+        // List of events gathered from an area.
         private ObservableCollection<Event> PushpinCollection { get; set; }
 
         public ObservableCollection<Event> pushpinCollection
@@ -56,6 +59,20 @@ namespace Event_Finder.Views
                 return PushpinCollection;
             }
         }
+
+        // List of events attended by user.
+        private ObservableCollection<Event> AttendingPushpinCollection { get; set; }
+
+        public ObservableCollection<Event> attendingPushpinCollection
+        {
+            get
+            {
+                return AttendingPushpinCollection;
+            }
+        }
+
+        Data attendedEvents;
+
 
         public MainPage()
         {
@@ -70,8 +87,11 @@ namespace Event_Finder.Views
             MainMap.Children.Add(textBlock);
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             PushpinCollection = new ObservableCollection<Event>();
+            AttendingPushpinCollection = new ObservableCollection<Event>();
             MainMap.Children.Add(_locationIcon100m);
+            MainMap.Children.Add(_locationIcon10m);
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            _locationIcon10m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             DataContext = this;
         }
 
@@ -82,23 +102,23 @@ namespace Event_Finder.Views
             try
             {
                 // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
-                double zoomLevel = 11.0f;
+                double zoomLevel = 13.0f;
 
                 // if we have GPS level accuracy
                 if (myPosition.Coordinate.Accuracy <= 10)
                 {
                     // Add the 10m icon and zoom closer.
-                    MainMap.Children.Add(_locationIcon10m);
+                   _locationIcon10m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                     MapLayer.SetPosition(_locationIcon10m, myLocation);
-                    zoomLevel = 13.0f;
+                    
                 }
                 // Else if we have Wi-Fi level accuracy.
                 if (myPosition.Coordinate.Accuracy <= 100)
                 {
                     // Add the 100m icon and zoom a little closer.
-                    
+                    _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                     MapLayer.SetPosition(_locationIcon100m, myLocation);
-                    zoomLevel = 13.0f;
+                    
                 }
 
                 // Set the map to the given location and zoom level.
@@ -115,20 +135,27 @@ namespace Event_Finder.Views
         async private void OnLoad(object sender, RoutedEventArgs e)
         {
             prog.IsActive = true;
-
-            List<Data> results;
             Geoposition myPosition = await lController.GetCurrentLocation();
+            
+            List<Data> results;
+
             PositionUserOnMap(myPosition);
             // get the city name from reverse geocodeing
             cityName = await lController.ReverseGeocodePoint(
                 new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude));
-            // 
-            Data d = await fController.getListOfEventsAttendedByUser();
+            // get list of atteneded events by user.
+            attendedEvents = await fController.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+            FillAttendedEventsByUser(attendedEvents);
+                 
 
+            // get list of events. 
             results = await fController.GetAllEvents(cityName, offset, myPosition.Coordinate.Point.Position.Latitude,
                 myPosition.Coordinate.Point.Position.Longitude,
                 DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+            
+            // position events on map.
             PositionEventsInTheMap(results);
            
             //context data
@@ -138,6 +165,30 @@ namespace Event_Finder.Views
         }
 
 
+        private void FillAttendedEventsByUser(Data attendedEvents) 
+        {
+
+            // add attended events to collection.
+            foreach (Event itemEvent in attendedEvents.data)
+            {
+                try
+                {
+                    AttendingPushpinCollection.Add(new Event
+                    {
+                        eid = itemEvent.eid,
+                        name = itemEvent.name,
+                        Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])),
+                        pic_square = itemEvent.pic_square,
+                        pic_big = itemEvent.pic_big,
+                        description = itemEvent.description,
+                        start_time = itemEvent.start_time,
+                        end_time = itemEvent.end_time,
+                    });
+                }
+                catch (Exception ex) { }
+            }
+        
+        }
         private void PositionEventsInTheMap(List<Data> results)
         {
             // loop through the list of results. 
@@ -183,53 +234,6 @@ namespace Event_Finder.Views
 
         }
 
-        /// <summary>
-        /// This function will give the status of your position.
-        /// </summary>
-        /// <param name="status"></param>
-        /// <returns></returns>
-        private string GetStatusString(PositionStatus status)
-        {
-            var strStatus = "";
-
-            switch (status)
-            {
-                case PositionStatus.Ready:
-                    
-                    strStatus = "Location is available.";
-                    break;
-
-                case PositionStatus.Initializing:
-                    strStatus = "Geolocation service is initializing.";
-                    break;
-
-                case PositionStatus.NoData:
-                    strStatus = "Location service data is not available.";
-                    break;
-
-                case PositionStatus.Disabled:
-                    strStatus = "Location services are disabled. Use the " +
-                                "Settings charm to enable them.";
-                    break;
-
-                case PositionStatus.NotInitialized:
-                    strStatus = "Location status is not initialized because " +
-                                "the app has not yet requested location data.";
-                    break;
-
-                case PositionStatus.NotAvailable:
-                    strStatus = "Location services are not supported on your system.";
-                    break;
-
-                default:
-                    strStatus = "Unknown PositionStatus value.";
-                    break;
-            }
-
-            return (strStatus);
-
-        }
-
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             prog.IsActive = true;
@@ -249,11 +253,15 @@ namespace Event_Finder.Views
             PositionEventsInTheMap(results);
         }
 
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        async private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             Event selectedEvent = (Event)e.ClickedItem;
             MainMap.SetView(selectedEvent.Location, 15.0f);
 
+            // get whether the user is attending this event.
+            RootObject rsvp = await fController.GetRSVPStatusForUser(selectedEvent.eid);
+            SetButtonToStatus(rsvp);
+           
             if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
             {
                 Infobox.DataContext = selectedEvent;
@@ -266,10 +274,41 @@ namespace Event_Finder.Views
             {
                 Infobox.Visibility = Visibility.Collapsed;
             }
-
         }
 
+        private void SetButtonToStatus(RootObject rsvp)
+        {
 
+            if (rsvp.data.Count != 0)
+            {
+                if (rsvp.data[0].rsvp_status == "attending")
+                {
+                    AttendButton.IsEnabled = false;
+                    DeclineButton.IsEnabled = true;
+                    MaybeButton.IsEnabled = true;
+                }
+                else if (rsvp.data[0].rsvp_status == "unsure")
+                {
+                    DeclineButton.IsEnabled = true;
+                    AttendButton.IsEnabled = true;
+                    MaybeButton.IsEnabled = false;
+                }
+                else if (rsvp.data[0].rsvp_status == "declined")
+                {
+                    DeclineButton.IsEnabled = false;
+                    AttendButton.IsEnabled = true;
+                    MaybeButton.IsEnabled = true;
+                }
+
+            }
+            else
+            {
+                DeclineButton.IsEnabled = true;
+                AttendButton.IsEnabled = true;
+                MaybeButton.IsEnabled = true;
+
+            }
+        }
 
         async private void Pushpin_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
@@ -280,6 +319,7 @@ namespace Event_Finder.Views
 
             // to be handeled later.
             RootObject d = await fController.GetRSVPStatusForUser(selectedEvent.eid);
+            SetButtonToStatus(d);
             //Ensure there is content to be displayed before modifying the infobox control
             if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
             {
@@ -378,6 +418,10 @@ namespace Event_Finder.Views
             }
             prog.IsActive = true;
 
+            attendedEvents = await fController.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+            FillAttendedEventsByUser(attendedEvents);
+
             List<Data> results = await fController.GetAllEvents(cityName, offset,
                 myLocation.Latitude,
                 myLocation.Longitude,
@@ -401,20 +445,9 @@ namespace Event_Finder.Views
             return x;
         
         }
-
        
-        /*
-        async private void SearchBox_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            
-            if (e.Key == Windows.System.VirtualKey.Enter) 
-            {
-                List<Data> results = await fController.SearchEventsFromFacebook(searchBox.QueryText, 3, myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude, DateTimeConverter.DateTimeToUnixTimestamp(dateTimePicker.Date.Date));
-                PositionEventsInTheMap(results);
-            }
-        }
-        */
-      
+  
+    
 
         
     }

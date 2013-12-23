@@ -100,10 +100,10 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
+            <!-- Events attending stack and item list -->
             <StackPanel >
                 <TextBlock Text="Events Attending" FontSize="30" HorizontalAlignment="Center"/>
-                <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="280" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
+                <ListView  x:Name="AttendingListView"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="280" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding attendingPushpinCollection}" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel  Orientation="Horizontal"  >
@@ -141,11 +141,11 @@
             <bm:MapLayer>
                 <bm:MapItemsControl x:Name="ListOfpushpins"  ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}" >
                 </bm:MapItemsControl>
-                <Image x:Name="locationImage" Visibility="Collapsed" Width="200" Source="assets/buttonAc2.png" />
+               
 
             </bm:MapLayer>
 
-            <bm:MapLayer Margin="-190,-190,0,0">
+            <bm:MapLayer >
                 <Grid x:Name="Infobox" Visibility="Collapsed">
 
                     <Border Width="500" Height="500" Background="#FF2931E2" Opacity="0.8" BorderBrush="White" BorderThickness="2" CornerRadius="50">

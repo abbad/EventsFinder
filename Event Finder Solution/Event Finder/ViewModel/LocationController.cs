@@ -48,5 +48,52 @@ namespace Event_Finder.ViewModel
            
             return geocodeResponse.Results[0].Address.Locality;
         }
+
+        /// <summary>
+        /// This function will give the status of your position.
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        private string GetStatusString(PositionStatus status)
+        {
+            var strStatus = "";
+
+            switch (status)
+            {
+                case PositionStatus.Ready:
+
+                    strStatus = "Location is available.";
+                    break;
+
+                case PositionStatus.Initializing:
+                    strStatus = "Geolocation service is initializing.";
+                    break;
+
+                case PositionStatus.NoData:
+                    strStatus = "Location service data is not available.";
+                    break;
+
+                case PositionStatus.Disabled:
+                    strStatus = "Location services are disabled. Use the " +
+                                "Settings charm to enable them.";
+                    break;
+
+                case PositionStatus.NotInitialized:
+                    strStatus = "Location status is not initialized because " +
+                                "the app has not yet requested location data.";
+                    break;
+
+                case PositionStatus.NotAvailable:
+                    strStatus = "Location services are not supported on your system.";
+                    break;
+
+                default:
+                    strStatus = "Unknown PositionStatus value.";
+                    break;
+            }
+
+            return (strStatus);
+
+        }
     }
 }
