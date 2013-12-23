@@ -355,8 +355,11 @@ namespace Event_Finder.Views
             if (attending == true)
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "attending" });
-                // add it to the list of events the person is going.
-                AttendingPushpinCollection.Add(selectedEvent);
+                // check if the event is in the list of the attended events.
+                if (!AttendingPushpinCollection.Contains(selectedEvent))
+                {
+                    AttendingPushpinCollection.Add(selectedEvent);
+                }
             }else
             {
                 dialog.Content = "Could not RSVP for Event";
@@ -376,7 +379,10 @@ namespace Event_Finder.Views
             {
 
                 SetButtonToStatus(new RSVP { rsvp_status = "unsure" });
-                AttendingPushpinCollection.Add(selectedEvent);
+                // check if the event is in the list of the attended events.
+                if (!AttendingPushpinCollection.Contains(selectedEvent)) { 
+                    AttendingPushpinCollection.Add(selectedEvent);
+                }
             }
             else 
             {
@@ -395,9 +401,12 @@ namespace Event_Finder.Views
 
             if (decline == true) 
             {
-
                 SetButtonToStatus(new RSVP { rsvp_status = "declined" });
-                AttendingPushpinCollection.Remove(selectedEvent);
+                // check if the event is in the list of the attended events.
+                if (!AttendingPushpinCollection.Contains(selectedEvent))
+                {
+                    AttendingPushpinCollection.Add(selectedEvent);
+                }
             }
             else
             {
@@ -460,16 +469,16 @@ namespace Event_Finder.Views
             catch (System.ArgumentOutOfRangeException argumentOutOfRangeException)
             {
                 _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                ex = argumentOutOfRangeException;
-
-            } if (ex != null && !open)
-            {
-                await dialog.ShowAsync();
-                open = false;
+                dialog.Content = "Could not find city:" + argumentOutOfRangeException.Data;
+                dialog.ShowAsync();
 
             }
+            catch (System.TimeoutException timeoutException) 
+            {
+                dialog.Content = "Could not connect to the internet:" + timeoutException.Data;
+                dialog.ShowAsync();
+            } 
             
-
             prog.IsActive = true;
             // get list of events. 
             results = await fController.GetAllEvents(cityName, offset, myLocation.Latitude,
@@ -479,8 +488,6 @@ namespace Event_Finder.Views
             prog.IsActive = true;
             // position events on map.
             FillEventsInPushPinCollection(results);
-
-          
         
         }
 
