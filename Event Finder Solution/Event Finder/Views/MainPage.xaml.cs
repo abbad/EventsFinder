@@ -43,7 +43,7 @@ namespace Event_Finder.Views
         //collection of pins
         private Button textBlock;
 
-        private double offset = 1;
+        private double offset = 0.5;
 
         MessageDialog dialog = new MessageDialog("Could not get city name!");
 
@@ -71,7 +71,7 @@ namespace Event_Finder.Views
             }
         }
 
-        Data attendedEvents;
+        List<Data> attendedEvents;
 
 
         public MainPage()
@@ -135,66 +135,79 @@ namespace Event_Finder.Views
         async private void OnLoad(object sender, RoutedEventArgs e)
         {
             prog.IsActive = true;
-            Geoposition myPosition = await lController.GetCurrentLocation();
-            
-            List<Data> results;
 
+            // initial user position
+            Geoposition myPosition = await lController.GetCurrentLocation();
             PositionUserOnMap(myPosition);
-            // get the city name from reverse geocodeing
-            cityName = await lController.ReverseGeocodePoint(
-                new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude));
+
+            prog.IsActive = true;
             // get list of atteneded events by user.
             attendedEvents = await fController.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
-            FillAttendedEventsByUser(attendedEvents);
-                 
+            FillAttendedEventsByUserInCollection(attendedEvents);
+            // Fill everythin needed for the app to function.
+            ReloadALL();
 
-            // get list of events. 
-            results = await fController.GetAllEvents(cityName, offset, myPosition.Coordinate.Point.Position.Latitude,
-                myPosition.Coordinate.Point.Position.Longitude,
-                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
-            
-            // position events on map.
-            PositionEventsInTheMap(results);
-           
             //context data
             MainMap.DataContext = this;
-            prog.IsActive = false;
 
         }
 
 
-        private void FillAttendedEventsByUser(Data attendedEvents) 
+        private void FillAttendedEventsByUserInCollection(List<Data> attendedEvents) 
         {
 
             // add attended events to collection.
-            foreach (Event itemEvent in attendedEvents.data)
+            // loop through the list of results.
+            string venueName1 = "";
+            prog.IsActive = true;
+            foreach (var result in attendedEvents)
             {
-                try
+                foreach (var itemEvent in result.data)
                 {
-                    AttendingPushpinCollection.Add(new Event
+                    try
                     {
-                        eid = itemEvent.eid,
-                        name = itemEvent.name,
-                        Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])),
-                        pic_square = itemEvent.pic_square,
-                        pic_big = itemEvent.pic_big,
-                        description = itemEvent.description,
-                        start_time = itemEvent.start_time,
-                        end_time = itemEvent.end_time,
-                    });
+                        venueName1 = itemEvent.venue["name"];
+                    }
+                    catch (Exception e) { }
+                    try
+                    {
+                        Event ee = new Event
+                            {
+                                eid = itemEvent.eid,
+                                name = itemEvent.name,
+                                Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])),
+                                venueName = venueName1,
+                                pic_square = itemEvent.pic_square,
+                                pic_big = itemEvent.pic_big,
+                                description = itemEvent.description,
+                                start_time = itemEvent.start_time,
+                                end_time = itemEvent.end_time,
+                            };
+
+                        // fill it in the item list of users event.
+                        AttendingPushpinCollection.Add(ee);
+                      
+                    }
+                    catch (Exception asda)
+                    {
+
+                    }
+
                 }
-                catch (Exception ex) { }
             }
+            prog.IsActive = false;
+
         
         }
-        private void PositionEventsInTheMap(List<Data> results)
+
+        private void FillEventsInPushPinCollection(List<Data> results)
         {
-            // loop through the list of results. 
-            if (PushpinCollection.Count != 0) 
+
+            // a workaround for events.
+            foreach (Event itemEvent in AttendingPushpinCollection)
             {
-                PushpinCollection.Clear();
+                PushpinCollection.Add(itemEvent);
             }
             string venueName1 = "";
             prog.IsActive = true;
@@ -228,8 +241,10 @@ namespace Event_Finder.Views
                        
                     }
                     
-                }
+                } 
+
             }
+
             prog.IsActive = false;
 
         }
@@ -237,20 +252,11 @@ namespace Event_Finder.Views
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             prog.IsActive = true;
-
-            if (cityName == null)
-            {
-                cityName = await lController.ReverseGeocodePoint(
-                    new Location(myLocation.Latitude, myLocation.Longitude));
-            }
-
-            List<Data> results = await fController.GetAllEvents(cityName, offset,
-                myLocation.Latitude,
-                myLocation.Longitude, 
-                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)
-                );
-            PositionEventsInTheMap(results);
+            // get list of atteneded events by user.
+            attendedEvents = await fController.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+            FillAttendedEventsByUserInCollection(attendedEvents);
+            ReloadALL();
         }
 
         async private void ListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -316,8 +322,7 @@ namespace Event_Finder.Views
             Event selectedEvent = (Event)selectedPushpin.DataContext;
             MainMap.SetView(selectedEvent.Location, 15.0f);
             
-
-            // to be handeled later.
+            // see RSVP status of event.
             RootObject d = await fController.GetRSVPStatusForUser(selectedEvent.eid);
             SetButtonToStatus(d);
             //Ensure there is content to be displayed before modifying the infobox control
@@ -374,6 +379,7 @@ namespace Event_Finder.Views
 
         }
 
+        // show reposition option
         private void MainMap_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
             
@@ -387,50 +393,61 @@ namespace Event_Finder.Views
 
         async void btn_Click(object sender, RoutedEventArgs e)
         {
-            
-            System.ArgumentOutOfRangeException ex = null;
-            bool open = false;
-
-            // clear events on the map. 
-            PushpinCollection.Clear();
-
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             
             // position me there 
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
             MapLayer.SetPosition(_locationIcon100m, myLocation);
 
+            ReloadALL();
+           
+            prog.IsActive = true;
+            
+        }
+
+        /// <summary>
+        ///  a function that will reload all items displayed on screen.
+        /// </summary>
+        /// <param name="myPosition"></param>
+        async private void ReloadALL()
+        {
+            prog.IsActive = true;
+            System.ArgumentOutOfRangeException ex = null;
+            bool open = false;   
+            pushpinCollection.Clear();
+           
+            List<Data> results;
+            // get the city name from reverse geocodeing
             try
             {
                 cityName = await lController.ReverseGeocodePoint(
                     new Location(myLocation.Latitude, myLocation.Longitude));
             }
-            catch (System.ArgumentOutOfRangeException argumentOutOfRangeException) 
+            catch (System.ArgumentOutOfRangeException argumentOutOfRangeException)
             {
                 _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 ex = argumentOutOfRangeException;
-                
-            }if ( ex != null && !open)
+
+            } if (ex != null && !open)
             {
                 await dialog.ShowAsync();
                 open = false;
-                
+
             }
-            prog.IsActive = true;
-
-            attendedEvents = await fController.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
-            FillAttendedEventsByUser(attendedEvents);
-
-            List<Data> results = await fController.GetAllEvents(cityName, offset,
-                myLocation.Latitude,
-                myLocation.Longitude,
-                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)
-                );
-
-            PositionEventsInTheMap(results);
             
+
+            prog.IsActive = true;
+            // get list of events. 
+            results = await fController.GetAllEvents(cityName, offset, myLocation.Latitude,
+               myLocation.Longitude,
+                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+            prog.IsActive = true;
+            // position events on map.
+            FillEventsInPushPinCollection(results);
+
+          
+        
         }
 
         private Button CreateTextBlock() 
@@ -446,6 +463,7 @@ namespace Event_Finder.Views
         
         }
        
+        
   
     
 
