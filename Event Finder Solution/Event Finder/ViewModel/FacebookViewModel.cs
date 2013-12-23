@@ -37,6 +37,14 @@ namespace Event_Finder.ViewModel
                 });
         }
 
+        async public Task<Data> getListOfEventsAttendedByUser()
+        {
+            String result = await CallFacebookFQL(MakeQueryForUserAttendedEvents());
+            return ParseEvents(result);
+            
+        
+        }
+
         async public Task<List<Data>> GetAllEvents(string searchString, double offset, double latitude, double longitude, double dt, double dtEndRange)
         { 
             List<Data> results = new List<Data>();
@@ -147,6 +155,12 @@ namespace Event_Finder.ViewModel
                                        dt.ToString(),
                                        dtEndRange.ToString());
                                         
+        }
+
+        private String MakeQueryForUserAttendedEvents() 
+        {
+            return String.Format(@"SELECT eid, start_time, end_time, pic_big, pic_square, name, description, venue FROM event WHERE eid IN (
+                SELECT eid FROM event_member WHERE uid = me() and rsvp_status=""attending"") and start_time > now()");
         }
 
     }

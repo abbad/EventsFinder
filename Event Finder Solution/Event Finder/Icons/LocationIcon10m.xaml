@@ -7,10 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Canvas>
-        <Ellipse Height="25" Width="25" Fill="#FFF0F0F0" Margin="-12.5,-12.5,0,0"></Ellipse>
-        <Ellipse Height="20" Width="20" Fill="Black" Margin="-10,-10,0,0"></Ellipse>
-        <Ellipse Height="10" Width="10" Fill="White" Margin="-5,-5,0,0"></Ellipse>
-    </Canvas>
+        <Image Height="25" Width="25" Source="/Icons/button.png" Margin="-12.5,-12.5,0,0"></Image>
+       
 
 </UserControl>

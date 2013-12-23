@@ -85,7 +85,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <TextBlock Text="                    Event Finder: Discover new Events"  FontSize="50"/>
+        <TextBlock Text="Event Finder: Discover new Events" HorizontalAlignment="Center"  FontSize="50"/>
         
         <Button Grid.Row="1"   Height="73" HorizontalAlignment="Center" Name="btnFacebookLogin" VerticalAlignment="Center" Width="276" Click="btnFacebookLogin_Click" FontFamily="Global User Interface" Margin="202,410,205,225" Style="{StaticResource fbLog}" />
     </Grid>

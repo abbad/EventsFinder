@@ -10,7 +10,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:bm="using:Bing.Maps"
     mc:Ignorable="d" FontFamily="Global User Interface">
-
+   
     <Page.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -43,8 +43,8 @@
             </DataTemplate>
         </ResourceDictionary>
     </Page.Resources>
-
-
+    
+   
     <Grid x:Name="MainGrid">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -141,6 +141,8 @@
             <bm:MapLayer>
                 <bm:MapItemsControl x:Name="ListOfpushpins"  ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}" >
                 </bm:MapItemsControl>
+                <Image x:Name="locationImage" Visibility="Collapsed" Width="200" Source="assets/buttonAc2.png" />
+
             </bm:MapLayer>
 
             <bm:MapLayer Margin="-190,-190,0,0">

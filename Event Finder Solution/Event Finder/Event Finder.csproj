@@ -169,12 +169,17 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Icons\button.png" />
+    <Content Include="Assets\buttonAc2.png" />
+    <Content Include="Assets\close.png" />
+    <Content Include="Assets\fblog.png" />
+    <Content Include="Assets\icon.png" />
     <Content Include="Assets\Logo.scale-100.png" />
+    <Content Include="Assets\long.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
+    <Content Include="Assets\splash.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
-    <Content Include="Icons\marker.png" />
-    <Content Include="Icons\marker2.png" />
     <None Include="Service References\geocodeservice\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
