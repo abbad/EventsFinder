@@ -122,7 +122,8 @@ namespace Event_Finder.Views
             // get the city name from reverse geocodeing
             cityName = await lController.ReverseGeocodePoint(
                 new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude));
-            
+            // 
+            Data d = await fController.getListOfEventsAttendedByUser();
 
             results = await fController.GetAllEvents(cityName, offset, myPosition.Coordinate.Point.Position.Latitude,
                 myPosition.Coordinate.Point.Position.Longitude,
