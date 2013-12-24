@@ -62,7 +62,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1076*"/>
-            <ColumnDefinition Width="290*"/>
+            <ColumnDefinition Width="300*"/>
         </Grid.ColumnDefinitions>
 
 
@@ -70,12 +70,12 @@
         <TextBlock Text="EVENT FINDER" Grid.Row="0" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Margin="0,6" Width="324"  />
 
         <!-- row 1 Categories, Event labels  -->
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Events" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="40" Margin="58,10,44,9" Height="53" Width="188"/>
+        <Image Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"    Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill"/>
 
         <!-- row 2 Categories, Events stacks -->
 
         <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
-            <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="300" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
+            <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="310" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel  Orientation="Horizontal"  >
@@ -100,10 +100,12 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
             <!-- Events attending stack and item list -->
             <StackPanel >
                 <TextBlock Text="My Events" FontSize="30" HorizontalAlignment="Center"/>
-                <ListView  x:Name="AttendingListView"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="280" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding attendingPushpinCollection}" >
+                    <ListView IsSwipeEnabled="False"  x:Name="AttendingListView"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="230" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding attendingPushpinCollection}" >
+
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel  Orientation="Horizontal"  >
@@ -137,30 +139,27 @@
         <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  Holding="MainMap_Holding" RightTapped="MainMap_RightTapped" x:Name="MainMap" Loaded="OnLoad" Grid.RowSpan="2" Grid.Row="2">
 
             <ProgressRing x:Name="prog" Height="200" Width="200" Margin="420,210,0,0"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+            <!-- list of pushpins maplayer -->
             <bm:MapLayer>
                 <bm:MapItemsControl x:Name="ListOfpushpins"  ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}" >
                 </bm:MapItemsControl>
-               
-
             </bm:MapLayer>
-
-            <bm:MapLayer >
+            <!-- Infobox map Layer -->
+            <bm:MapLayer>
                 <Grid x:Name="Infobox" Visibility="Collapsed">
-
                     <Border Width="500" Height="500" Background="#FF2931E2" Opacity="0.8" BorderBrush="White" BorderThickness="2" CornerRadius="50">
-                        <Button Content="X" Style="{StaticResource closeButton}" Tapped="CloseInfobox_Tapped" HorizontalAlignment="Right" Background="Red" VerticalAlignment="Top" />
+                        <Button Height="50" Width="50"  Style="{StaticResource closeButton}" Tapped="CloseInfobox_Tapped" HorizontalAlignment="Right" Background="Red" VerticalAlignment="Top" Margin="0,-22,-25,0" />
                     </Border>
 
                     <StackPanel Height="500">
                         <Grid Height="70" Width="400">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <TextBlock Text="{Binding name}"  Height="Auto"  FontSize="22"  TextWrapping="Wrap" HorizontalAlignment="Center" />
+                            <ScrollViewer  Padding="0,10,0,0" VerticalScrollBarVisibility="Auto">
+                                <TextBlock Text="{Binding name}"  Height="Auto"  FontSize="21.333"  TextWrapping="Wrap" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontWeight="Bold" />
                             </ScrollViewer>
                         </Grid>
                         <Image Height="80" Width="80" Source="{Binding pic_big}" HorizontalAlignment="Center" />
-                        <ScrollViewer Padding="20,0,0,0"   Width="500" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="300">
-                            <TextBlock Text="{Binding description}"  FontSize="20" Width="450" TextWrapping="Wrap" />
+                        <ScrollViewer Style="{StaticResource koz}" Padding="0,0,0,0" Height="280"  Width="500" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="300">
+                            <TextBlock Text="{Binding description}"  FontSize="21.333" Width="450" TextWrapping="Wrap" FontFamily="Segoe UI" FontWeight="Light" />
                         </ScrollViewer>
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <Button x:Name="AttendButton" Content="Attend" Width="100" Height="50" Click="AttendButton_Click" />
@@ -168,17 +167,15 @@
                             <Button x:Name="DeclineButton" Content="Decline" Width="100" Height="50" Click="DeclineButton_Click"/>
                         </StackPanel>
                     </StackPanel>
-
                 </Grid>
             </bm:MapLayer>
         </bm:Map>
-        <DatePicker  x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged" Margin="680,18,20,22" Height="32" Width="376" Grid.Row="1" />
-        <DatePicker x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged" Margin="47,18,653,22" Height="32" Width="376" Grid.Row="1" />
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40" Margin="436,10,422,14" Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Grid.Row="1" >
-        	<Run Text="Date Range"/>
-        	<LineBreak/>
-        	<Run/>
-        </TextBlock>
+        
+        <DatePicker  Header="To" x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Right" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" Grid.Row="1" />
+        <DatePicker Header="From" x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Left" Margin="10,0,0,0" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" Grid.Row="1" />
+        <TextBlock Text="Date Range" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"  Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Grid.Row="1" />
+        	
+        
     </Grid>
 
 </Page>
