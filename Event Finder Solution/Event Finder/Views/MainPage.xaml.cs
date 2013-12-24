@@ -461,13 +461,14 @@ namespace Event_Finder.Views
             catch (System.ArgumentOutOfRangeException argumentOutOfRangeException)
             {
                 _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                dialog.Content = "Could not find city:" + argumentOutOfRangeException.Data;
+                dialog.Content = "Could not find city: " + argumentOutOfRangeException.Data;
                 dialog.ShowAsync();
+                return;
 
             }
             catch (System.TimeoutException timeoutException) 
             {
-                dialog.Content = "Could not connect to the internet:" + timeoutException.Data;
+                dialog.Content = "Could not connect to the internet: " + timeoutException.Data;
                 dialog.ShowAsync();
             } 
             
