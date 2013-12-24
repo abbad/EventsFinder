@@ -156,7 +156,7 @@ namespace Event_Finder.Views
 
 
             }
-            catch (System.UnauthorizedAccessException unauthorizedAccessException )
+            catch (System.UnauthorizedAccessException )
             {
                 dialog.Content = "Could not find location";
             }
@@ -469,9 +469,9 @@ namespace Event_Finder.Views
                 
 
             }
-            catch (System.TimeoutException timeoutException) 
+            catch (System.TimeoutException) 
             {
-                dialog.Content = "Could not connect to the internet: ";
+                dialog.Content = "Could not connect to the internet";
                 exceptionOccured = true;
             }if (exceptionOccured)
             { 
