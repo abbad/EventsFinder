@@ -158,7 +158,7 @@ namespace Event_Finder.Views
             }
             catch (System.UnauthorizedAccessException unauthorizedAccessException )
             {
-                dialog.Content = "Could not find location: " + unauthorizedAccessException.Data;
+                dialog.Content = "Could not find location";
             }
         }
 
@@ -471,7 +471,7 @@ namespace Event_Finder.Views
             }
             catch (System.TimeoutException timeoutException) 
             {
-                dialog.Content = "Could not connect to the internet: " + timeoutException.Data;
+                dialog.Content = "Could not connect to the internet: ";
                 exceptionOccured = true;
             }if (exceptionOccured)
             { 
@@ -490,7 +490,7 @@ namespace Event_Finder.Views
             
             prog.IsActive = true;
             // get list of events. 
-            results = await facebookApi.GetAllEvents(cityName, offset, myLocation.Latitude,
+            results = await facebookApi.GetAllEvents(SafeDBString(cityName), offset, myLocation.Latitude,
                myLocation.Longitude,
                 DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
@@ -498,6 +498,11 @@ namespace Event_Finder.Views
             // position events on map.
             FillEventsCollection(results);
         
+        }
+
+        string SafeDBString(string inputValue)
+        {
+            return inputValue.Replace("'", " ");
         }
 
         private Button CreateButton() 
