@@ -115,6 +115,8 @@ namespace Event_Finder.Views
         public MainPage()
         {
             this.InitializeComponent();
+            dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
+            dialog.CancelCommandIndex = 1;
             initializeObjects();
             setInitialItemsToCollapsed();
             initializeCollections();
@@ -449,7 +451,8 @@ namespace Event_Finder.Views
         async private void QueryForEventsWithinAnArea()
         {
             prog.IsActive = true;
-           
+            bool handeled = false;
+            bool exceptionOccured = false;
            
             List<Data> results;
             // get the city name from reverse geocodeing
@@ -458,19 +461,32 @@ namespace Event_Finder.Views
                 cityName = await lController.ReverseGeocodePoint(
                     new Location(myLocation.Latitude, myLocation.Longitude));
             }
-            catch (System.ArgumentOutOfRangeException argumentOutOfRangeException)
+            catch (System.ArgumentOutOfRangeException)
             {
                 _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                dialog.Content = "Could not find city: " + argumentOutOfRangeException.Data;
-                dialog.ShowAsync();
-                return;
+                dialog.Content = "Could not find city name"; 
+                exceptionOccured = true;
+                
 
             }
             catch (System.TimeoutException timeoutException) 
             {
                 dialog.Content = "Could not connect to the internet: " + timeoutException.Data;
-                dialog.ShowAsync();
-            } 
+                exceptionOccured = true;
+            }if (exceptionOccured)
+            { 
+               
+                try
+                {
+                    if (!handeled) {
+                        await dialog.ShowAsync();
+                        handeled = true;
+                    }
+                   
+                }
+                catch (Exception){}
+                
+            }
             
             prog.IsActive = true;
             // get list of events. 
