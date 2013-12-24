@@ -35,12 +35,13 @@ namespace Event_Finder.Views
         LocationIcon10m _locationIcon10m;
         LocationIcon100m _locationIcon100m;
         // controller for facebook functions
-        public FacebookViewModel fController;
+        public FacebookViewModel facebookApi;
         // controller for geolocation. 
         LocationController lController;
         // application location
         public Location myLocation;
-        //collection of pins
+        
+        // text block for repositioning.
         private Button textBlock;
 
         private double offset = 0.5;
@@ -49,7 +50,7 @@ namespace Event_Finder.Views
 
         private String cityName = "";
         
-        // List of events gathered from an area.
+        // List of pushpin collection
         private ObservableCollection<Event> PushpinCollection { get; set; }
 
         public ObservableCollection<Event> pushpinCollection
@@ -61,37 +62,64 @@ namespace Event_Finder.Views
         }
 
         // List of events attended by user.
-        private ObservableCollection<Event> AttendingPushpinCollection { get; set; }
+        private ObservableCollection<Event> AttendingCollection { get; set; }
 
-        public ObservableCollection<Event> attendingPushpinCollection
+        public ObservableCollection<Event> attendingCollection
         {
             get
             {
-                return AttendingPushpinCollection;
+                return AttendingCollection;
             }
         }
 
-        List<Data> attendedEvents;
+        // List of events queried for. 
+        private ObservableCollection<Event> ItemEventsList { get; set; }
 
+        public ObservableCollection<Event> itemEventsList
+        {
+            get
+            {
+                return ItemEventsList;
+            }
+        }
 
+        private void initializeCollections() 
+        {
+            PushpinCollection = new ObservableCollection<Event>();
+            AttendingCollection = new ObservableCollection<Event>();
+            ItemEventsList = new ObservableCollection<Event>();
+        }
+
+        private void initializeObjects() 
+        {
+            lController = new LocationController();
+            facebookApi = new FacebookViewModel();
+            _locationIcon10m = new LocationIcon10m();
+            _locationIcon100m = new LocationIcon100m();
+            textBlock = CreateButton();
+        }
+
+        private void addInitialChildrenToMap() 
+        {
+            MainMap.Children.Add(_locationIcon100m);
+            MainMap.Children.Add(_locationIcon10m);
+            MainMap.Children.Add(textBlock);
+        }
+
+        private void setInitialItemsToCollapsed() 
+        {
+            _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            _locationIcon10m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+            textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+        }
         public MainPage()
         {
             this.InitializeComponent();
-            dialog.Options = MessageDialogOptions.AcceptUserInputAfterDelay;
+            initializeObjects();
+            setInitialItemsToCollapsed();
+            initializeCollections();
+            addInitialChildrenToMap();
             endRangeDateTimePicker.Date = DateTime.Today.AddDays(5);
-            lController = new LocationController();
-            fController = new FacebookViewModel();
-            _locationIcon10m = new LocationIcon10m();
-            _locationIcon100m = new LocationIcon100m();
-            textBlock = CreateTextBlock();
-            MainMap.Children.Add(textBlock);
-            textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            PushpinCollection = new ObservableCollection<Event>();
-            AttendingPushpinCollection = new ObservableCollection<Event>();
-            MainMap.Children.Add(_locationIcon100m);
-            MainMap.Children.Add(_locationIcon10m);
-            _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            _locationIcon10m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             DataContext = this;
         }
 
@@ -126,9 +154,9 @@ namespace Event_Finder.Views
 
 
             }
-            catch (System.UnauthorizedAccessException)
+            catch (System.UnauthorizedAccessException unauthorizedAccessException )
             {
-               
+                dialog.Content = "Could not find location: " + unauthorizedAccessException.Data;
             }
         }
 
@@ -141,60 +169,45 @@ namespace Event_Finder.Views
             PositionUserOnMap(myPosition);
 
             prog.IsActive = true;
+
             // get list of atteneded events by user.
-            attendedEvents = await fController.getListOfEventsAttendedByUser(
+            FillAttendedEventsByUserInCollection(await facebookApi.getListOfEventsAttendedByUser(
                 DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
-            FillAttendedEventsByUserInCollection(attendedEvents);
-            // Fill everythin needed for the app to function.
-            ReloadALL();
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)));
+            
+            // QueryForEventsWithinAnArea
+            QueryForEventsWithinAnArea();
 
             //context data
             MainMap.DataContext = this;
 
         }
 
+        private bool CheckEventForLatitudeAndLongitude(Event Item) 
+        {
+            return (Item.venue.ContainsKey("latitude") && Item.venue.ContainsKey("longitude"));
+        }
 
         private void FillAttendedEventsByUserInCollection(List<Data> attendedEvents) 
         {
 
             // add attended events to collection.
-            // loop through the list of results.
-            string venueName1 = "";
             prog.IsActive = true;
             foreach (var result in attendedEvents)
             {
                 foreach (var itemEvent in result.data)
                 {
-                    try
+                    if (CheckEventForLatitudeAndLongitude(itemEvent)) 
                     {
-                        venueName1 = itemEvent.venue["name"];
-                    }
-                    catch (Exception e) { }
-                    try
-                    {
-                        Event ee = new Event
-                            {
-                                eid = itemEvent.eid,
-                                name = itemEvent.name,
-                                Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])),
-                                venueName = venueName1,
-                                pic_square = itemEvent.pic_square,
-                                pic_big = itemEvent.pic_big,
-                                description = itemEvent.description,
-                                start_time = itemEvent.start_time,
-                                end_time = itemEvent.end_time,
-                            };
+                        // create the instance of location 
+                        itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
 
                         // fill it in the item list of users event.
-                        AttendingPushpinCollection.Add(ee);
-                      
-                    }
-                    catch (Exception asda)
-                    {
+                        AttendingCollection.Add(itemEvent);
 
+                        // and add them to pushpin collection
+                        PushpinCollection.Add(itemEvent);
                     }
-
                 }
             }
             prog.IsActive = false;
@@ -202,64 +215,45 @@ namespace Event_Finder.Views
         
         }
 
-        private void FillEventsInPushPinCollection(List<Data> results)
+        private void FillEventsCollection(List<Data> results)
         {
-            // a workaround for my events.
-            foreach (Event itemEvent in AttendingPushpinCollection)
-            {
-                PushpinCollection.Add(itemEvent);
-            }
-            
-            string venueName1 = "";
             prog.IsActive = true;
             foreach (var result in results)
             {
                 foreach (var itemEvent in result.data)
                 {
-                    try
+                   
+                   if (CheckEventForLatitudeAndLongitude(itemEvent)) 
                     {
-                        venueName1 = itemEvent.venue["name"];
-                    }
-                    catch (Exception e) { }
-                    try
-                    {
+                        itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
+                        // fill it in item lsit of events
+                        ItemEventsList.Add(itemEvent);
 
-                        PushpinCollection.Add(
-                            new Event { 
-                                eid = itemEvent.eid,
-                                name = itemEvent.name, 
-                                Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"])),
-                                venueName = venueName1,
-                                pic_square = itemEvent.pic_square,
-                                pic_big = itemEvent.pic_big,
-                                description = itemEvent.description,
-                                start_time = itemEvent.start_time,
-                                end_time = itemEvent.end_time,
-                            });
+                        // add them to pushpin collection
+                        PushpinCollection.Add(itemEvent);
                     }
-                    catch (Exception asda)
-                    {
-                       
-                    }
-                    
                 } 
 
             }
-
-            
-
             prog.IsActive = false;
 
         }
 
+        private void clearAllCollections() 
+        {
+            pushpinCollection.Clear();
+            attendingCollection.Clear();
+            itemEventsList.Clear();
+        }
+
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
+            clearAllCollections();
             prog.IsActive = true;
             // get list of atteneded events by user.
-            attendedEvents = await fController.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
-            FillAttendedEventsByUserInCollection(attendedEvents);
-            ReloadALL();
+            FillAttendedEventsByUserInCollection(await facebookApi.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)));
+            QueryForEventsWithinAnArea();
         }
 
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -316,7 +310,7 @@ namespace Event_Finder.Views
             MainMap.SetView(selectedEvent.Location, 15.0f);
 
             // see RSVP status of event.
-            RootObject rsvp = await fController.GetRSVPStatusForUser(selectedEvent.eid);
+            RootObject rsvp = await facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
             if (rsvp.data.Count != 0)
             {
                 SetButtonToStatus(rsvp.data[0]);
@@ -351,14 +345,14 @@ namespace Event_Finder.Views
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
-            bool attending = await fController.RSVPEvent(selectedEvent.eid, "attending");
+            bool attending = await facebookApi.RSVPEvent(selectedEvent.eid, "attending");
             if (attending == true)
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "attending" });
                 // check if the event is in the list of the attended events.
-                if (!AttendingPushpinCollection.Contains(selectedEvent))
+                if (!AttendingCollection.Contains(selectedEvent))
                 {
-                    AttendingPushpinCollection.Add(selectedEvent);
+                    AttendingCollection.Add(selectedEvent);
                 }
             }else
             {
@@ -373,15 +367,15 @@ namespace Event_Finder.Views
             Event selectedEvent = (Event)btn.DataContext;
             bool maybe = false;
 
-            maybe = await fController.RSVPEvent(selectedEvent.eid, "maybe");
+            maybe = await facebookApi.RSVPEvent(selectedEvent.eid, "maybe");
 
             if (maybe == true)
             {
 
                 SetButtonToStatus(new RSVP { rsvp_status = "unsure" });
                 // check if the event is in the list of the attended events.
-                if (!AttendingPushpinCollection.Contains(selectedEvent)) { 
-                    AttendingPushpinCollection.Add(selectedEvent);
+                if (!AttendingCollection.Contains(selectedEvent)) { 
+                    AttendingCollection.Add(selectedEvent);
                 }
             }
             else 
@@ -397,15 +391,15 @@ namespace Event_Finder.Views
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
-            bool decline = await fController.RSVPEvent(selectedEvent.eid, "declined");
+            bool decline = await facebookApi.RSVPEvent(selectedEvent.eid, "declined");
 
             if (decline == true) 
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "declined" });
                 // check if the event is in the list of the attended events.
-                if (!AttendingPushpinCollection.Contains(selectedEvent))
+                if (!AttendingCollection.Contains(selectedEvent))
                 {
-                    AttendingPushpinCollection.Add(selectedEvent);
+                    AttendingCollection.Add(selectedEvent);
                 }
             }
             else
@@ -442,7 +436,7 @@ namespace Event_Finder.Views
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
             MapLayer.SetPosition(_locationIcon100m, myLocation);
 
-            ReloadALL();
+            QueryForEventsWithinAnArea();
             AttendingListView.IsEnabled = true;
             prog.IsActive = true;
             
@@ -452,12 +446,10 @@ namespace Event_Finder.Views
         ///  a function that will reload all items displayed on screen.
         /// </summary>
         /// <param name="myPosition"></param>
-        async private void ReloadALL()
+        async private void QueryForEventsWithinAnArea()
         {
             prog.IsActive = true;
-            System.ArgumentOutOfRangeException ex = null;
-            bool open = false;   
-            pushpinCollection.Clear();
+           
            
             List<Data> results;
             // get the city name from reverse geocodeing
@@ -481,17 +473,17 @@ namespace Event_Finder.Views
             
             prog.IsActive = true;
             // get list of events. 
-            results = await fController.GetAllEvents(cityName, offset, myLocation.Latitude,
+            results = await facebookApi.GetAllEvents(cityName, offset, myLocation.Latitude,
                myLocation.Longitude,
                 DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
             prog.IsActive = true;
             // position events on map.
-            FillEventsInPushPinCollection(results);
+            FillEventsCollection(results);
         
         }
 
-        private Button CreateTextBlock() 
+        private Button CreateButton() 
         {
             
             Button x = new Button();
@@ -503,9 +495,7 @@ namespace Event_Finder.Views
             return x;
         
         }
-       
-        
-  
+      
     
 
         

@@ -30,14 +30,12 @@
               VerticalAlignment="Top"
               Width="115" Fill="#CC1553A5" />
                         <Grid Height="115" Width="115"  >
-
                             <Image Source="{Binding pic_big}" Margin="0,0,23,40" Height="115" Width="115" />
                         </Grid>
-
                     </Grid>
                 </UserControl>
             </ControlTemplate>
-            <DataTemplate x:Key="LogoTemplate">
+            <DataTemplate x:Key="PushPinTemplate">
                 <bm:Pushpin  bm:MapLayer.Position="{Binding Location}" Height="120" Width="120" Margin="0,-120,0,0" Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
                 </bm:Pushpin>
             </DataTemplate>
@@ -75,7 +73,7 @@
         <!-- row 2 Categories, Events stacks -->
 
         <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
-            <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="310" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
+            <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="310" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding itemEventsList}" IsSwipeEnabled="False" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel  Orientation="Horizontal"  >
@@ -104,7 +102,7 @@
             <!-- Events attending stack and item list -->
             <StackPanel >
                 <TextBlock Text="My Events" FontSize="30" HorizontalAlignment="Center"/>
-                    <ListView IsSwipeEnabled="False"  x:Name="AttendingListView"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="230" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding attendingPushpinCollection}" >
+                <ListView IsSwipeEnabled="False"  x:Name="AttendingListView"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="230" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding attendingCollection}" >
 
                     <ListView.ItemTemplate>
                         <DataTemplate>
@@ -140,8 +138,8 @@
 
             <ProgressRing x:Name="prog" Height="200" Width="200" Margin="420,210,0,0"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <!-- list of pushpins maplayer -->
-            <bm:MapLayer>
-                <bm:MapItemsControl x:Name="ListOfpushpins"  ItemTemplate="{StaticResource LogoTemplate}" ItemsSource="{Binding pushpinCollection}" >
+            <bm:MapLayer x:Name="PushPinMapLayer">
+                <bm:MapItemsControl x:Name="pushpinsItemsControl"  ItemTemplate="{StaticResource PushPinTemplate}" ItemsSource="{Binding pushpinCollection}" >
                 </bm:MapItemsControl>
             </bm:MapLayer>
             <!-- Infobox map Layer -->
