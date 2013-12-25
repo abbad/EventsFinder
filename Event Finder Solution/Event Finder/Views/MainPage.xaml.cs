@@ -31,42 +31,18 @@ namespace Event_Finder.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        // icons for the locaition
-        LocationIcon10m _locationIcon10m;
-        LocationIcon100m _locationIcon100m;
-        // controller for facebook functions
-        public FacebookViewModel facebookApi;
-        // controller for geolocation. 
-        LocationController lController;
-        // application location
-        public Location myLocation;
         
+
         // text block for repositioning.
         private Button textBlock;
 
         private double offset = 0.5;
 
-        MessageDialog dialog = new MessageDialog("Could not get city name!");
+        // icons for the locaition
+        LocationIcon10m _locationIcon10m;
+        LocationIcon100m _locationIcon100m;
 
-        private String cityName = "";
         
-        
-        private void initializeCollections() 
-        {
-            App.PushpinCollection = new ObservableCollection<Event>();
-            App.AttendingCollection = new ObservableCollection<Event>();
-            App.ItemEventsList = new ObservableCollection<Event>();
-        }
-
-        private void initializeObjects() 
-        {
-            lController = new LocationController();
-            facebookApi = new FacebookViewModel();
-            _locationIcon10m = new LocationIcon10m();
-            _locationIcon100m = new LocationIcon100m();
-            textBlock = CreateButton();
-        }
-
         private void addInitialChildrenToMap() 
         {
             MainMap.Children.Add(_locationIcon100m);
@@ -83,15 +59,20 @@ namespace Event_Finder.Views
         public MainPage()
         {
             this.InitializeComponent();
-            dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
-            dialog.CancelCommandIndex = 1;
-            initializeObjects();
+            
             setInitialItemsToCollapsed();
-            initializeCollections();
             addInitialChildrenToMap();
             endRangeDateTimePicker.Date = DateTime.Today.AddDays(5);
             DataContext = this;
             pushpinsItemsControl.ItemsSource = App.PushpinCollection;
+
+            MessageDialog dialog = new MessageDialog("Could not get city name!");
+            dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
+            dialog.CancelCommandIndex = 1;
+
+            _locationIcon10m = new LocationIcon10m();
+            _locationIcon100m = new LocationIcon100m();
+            textBlock = CreateButton();
         }
 
         private void PositionUserOnMap(Geoposition myPosition) 
@@ -184,30 +165,6 @@ namespace Event_Finder.Views
             prog.IsActive = false;
 
         
-        }
-
-        private void FillEventsCollection(List<Data> results)
-        {
-            prog.IsActive = true;
-            foreach (var result in results)
-            {
-                foreach (var itemEvent in result.data)
-                {
-                   
-                   if (CheckEventForLatitudeAndLongitude(itemEvent)) 
-                    {
-                        itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
-                        // fill it in item lsit of events
-                        App.ItemEventsList.Add(itemEvent);
-
-                        // add them to pushpin collection
-                        App.PushpinCollection.Add(itemEvent);
-                    }
-                } 
-
-            }
-            prog.IsActive = false;
-
         }
 
         
@@ -415,67 +372,7 @@ namespace Event_Finder.Views
             
         }
 
-        /// <summary>
-        ///  a function that will reload all items displayed on screen.
-        /// </summary>
-        /// <param name="myPosition"></param>
-        async private void QueryForEventsWithinAnArea()
-        {
-            prog.IsActive = true;
-            bool handeled = false;
-            bool exceptionOccured = false;
-           
-            List<Data> results;
-            // get the city name from reverse geocodeing
-            try
-            {
-                cityName = await lController.ReverseGeocodePoint(
-                    new Location(myLocation.Latitude, myLocation.Longitude));
-            }
-            catch (System.ArgumentOutOfRangeException)
-            {
-                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                dialog.Content = "Could not find city name"; 
-                exceptionOccured = true;
-                
-
-            }
-            catch (System.TimeoutException) 
-            {
-                dialog.Content = "Could not connect to the internet";
-                exceptionOccured = true;
-            }if (exceptionOccured)
-            { 
-               
-                try
-                {
-                    if (!handeled) {
-                        await dialog.ShowAsync();
-                        handeled = true;
-                    }
-                   
-                }
-                catch (Exception){}
-                
-            }
-            
-            prog.IsActive = true;
-            // get list of events. 
-            results = await facebookApi.GetAllEvents(SafeDBString(cityName), offset, myLocation.Latitude,
-               myLocation.Longitude,
-                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
-            prog.IsActive = true;
-            // position events on map.
-            FillEventsCollection(results);
-        
-        }
-
-        string SafeDBString(string inputValue)
-        {
-            return inputValue.Replace("'", " ");
-        }
-
+      
         private Button CreateButton() 
         {
             
