@@ -119,7 +119,7 @@ namespace Event_Finder.Views
 
         async private void OnLoad(object sender, RoutedEventArgs e)
         {
-            Frame.
+            
 
 
             prog.IsActive = true;
