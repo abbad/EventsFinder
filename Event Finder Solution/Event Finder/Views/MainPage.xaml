@@ -62,7 +62,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1076*"/>
-            <ColumnDefinition Width="290*"/>
+            <ColumnDefinition Width="300*"/>
         </Grid.ColumnDefinitions>
 
 
@@ -70,12 +70,12 @@
         <TextBlock Text="EVENT FINDER" Grid.Row="0" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Margin="0,6" Width="324"  />
 
         <!-- row 1 Categories, Event labels  -->
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="Events" HorizontalAlignment="Center" VerticalAlignment="Center"  FontSize="40" Margin="58,10,44,9" Height="53" Width="188"/>
+        <Image Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"    Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill"/>
 
         <!-- row 2 Categories, Events stacks -->
 
         <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
-            <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="300" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
+            <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="310" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel  Orientation="Horizontal"  >
@@ -101,9 +101,9 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <StackPanel >
-                <TextBlock Text="Events Attending" FontSize="30" HorizontalAlignment="Center"/>
-                <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="280" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
+            <StackPanel Margin="0,35,0,0" >
+                <TextBlock Text="My Events" FontSize="30" HorizontalAlignment="Center"/>
+                <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="230" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding pushpinCollection}" IsSwipeEnabled="False" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel  Orientation="Horizontal"  >
@@ -145,22 +145,23 @@
 
             </bm:MapLayer>
 
-            <bm:MapLayer Margin="-190,-190,0,0">
+            <bm:MapLayer Margin="190,-190,0,0">
+
                 <Grid x:Name="Infobox" Visibility="Collapsed">
 
                     <Border Width="500" Height="500" Background="#FF2931E2" Opacity="0.8" BorderBrush="White" BorderThickness="2" CornerRadius="50">
-                        <Button Content="X" Style="{StaticResource closeButton}" Tapped="CloseInfobox_Tapped" HorizontalAlignment="Right" Background="Red" VerticalAlignment="Top" />
+                        <Button Height="50" Width="50"  Style="{StaticResource closeButton}" Tapped="CloseInfobox_Tapped" HorizontalAlignment="Right" Background="Red" VerticalAlignment="Top" Margin="0,-22,-25,0" />
                     </Border>
 
                     <StackPanel Height="500">
                         <Grid Height="70" Width="400">
-                            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                <TextBlock Text="{Binding name}"  Height="Auto"  FontSize="22"  TextWrapping="Wrap" HorizontalAlignment="Center" />
+                            <ScrollViewer  Padding="0,10,0,0" VerticalScrollBarVisibility="Auto">
+                                <TextBlock Text="{Binding name}"  Height="Auto"  FontSize="21.333"  TextWrapping="Wrap" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" FontWeight="Bold" />
                             </ScrollViewer>
                         </Grid>
                         <Image Height="80" Width="80" Source="{Binding pic_big}" HorizontalAlignment="Center" />
-                        <ScrollViewer Padding="20,0,0,0"   Width="500" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="300">
-                            <TextBlock Text="{Binding description}"  FontSize="20" Width="450" TextWrapping="Wrap" />
+                        <ScrollViewer Style="{StaticResource koz}" Padding="0,0,0,0" Height="280"  Width="500" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxHeight="300">
+                            <TextBlock Text="{Binding description}"  FontSize="21.333" Width="450" TextWrapping="Wrap" FontFamily="Segoe UI" FontWeight="Light" />
                         </ScrollViewer>
                         <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                             <Button x:Name="AttendButton" Content="Attend" Width="100" Height="50" Click="AttendButton_Click" />
