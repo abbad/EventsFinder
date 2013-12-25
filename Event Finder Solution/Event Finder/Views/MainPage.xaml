@@ -173,13 +173,11 @@
                 </Grid>
             </bm:MapLayer>
         </bm:Map>
-        <DatePicker  x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged" Margin="680,18,20,22" Height="32" Width="376" Grid.Row="1" />
-        <DatePicker x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Center" DateChanged="DatePicker_DateChanged" Margin="47,18,653,22" Height="32" Width="376" Grid.Row="1" />
-        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40" Margin="436,10,422,14" Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Grid.Row="1" >
-        	<Run Text="Date Range"/>
-        	<LineBreak/>
-        	<Run/>
-        </TextBlock>
+        <DatePicker  Header="To" x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Right" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" Grid.Row="1" />
+        <DatePicker Header="From" x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Left" Margin="10,0,0,0" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" Grid.Row="1" />
+        <TextBlock Text="Date Range" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"  Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Grid.Row="1" />
+        	
+        
     </Grid>
 
 </Page>
