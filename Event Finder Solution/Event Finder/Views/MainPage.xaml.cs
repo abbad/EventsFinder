@@ -517,6 +517,11 @@ namespace Event_Finder.Views
             return x;
         
         }
+
+        private void appBarNavigateButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
       
     
 
