@@ -22,6 +22,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using System.Threading.Tasks;
+using Event_Finder.Common;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Event_Finder.Views
@@ -42,7 +43,9 @@ namespace Event_Finder.Views
         LocationIcon10m _locationIcon10m;
         LocationIcon100m _locationIcon100m;
 
-        
+        private CommonApiHandler commonApiHandler = new CommonApiHandler();
+
+        MessageDialog dialog = new MessageDialog("Could not get city name!");
         private void addInitialChildrenToMap() 
         {
             MainMap.Children.Add(_locationIcon100m);
@@ -57,27 +60,29 @@ namespace Event_Finder.Views
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
         }
         public MainPage()
-        {
+        { 
             this.InitializeComponent();
-            
+            textBlock = CreateButton();
+            _locationIcon10m = new LocationIcon10m();
+            _locationIcon100m = new LocationIcon100m();
             setInitialItemsToCollapsed();
             addInitialChildrenToMap();
             endRangeDateTimePicker.Date = DateTime.Today.AddDays(5);
             DataContext = this;
-            pushpinsItemsControl.ItemsSource = App.PushpinCollection;
-
-            MessageDialog dialog = new MessageDialog("Could not get city name!");
+          
+           
             dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
             dialog.CancelCommandIndex = 1;
+          
+            
 
-            _locationIcon10m = new LocationIcon10m();
-            _locationIcon100m = new LocationIcon100m();
-            textBlock = CreateButton();
+            // create objec of common 
+            CommonApiHandler commonApiHandler = new CommonApiHandler();
         }
 
         private void PositionUserOnMap(Geoposition myPosition) 
         {
-            myLocation = new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude);
+            commonApiHandler.myLocation = new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude);
             
             try
             {
@@ -89,7 +94,7 @@ namespace Event_Finder.Views
                 {
                     // Add the 10m icon and zoom closer.
                    _locationIcon10m.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                    MapLayer.SetPosition(_locationIcon10m, myLocation);
+                   MapLayer.SetPosition(_locationIcon10m, commonApiHandler.myLocation);
                     
                 }
                 // Else if we have Wi-Fi level accuracy.
@@ -97,12 +102,12 @@ namespace Event_Finder.Views
                 {
                     // Add the 100m icon and zoom a little closer.
                     _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                    MapLayer.SetPosition(_locationIcon100m, myLocation);
+                    MapLayer.SetPosition(_locationIcon100m, commonApiHandler.myLocation);
                     
                 }
 
                 // Set the map to the given location and zoom level.
-                MainMap.SetView(myLocation, zoomLevel);
+                MainMap.SetView(commonApiHandler.myLocation, zoomLevel);
 
 
             }
@@ -114,60 +119,47 @@ namespace Event_Finder.Views
 
         async private void OnLoad(object sender, RoutedEventArgs e)
         {
+            Frame.
+
+
             prog.IsActive = true;
 
             // initial user position
-            Geoposition myPosition = await lController.GetCurrentLocation();
+            Geoposition myPosition = await commonApiHandler.lController.GetCurrentLocation();
             PositionUserOnMap(myPosition);
 
             prog.IsActive = true;
 
             // get list of atteneded events by user.
-            FillAttendedEventsByUserInCollection(await facebookApi.getListOfEventsAttendedByUser(
+            commonApiHandler.FillAttendedEventsByUserInCollection(await commonApiHandler.facebookApi.getListOfEventsAttendedByUser(
                 DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)));
             
             // QueryForEventsWithinAnArea
-            QueryForEventsWithinAnArea();
+            String error = await commonApiHandler.QueryForEventsWithinAnArea(offset, DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+
+            if (error != null) 
+            {
+                dialog.Content = error; 
+                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                try
+                {
+                    await dialog.ShowAsync();
+                }
+                catch (Exception) { }
+             
+            }
+         
 
             //context data
             MainMap.DataContext = this;
-
-        }
-
-        private bool CheckEventForLatitudeAndLongitude(Event Item) 
-        {
-            return (Item.venue.ContainsKey("latitude") && Item.venue.ContainsKey("longitude"));
-        }
-
-        private void FillAttendedEventsByUserInCollection(List<Data> attendedEvents) 
-        {
-
-            // add attended events to collection.
-            prog.IsActive = true;
-            foreach (var result in attendedEvents)
-            {
-                foreach (var itemEvent in result.data)
-                {
-                    if (CheckEventForLatitudeAndLongitude(itemEvent)) 
-                    {
-                        // create the instance of location 
-                        itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
-
-                        // fill it in the item list of users event.
-                        App.AttendingCollection.Add(itemEvent);
-
-                        // and add them to pushpin collection
-                        App.PushpinCollection.Add(itemEvent);
-                    }
-                }
-            }
+            pushpinsItemsControl.ItemsSource = App.PushpinCollection;
             prog.IsActive = false;
-
-        
         }
 
         
+
         private void clearAllCollections() 
         {
             App.PushpinCollection.Clear();
@@ -180,9 +172,23 @@ namespace Event_Finder.Views
              clearAllCollections();
             prog.IsActive = true;
             // get list of atteneded events by user.
-            FillAttendedEventsByUserInCollection(await facebookApi.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+            commonApiHandler.FillAttendedEventsByUserInCollection(await commonApiHandler.facebookApi.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)));
-            QueryForEventsWithinAnArea();
+            // QueryForEventsWithinAnArea
+            String error = await commonApiHandler.QueryForEventsWithinAnArea(offset, DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+
+            if (error != null)
+            {
+                dialog.Content = error;
+                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                try
+                {
+                    await dialog.ShowAsync();
+                }
+                catch (Exception) { }
+            }
+            prog.IsActive = false;
         }
 
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -239,7 +245,7 @@ namespace Event_Finder.Views
             MainMap.SetView(selectedEvent.Location, 15.0f);
 
             // see RSVP status of event.
-            RootObject rsvp = await facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
+            RootObject rsvp = await commonApiHandler.facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
             if (rsvp.data.Count != 0)
             {
                 SetButtonToStatus(rsvp.data[0]);
@@ -274,7 +280,7 @@ namespace Event_Finder.Views
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
-            bool attending = await facebookApi.RSVPEvent(selectedEvent.eid, "attending");
+            bool attending = await commonApiHandler.facebookApi.RSVPEvent(selectedEvent.eid, "attending");
             if (attending == true)
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "attending" });
@@ -296,7 +302,7 @@ namespace Event_Finder.Views
             Event selectedEvent = (Event)btn.DataContext;
             bool maybe = false;
 
-            maybe = await facebookApi.RSVPEvent(selectedEvent.eid, "maybe");
+            maybe = await commonApiHandler.facebookApi.RSVPEvent(selectedEvent.eid, "maybe");
 
             if (maybe == true)
             {
@@ -321,7 +327,7 @@ namespace Event_Finder.Views
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
-            bool decline = await facebookApi.RSVPEvent(selectedEvent.eid, "declined");
+            bool decline = await commonApiHandler.facebookApi.RSVPEvent(selectedEvent.eid, "declined");
 
             if (decline == true) 
             {
@@ -350,32 +356,44 @@ namespace Event_Finder.Views
         {
             
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
-
-            this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out myLocation);
-            MapLayer.SetPosition(textBlock, myLocation);
+            Location loc = new Location();
+            this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out loc);
+             commonApiHandler.myLocation =  loc;
+            MapLayer.SetPosition(textBlock, commonApiHandler.myLocation);
 
             textBlock.Click += btn_Click;
         }
 
-        private void btn_Click(object sender, RoutedEventArgs e)
+        async private void btn_Click(object sender, RoutedEventArgs e)
         {
-            //AttendingListView.IsEnabled = false;
+            prog.IsActive = true;
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             
             // position me there 
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            MapLayer.SetPosition(_locationIcon100m, myLocation);
+            MapLayer.SetPosition(_locationIcon100m, commonApiHandler.myLocation);
 
-            QueryForEventsWithinAnArea();
-            //AttendingListView.IsEnabled = true;
-            prog.IsActive = true;
+            String error = await commonApiHandler.QueryForEventsWithinAnArea(offset, DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+
+            if (error != null)
+            {
+                dialog.Content = error;
+                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                try
+                {
+                    await dialog.ShowAsync();
+                }
+                catch (Exception) { }
+
+            }
+            prog.IsActive = false;
             
         }
 
       
         private Button CreateButton() 
         {
-            
             Button x = new Button();
             x.Height = 80;
             x.Width = 150;

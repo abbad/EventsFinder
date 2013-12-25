@@ -1,4 +1,5 @@
 ﻿using Bing.Maps;
+using Event_Finder.Models;
 using Event_Finder.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,9 @@ namespace Event_Finder.Common
         // controller for facebook functions
         public FacebookViewModel facebookApi;
         // controller for geolocation. 
-        LocationController lController;
+        public LocationController lController;
         // application location
-        public Location myLocation;
+        public Location myLocation {set; get;}
 
         private String cityName = "";
         public CommonApiHandler()
@@ -29,6 +30,7 @@ namespace Event_Finder.Common
 
         private void initializeObjects()
         {
+            myLocation = null;
             lController = new LocationController();
             facebookApi = new FacebookViewModel();
         }
@@ -41,16 +43,14 @@ namespace Event_Finder.Common
         }
 
         
-
+     
           /// <summary>
         ///  a function that will reload all items displayed on screen.
         /// </summary>
         /// <param name="myPosition"></param>
-        async private void QueryForEventsWithinAnArea()
+        async public Task<String> QueryForEventsWithinAnArea(double offset, double startRange, double endRange)
         {
           
-            bool handeled = false;
-            bool exceptionOccured = false;
            
             List<Data> results;
             // get the city name from reverse geocodeing
@@ -61,39 +61,27 @@ namespace Event_Finder.Common
             }
             catch (System.ArgumentOutOfRangeException)
             {
-                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                dialog.Content = "Could not find city name"; 
-                exceptionOccured = true;
+                return "Could not find city Name";
+                
                 
 
             }
             catch (System.TimeoutException) 
             {
-                dialog.Content = "Could not connect to the internet";
-                exceptionOccured = true;
-            }if (exceptionOccured)
-            { 
-               
-                try
-                {
-                    if (!handeled) {
-                        await dialog.ShowAsync();
-                        handeled = true;
-                    }
-                   
-                }
-                catch (Exception){}
+               return "Could not connect to the internet";
                 
             }
             
             // get list of events. 
             results = await facebookApi.GetAllEvents(SafeDBString(cityName), offset, myLocation.Latitude,
                myLocation.Longitude,
-                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+                startRange ,
+                endRange );
             
-            // position events on map.
+            // fill the collections 
             FillEventsCollection(results);
+
+            return null;
         
         }
 
@@ -105,7 +93,7 @@ namespace Event_Finder.Common
 
         private void FillEventsCollection(List<Data> results)
         {
-            prog.IsActive = true;
+        
             foreach (var result in results)
             {
                 foreach (var itemEvent in result.data)
@@ -123,15 +111,22 @@ namespace Event_Finder.Common
                 }
 
             }
-            prog.IsActive = false;
+          
 
         }
 
-        private void FillAttendedEventsByUserInCollection(List<Data> attendedEvents)
+        private bool CheckEventForLatitudeAndLongitude(Event Item) 
+        {
+            return (Item.venue.ContainsKey("latitude") && Item.venue.ContainsKey("longitude"));
+        }
+
+    
+
+        public void FillAttendedEventsByUserInCollection(List<Data> attendedEvents)
         {
 
             // add attended events to collection.
-            prog.IsActive = true;
+            
             foreach (var result in attendedEvents)
             {
                 foreach (var itemEvent in result.data)
@@ -149,7 +144,7 @@ namespace Event_Finder.Common
                     }
                 }
             }
-            prog.IsActive = false;
+            
 
 
         }

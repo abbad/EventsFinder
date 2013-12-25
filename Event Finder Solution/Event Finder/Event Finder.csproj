@@ -116,6 +116,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\CommonApiHandler.cs" />
+    <Compile Include="Common\List.cs" />
     <Compile Include="Icons\LocationIcon100m.xaml.cs">
       <DependentUpon>LocationIcon100m.xaml</DependentUpon>
     </Compile>
