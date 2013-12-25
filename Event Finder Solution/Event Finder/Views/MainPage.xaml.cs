@@ -50,44 +50,12 @@ namespace Event_Finder.Views
 
         private String cityName = "";
         
-        // List of pushpin collection
-        private ObservableCollection<Event> PushpinCollection { get; set; }
-
-        public ObservableCollection<Event> pushpinCollection
-        {
-            get
-            {
-                return PushpinCollection;
-            }
-        }
-
-        // List of events attended by user.
-        private ObservableCollection<Event> AttendingCollection { get; set; }
-
-        public ObservableCollection<Event> attendingCollection
-        {
-            get
-            {
-                return AttendingCollection;
-            }
-        }
-
-        // List of events queried for. 
-        private ObservableCollection<Event> ItemEventsList { get; set; }
-
-        public ObservableCollection<Event> itemEventsList
-        {
-            get
-            {
-                return ItemEventsList;
-            }
-        }
-
+        
         private void initializeCollections() 
         {
-            PushpinCollection = new ObservableCollection<Event>();
-            AttendingCollection = new ObservableCollection<Event>();
-            ItemEventsList = new ObservableCollection<Event>();
+            App.PushpinCollection = new ObservableCollection<Event>();
+            App.AttendingCollection = new ObservableCollection<Event>();
+            App.ItemEventsList = new ObservableCollection<Event>();
         }
 
         private void initializeObjects() 
@@ -123,6 +91,7 @@ namespace Event_Finder.Views
             addInitialChildrenToMap();
             endRangeDateTimePicker.Date = DateTime.Today.AddDays(5);
             DataContext = this;
+            pushpinsItemsControl.ItemsSource = App.PushpinCollection;
         }
 
         private void PositionUserOnMap(Geoposition myPosition) 
@@ -205,10 +174,10 @@ namespace Event_Finder.Views
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
 
                         // fill it in the item list of users event.
-                        AttendingCollection.Add(itemEvent);
+                        App.AttendingCollection.Add(itemEvent);
 
                         // and add them to pushpin collection
-                        PushpinCollection.Add(itemEvent);
+                        App.PushpinCollection.Add(itemEvent);
                     }
                 }
             }
@@ -229,10 +198,10 @@ namespace Event_Finder.Views
                     {
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
                         // fill it in item lsit of events
-                        ItemEventsList.Add(itemEvent);
+                        App.ItemEventsList.Add(itemEvent);
 
                         // add them to pushpin collection
-                        PushpinCollection.Add(itemEvent);
+                        App.PushpinCollection.Add(itemEvent);
                     }
                 } 
 
@@ -241,16 +210,17 @@ namespace Event_Finder.Views
 
         }
 
+        
         private void clearAllCollections() 
         {
-            pushpinCollection.Clear();
-            attendingCollection.Clear();
-            itemEventsList.Clear();
+            App.PushpinCollection.Clear();
+            App.AttendingCollection.Clear();
+            App.ItemEventsList.Clear();
         }
-
+        
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-            clearAllCollections();
+             clearAllCollections();
             prog.IsActive = true;
             // get list of atteneded events by user.
             FillAttendedEventsByUserInCollection(await facebookApi.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
@@ -352,9 +322,9 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "attending" });
                 // check if the event is in the list of the attended events.
-                if (!AttendingCollection.Contains(selectedEvent))
+                if (!App.AttendingCollection.Contains(selectedEvent))
                 {
-                    AttendingCollection.Add(selectedEvent);
+                    App.AttendingCollection.Add(selectedEvent);
                 }
             }else
             {
@@ -376,8 +346,9 @@ namespace Event_Finder.Views
 
                 SetButtonToStatus(new RSVP { rsvp_status = "unsure" });
                 // check if the event is in the list of the attended events.
-                if (!AttendingCollection.Contains(selectedEvent)) { 
-                    AttendingCollection.Add(selectedEvent);
+                if (!App.AttendingCollection.Contains(selectedEvent))
+                {
+                    App.AttendingCollection.Add(selectedEvent);
                 }
             }
             else 
@@ -399,9 +370,9 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "declined" });
                 // check if the event is in the list of the attended events.
-                if (!AttendingCollection.Contains(selectedEvent))
+                if (!App.AttendingCollection.Contains(selectedEvent))
                 {
-                    AttendingCollection.Add(selectedEvent);
+                    App.AttendingCollection.Add(selectedEvent);
                 }
             }
             else
@@ -431,7 +402,7 @@ namespace Event_Finder.Views
 
         private void btn_Click(object sender, RoutedEventArgs e)
         {
-            AttendingListView.IsEnabled = false;
+            //AttendingListView.IsEnabled = false;
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             
             // position me there 
@@ -439,7 +410,7 @@ namespace Event_Finder.Views
             MapLayer.SetPosition(_locationIcon100m, myLocation);
 
             QueryForEventsWithinAnArea();
-            AttendingListView.IsEnabled = true;
+            //AttendingListView.IsEnabled = true;
             prog.IsActive = true;
             
         }
@@ -520,7 +491,7 @@ namespace Event_Finder.Views
 
         private void appBarNavigateButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Frame.Navigate(typeof(GridViewPage));
         }
       
     

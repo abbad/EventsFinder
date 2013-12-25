@@ -6,9 +6,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="appBarNavigateButton" Label="Map View" Icon="Globe" Click="appBarNavigateButton_Click"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <GridView ItemsSource="{Binding itemEventsList}" 
+        <GridView x:Name="EventsGridView"
           Margin="0,120,0,0" MaxHeight="500" Grid.Column="1">
             <GridView.ItemTemplate>
                 <DataTemplate>

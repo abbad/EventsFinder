@@ -6,6 +6,7 @@
     xmlns:local="using:Event_Finder.Views"
     xmlns:viewModel="using:Event_Finder.ViewModel"
     xmlns:model="using:Event_Finder.Models"
+    xmlns:App="using:Event_Finder"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:bm="using:Bing.Maps"
@@ -24,6 +25,8 @@
                 <ResourceDictionary Source="Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <model:Event x:Key="Event" />
+         
+          
             <ControlTemplate x:Key="PushPinStyle">
                 <UserControl Height="140"  Width="140" FontFamily="Global User Interface">
 
@@ -66,8 +69,7 @@
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1076*"/>
-            <ColumnDefinition Width="300*"/>
+            
         </Grid.ColumnDefinitions>
 
 
@@ -78,9 +80,9 @@
         <Image Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"    Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill"/>
 
         <!-- row 2 Categories, Events stacks -->
-
+        <!--
         <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
-            <ListView  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="310" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding itemEventsList}" IsSwipeEnabled="False" >
+            <ListView x:Name="allItemsList"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="310" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsSwipeEnabled="False" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel  Orientation="Horizontal"  >
@@ -105,9 +107,10 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-
-            <!-- Events attending stack and item list -->
-            <StackPanel >
+            
+             Events attending stack and item list -->
+        <!--    
+        <StackPanel >
                 <TextBlock Text="My Events" FontSize="30" HorizontalAlignment="Center"/>
                 <ListView IsSwipeEnabled="False"  x:Name="AttendingListView"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="230" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding attendingCollection}" >
 
@@ -139,14 +142,14 @@
             </StackPanel>
 
         </StackPanel>
-
+        --> 
         <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
         <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  Holding="MainMap_Holding" RightTapped="MainMap_RightTapped" x:Name="MainMap" Loaded="OnLoad" Grid.RowSpan="2" Grid.Row="2">
 
             <ProgressRing x:Name="prog" Height="200" Width="200" Margin="420,210,0,0"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <!-- list of pushpins maplayer -->
             <bm:MapLayer x:Name="PushPinMapLayer">
-                <bm:MapItemsControl x:Name="pushpinsItemsControl"  ItemTemplate="{StaticResource PushPinTemplate}" ItemsSource="{Binding pushpinCollection}" >
+                <bm:MapItemsControl x:Name="pushpinsItemsControl"  ItemTemplate="{StaticResource PushPinTemplate}" >
                 </bm:MapItemsControl>
             </bm:MapLayer>
             <!-- Infobox map Layer -->

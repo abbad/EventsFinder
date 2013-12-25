@@ -1,8 +1,10 @@
-﻿using Event_Finder.ViewModel;
+﻿using Event_Finder.Models;
+using Event_Finder.ViewModel;
 using Event_Finder.Views;
 using Facebook.Client;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -32,6 +34,40 @@ namespace Event_Finder
         internal static string FacebookId = String.Empty;
         public static bool isAuthenticated = false;
         public static FacebookSessionClient FacebookSessionClient = new FacebookSessionClient(Constants.FacebookAppId);
+
+        // List of pushpin collection
+        internal static ObservableCollection<Event> PushpinCollection { get; set; }
+
+        public ObservableCollection<Event> pushpinCollection
+        {
+            get
+            {
+                return PushpinCollection;
+            }
+        }
+
+        // List of events attended by user.
+        internal static ObservableCollection<Event> AttendingCollection { get; set; }
+
+        public ObservableCollection<Event> attendingCollection
+        {
+            get
+            {
+                return AttendingCollection;
+            }
+        }
+
+        // List of events queried for. 
+        internal static ObservableCollection<Event> ItemEventsList { get; set; }
+
+        public  ObservableCollection<Event> itemEventsList
+        {
+            get
+            {
+                return ItemEventsList;
+            }
+        }
+
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code

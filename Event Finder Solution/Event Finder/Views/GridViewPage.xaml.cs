@@ -25,6 +25,12 @@ namespace Event_Finder.Views
         public GridViewPage()
         {
             this.InitializeComponent();
+            EventsGridView.ItemsSource = App.ItemEventsList;
+        }
+
+        private void appBarNavigateButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MainPage));
         }
     }
 }
