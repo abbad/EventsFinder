@@ -1,6 +1,7 @@
 ﻿using Bing.Maps;
 using Event_Finder.Models;
 using Event_Finder.ViewModel;
+using Event_Finder.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,7 +37,6 @@ namespace Event_Finder.Common
 
         private void initializeCollections()
         {
-            App.PushpinCollection = new ObservableCollection<Event>();
             App.AttendingCollection = new ObservableCollection<Event>();
             App.ItemEventsList = new ObservableCollection<Event>();
         }
@@ -49,7 +49,7 @@ namespace Event_Finder.Common
         /// <param name="myPosition"></param>
         async public Task<String> QueryForEventsWithinAnArea(double offset, double startRange, double endRange)
         {
-          
+            MainPage.b.IsActive = true ;
            
             List<Data> results;
             // get the city name from reverse geocodeing
@@ -61,27 +61,41 @@ namespace Event_Finder.Common
             catch (System.ArgumentOutOfRangeException)
             {
                 return "Could not find city Name";
-                
-                
+
+
 
             }
-            catch (System.TimeoutException) 
+            catch (System.TimeoutException)
             {
-               return "Could not connect to the internet";
+                return "Could not connect to the internet";
+
+            }
+            catch (System.ServiceModel.EndpointNotFoundException) 
+            {
+                return "Could not connect to endpoint"; 
                 
             }
-            
-            // get list of events. 
-            results = await facebookApi.GetAllEvents(SafeDBString(cityName), App.offset, App.myLocation.Latitude,
-               App.myLocation.Longitude,
-                startRange ,
-                endRange );
-            
-            // fill the collections 
-            FillEventsCollection(results);
 
+
+            try
+            {
+                // get list of events. 
+                results = await facebookApi.GetAllEvents(SafeDBString(cityName), App.offset, App.myLocation.Latitude,
+                   App.myLocation.Longitude,
+                    startRange,
+                    endRange);
+
+                // fill the collections 
+                FillEventsCollection(results);
+            }
+            catch (Facebook.WebExceptionWrapper) 
+            {
+                return "Could not connect to internet"; 
+            }
+
+            MainPage.b.IsActive = false;
             return null;
-        
+            
         }
 
         string SafeDBString(string inputValue)
@@ -103,9 +117,6 @@ namespace Event_Finder.Common
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
                         // fill it in item lsit of events
                         App.ItemEventsList.Add(itemEvent);
-
-                        // add them to pushpin collection
-                        App.PushpinCollection.Add(itemEvent);
                     }
                 }
 
@@ -138,8 +149,6 @@ namespace Event_Finder.Common
                         // fill it in the item list of users event.
                         App.AttendingCollection.Add(itemEvent);
 
-                        // and add them to pushpin collection
-                        App.PushpinCollection.Add(itemEvent);
                     }
                 }
             }

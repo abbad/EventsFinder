@@ -17,6 +17,9 @@
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="appBarNavigateButton" Label="Grid View" Icon="ViewAll" Click="appBarNavigateButton_Click"/>
             </CommandBar.SecondaryCommands>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton x:Name="myEventsButton" Label="My Events" Icon="Bookmarks"  Click="myEventsButton_Click"/>
+            </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
     <Page.Resources>

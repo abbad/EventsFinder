@@ -42,6 +42,9 @@ namespace Event_Finder.Views
         LocationIcon10m _locationIcon10m;
         LocationIcon100m _locationIcon100m;
 
+        public static ProgressRing b = new ProgressRing();
+
+
         MessageDialog dialog = new MessageDialog("Could not get city name!");
         private void addInitialChildrenToMap() 
         {
@@ -73,7 +76,6 @@ namespace Event_Finder.Views
         }
 
         
-
         private void PositionUserOnMap() 
         {
             
@@ -115,37 +117,26 @@ namespace Event_Finder.Views
             prog.IsActive = true;
             PositionUserOnMap();
             MainMap.DataContext = this;
-            pushpinsItemsControl.ItemsSource = App.PushpinCollection;
-            prog.IsActive = false;
-            /*
-          
-
-            if (App.errorOccured)
+            if (App.myEventsSelected)
             {
-                dialog.Content = App.errorMessage;
-                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                try
-                {
-                    await dialog.ShowAsync();
-                }
-                catch (Exception) { }
+                pushpinsItemsControl.ItemsSource = App.AttendingCollection;
+                myEventsButton.Label = "View All Events";
+                
             }
             else 
             {
-               
+                pushpinsItemsControl.ItemsSource = App.ItemEventsList;
+                myEventsButton.Label = "My Events";
             }
-         
-
-            //context data
-          
-           */
+            prog.IsActive = false;
+            
         }
 
         
 
         private void clearAllCollections() 
         {
-            App.PushpinCollection.Clear();
+           
             App.AttendingCollection.Clear();
             App.ItemEventsList.Clear();
         }
@@ -352,8 +343,7 @@ namespace Event_Finder.Views
 
         async private void btn_Click(object sender, RoutedEventArgs e)
         {
-            App.PushpinCollection.Clear();
-            pushpinsItemsControl.ItemsSource = App.PushpinCollection;
+     
             prog.IsActive = true;
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             
@@ -396,6 +386,27 @@ namespace Event_Finder.Views
         {
             Frame.Navigate(typeof(GridViewPage));
         }
+
+        private void myEventsButton_Click(object sender, RoutedEventArgs e)
+        {
+          
+            string toggle = myEventsButton.Label;
+            if (toggle =="My Events")
+            {
+                myEventsButton.Label = "View All Events";
+
+                pushpinsItemsControl.ItemsSource = App.AttendingCollection;
+                App.myEventsSelected = true;
+            }
+            else 
+            {
+                pushpinsItemsControl.ItemsSource = App.ItemEventsList;
+                myEventsButton.Label = "My Events";
+                App.myEventsSelected = false;
+            }
+            
+        }
+
       
     
 

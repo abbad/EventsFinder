@@ -25,7 +25,20 @@ namespace Event_Finder.Views
         public GridViewPage()
         {
             this.InitializeComponent();
-            EventsGridView.ItemsSource = App.ItemEventsList;
+            EventsGridView.Loaded += EventsGridView_Loaded;
+            
+        }
+
+        void EventsGridView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (App.myEventsSelected)
+            {
+                EventsGridView.ItemsSource = App.AttendingCollection;
+            }
+            else
+            {
+                EventsGridView.ItemsSource = App.ItemEventsList;
+            }
         }
 
         private void appBarNavigateButton_Click(object sender, RoutedEventArgs e)

@@ -40,13 +40,14 @@ namespace Event_Finder
         public static bool isAuthenticated = false;
         public static FacebookSessionClient FacebookSessionClient = new FacebookSessionClient(Constants.FacebookAppId);
 
+        internal static bool myEventsSelected = false;
         internal static string errorMessage = "";
 
         internal static bool errorOccured = false;
 
         internal static CommonApiHandler commonApiHandler = new CommonApiHandler();
         // List of pushpin collection
-        internal static ObservableCollection<Event> PushpinCollection { get; set; }
+
 
         internal static DateTime endRange = DateTime.Today.AddDays(5);
 
@@ -55,13 +56,7 @@ namespace Event_Finder
         internal static double offset = 0.5;
 
         internal static Location myLocation = null;
-        public ObservableCollection<Event> pushpinCollection
-        {
-            get
-            {
-                return PushpinCollection;
-            }
-        }
+       
 
         // List of events attended by user.
         internal static ObservableCollection<Event> AttendingCollection { get; set; }
