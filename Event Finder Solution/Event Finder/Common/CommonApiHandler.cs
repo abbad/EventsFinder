@@ -49,8 +49,7 @@ namespace Event_Finder.Common
         /// <param name="myPosition"></param>
         async public Task<String> QueryForEventsWithinAnArea(double offset, double startRange, double endRange)
         {
-            MainPage.b.IsActive = true ;
-           
+         
             List<Data> results;
             // get the city name from reverse geocodeing
             try
@@ -93,7 +92,7 @@ namespace Event_Finder.Common
                 return "Could not connect to internet"; 
             }
 
-            MainPage.b.IsActive = false;
+           
             return null;
             
         }

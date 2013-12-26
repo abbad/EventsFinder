@@ -33,37 +33,29 @@ namespace Event_Finder.Views
     public sealed partial class MainPage : Page
     {
         
-        // 
-
-        // text block for repositioning.
-        private Button textBlock;
+        // x bool for enabling positioning
+        bool x = false;
 
         // icons for the locaition
-        LocationIcon10m _locationIcon10m;
         LocationIcon100m _locationIcon100m;
 
-        public static ProgressRing b = new ProgressRing();
-
-
         MessageDialog dialog = new MessageDialog("Could not get city name!");
-        private void addInitialChildrenToMap() 
+        private void addInitialChildrenToMap()
         {
             MainMap.Children.Add(_locationIcon100m);
-            MainMap.Children.Add(_locationIcon10m);
-            MainMap.Children.Add(textBlock);
+           
         }
 
         private void setInitialItemsToCollapsed() 
         {
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            _locationIcon10m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+          
+            
         }
         public MainPage()
         { 
             this.InitializeComponent();
-            textBlock = CreateButton();
-            _locationIcon10m = new LocationIcon10m();
+       
             _locationIcon100m = new LocationIcon100m();
             setInitialItemsToCollapsed();
             addInitialChildrenToMap();
@@ -72,7 +64,7 @@ namespace Event_Finder.Views
             
             dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
             dialog.CancelCommandIndex = 1;
-       
+
         }
 
         
@@ -84,25 +76,10 @@ namespace Event_Finder.Views
                 // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
                 double zoomLevel = 13.0f;
 
-                // if we have GPS level accuracy
-                if (App.myPosition.Coordinate.Accuracy <= 10)
-                {
-                    // Add the 10m icon and zoom closer.
-                   _locationIcon10m.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                   MapLayer.SetPosition(_locationIcon10m, App.myLocation);
-                    
-                }
-                // Else if we have Wi-Fi level accuracy.
-                if (App.myPosition.Coordinate.Accuracy <= 100)
-                {
-                    // Add the 100m icon and zoom a little closer.
-                    _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                    MapLayer.SetPosition(_locationIcon100m, App.myLocation);
-                    
-                }
-
-                // Set the map to the given location and zoom level.
+                MapLayer.SetPosition(_locationIcon100m, App.myLocation);
+                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 MainMap.SetView(App.myLocation, zoomLevel);
+         
 
 
             }
@@ -323,51 +300,6 @@ namespace Event_Finder.Views
 
         }
 
-        private void MainMap_Holding(object sender, HoldingRoutedEventArgs e)
-        {
-
-        }
-
-        // show reposition option
-        private void MainMap_RightTapped(object sender, RightTappedRoutedEventArgs e)
-        {
-            
-            textBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            Location loc = new Location();
-            this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out loc);
-            App.myLocation = loc;
-            MapLayer.SetPosition(textBlock, App.myLocation);
-
-            textBlock.Click += btn_Click;
-        }
-
-        async private void btn_Click(object sender, RoutedEventArgs e)
-        {
-     
-            prog.IsActive = true;
-            textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-            
-            // position me there 
-            _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            MapLayer.SetPosition(_locationIcon100m, App.myLocation);
-
-            String error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
-                DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
-
-            if (error != null)
-            {
-                dialog.Content = error;
-                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                try
-                {
-                    await dialog.ShowAsync();
-                }
-                catch (Exception) { }
-
-            }
-            prog.IsActive = false;
-        
-        }
 
       
         private Button CreateButton() 
@@ -407,9 +339,47 @@ namespace Event_Finder.Views
             
         }
 
-      
-    
+        private void setPositionButton_Click(object sender, RoutedEventArgs e)
+        {
+            x = true;
+            setPositionButton.IsEnabled = false;
+        }
 
-        
+        async void MainMap_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+           
+            if (x) {
+                App.ItemEventsList.Clear();
+                x = false;
+                prog.IsActive = true;
+                setPositionButton.IsEnabled = true;
+                Location loc = new Location();
+                this.MainMap.TryPixelToLocation(e.GetCurrentPoint(MainMap).Position, out loc);
+                App.myLocation = loc;
+              
+                // position me there 
+                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                MapLayer.SetPosition(_locationIcon100m, App.myLocation);
+
+                // get all events withing an area. 
+                String error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
+                    DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
+
+                if (error != null)
+                {
+                    dialog.Content = error;
+                    _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                    try
+                    {
+                        await dialog.ShowAsync();
+                    }
+                    catch (Exception) { }
+
+                }
+                prog.IsActive = false;
+           
+            }
+        }
+
     }
 }

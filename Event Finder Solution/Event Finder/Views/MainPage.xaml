@@ -16,6 +16,7 @@
         <CommandBar>
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="appBarNavigateButton" Label="Grid View" Icon="ViewAll" Click="appBarNavigateButton_Click"/>
+                <AppBarButton x:Name="setPositionButton" Label="Change Position" Icon="Pin"  Click="setPositionButton_Click"/>
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>
                 <AppBarButton x:Name="myEventsButton" Label="My Events" Icon="Bookmarks"  Click="myEventsButton_Click"/>
@@ -147,7 +148,7 @@
         </StackPanel>
         --> 
         <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
-        <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  Holding="MainMap_Holding" RightTapped="MainMap_RightTapped" x:Name="MainMap" Loaded="OnLoad" Grid.RowSpan="2" Grid.Row="2">
+        <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" PointerPressedOverride="MainMap_PointerPressed" Loaded="OnLoad" Grid.RowSpan="2" Grid.Row="2">
 
             <ProgressRing x:Name="prog" Height="200" Width="200" Margin="420,210,0,0"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <!-- list of pushpins maplayer -->
