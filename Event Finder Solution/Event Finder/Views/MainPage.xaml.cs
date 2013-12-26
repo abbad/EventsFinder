@@ -33,17 +33,14 @@ namespace Event_Finder.Views
     public sealed partial class MainPage : Page
     {
         
+        // 
 
         // text block for repositioning.
         private Button textBlock;
 
-        private double offset = 0.5;
-
         // icons for the locaition
         LocationIcon10m _locationIcon10m;
         LocationIcon100m _locationIcon100m;
-
-        private CommonApiHandler commonApiHandler = new CommonApiHandler();
 
         MessageDialog dialog = new MessageDialog("Could not get city name!");
         private void addInitialChildrenToMap() 
@@ -69,20 +66,16 @@ namespace Event_Finder.Views
             addInitialChildrenToMap();
             endRangeDateTimePicker.Date = DateTime.Today.AddDays(5);
             DataContext = this;
-          
-           
+            
             dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
             dialog.CancelCommandIndex = 1;
-          
-            
-
-            // create objec of common 
-            CommonApiHandler commonApiHandler = new CommonApiHandler();
+       
         }
 
-        private void PositionUserOnMap(Geoposition myPosition) 
+        
+
+        private void PositionUserOnMap() 
         {
-            commonApiHandler.myLocation = new Location(myPosition.Coordinate.Point.Position.Latitude, myPosition.Coordinate.Point.Position.Longitude);
             
             try
             {
@@ -90,24 +83,24 @@ namespace Event_Finder.Views
                 double zoomLevel = 13.0f;
 
                 // if we have GPS level accuracy
-                if (myPosition.Coordinate.Accuracy <= 10)
+                if (App.myPosition.Coordinate.Accuracy <= 10)
                 {
                     // Add the 10m icon and zoom closer.
                    _locationIcon10m.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                   MapLayer.SetPosition(_locationIcon10m, commonApiHandler.myLocation);
+                   MapLayer.SetPosition(_locationIcon10m, App.myLocation);
                     
                 }
                 // Else if we have Wi-Fi level accuracy.
-                if (myPosition.Coordinate.Accuracy <= 100)
+                if (App.myPosition.Coordinate.Accuracy <= 100)
                 {
                     // Add the 100m icon and zoom a little closer.
                     _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                    MapLayer.SetPosition(_locationIcon100m, commonApiHandler.myLocation);
+                    MapLayer.SetPosition(_locationIcon100m, App.myLocation);
                     
                 }
 
                 // Set the map to the given location and zoom level.
-                MainMap.SetView(commonApiHandler.myLocation, zoomLevel);
+                MainMap.SetView(App.myLocation, zoomLevel);
 
 
             }
@@ -117,45 +110,35 @@ namespace Event_Finder.Views
             }
         }
 
-        async private void OnLoad(object sender, RoutedEventArgs e)
+        private void OnLoad(object sender, RoutedEventArgs e)
         {
-            
-
-
             prog.IsActive = true;
+            PositionUserOnMap();
+            MainMap.DataContext = this;
+            pushpinsItemsControl.ItemsSource = App.PushpinCollection;
+            prog.IsActive = false;
+            /*
+          
 
-            // initial user position
-            Geoposition myPosition = await commonApiHandler.lController.GetCurrentLocation();
-            PositionUserOnMap(myPosition);
-
-            prog.IsActive = true;
-
-            // get list of atteneded events by user.
-            commonApiHandler.FillAttendedEventsByUserInCollection(await commonApiHandler.facebookApi.getListOfEventsAttendedByUser(
-                DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)));
-            
-            // QueryForEventsWithinAnArea
-            String error = await commonApiHandler.QueryForEventsWithinAnArea(offset, DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
-
-            if (error != null) 
+            if (App.errorOccured)
             {
-                dialog.Content = error; 
+                dialog.Content = App.errorMessage;
                 _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                 try
                 {
                     await dialog.ShowAsync();
                 }
                 catch (Exception) { }
-             
+            }
+            else 
+            {
+               
             }
          
 
             //context data
-            MainMap.DataContext = this;
-            pushpinsItemsControl.ItemsSource = App.PushpinCollection;
-            prog.IsActive = false;
+          
+           */
         }
 
         
@@ -169,13 +152,16 @@ namespace Event_Finder.Views
         
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
-             clearAllCollections();
+            clearAllCollections();
+
+            App.startRange = startRangeDateTimePicker.Date.Date;
+            App.endRange = endRangeDateTimePicker.Date.Date;
             prog.IsActive = true;
             // get list of atteneded events by user.
-            commonApiHandler.FillAttendedEventsByUserInCollection(await commonApiHandler.facebookApi.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date)));
+            App.commonApiHandler.FillAttendedEventsByUserInCollection(await App.commonApiHandler.facebookApi.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
+                DateTimeConverter.DateTimeToUnixTimestamp(App.endRange)));
             // QueryForEventsWithinAnArea
-            String error = await commonApiHandler.QueryForEventsWithinAnArea(offset, DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+            String error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
 
             if (error != null)
@@ -188,7 +174,7 @@ namespace Event_Finder.Views
                 }
                 catch (Exception) { }
             }
-            prog.IsActive = false;
+            prog.IsActive = false; 
         }
 
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
@@ -245,7 +231,7 @@ namespace Event_Finder.Views
             MainMap.SetView(selectedEvent.Location, 15.0f);
 
             // see RSVP status of event.
-            RootObject rsvp = await commonApiHandler.facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
+            RootObject rsvp = await App.commonApiHandler.facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
             if (rsvp.data.Count != 0)
             {
                 SetButtonToStatus(rsvp.data[0]);
@@ -280,7 +266,7 @@ namespace Event_Finder.Views
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
-            bool attending = await commonApiHandler.facebookApi.RSVPEvent(selectedEvent.eid, "attending");
+            bool attending = await App.commonApiHandler.facebookApi.RSVPEvent(selectedEvent.eid, "attending");
             if (attending == true)
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "attending" });
@@ -302,7 +288,7 @@ namespace Event_Finder.Views
             Event selectedEvent = (Event)btn.DataContext;
             bool maybe = false;
 
-            maybe = await commonApiHandler.facebookApi.RSVPEvent(selectedEvent.eid, "maybe");
+            maybe = await App.commonApiHandler.facebookApi.RSVPEvent(selectedEvent.eid, "maybe");
 
             if (maybe == true)
             {
@@ -327,7 +313,7 @@ namespace Event_Finder.Views
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
-            bool decline = await commonApiHandler.facebookApi.RSVPEvent(selectedEvent.eid, "declined");
+            bool decline = await App.commonApiHandler.facebookApi.RSVPEvent(selectedEvent.eid, "declined");
 
             if (decline == true) 
             {
@@ -358,23 +344,25 @@ namespace Event_Finder.Views
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Visible;
             Location loc = new Location();
             this.MainMap.TryPixelToLocation(e.GetPosition(this.MainMap), out loc);
-             commonApiHandler.myLocation =  loc;
-            MapLayer.SetPosition(textBlock, commonApiHandler.myLocation);
+            App.myLocation = loc;
+            MapLayer.SetPosition(textBlock, App.myLocation);
 
             textBlock.Click += btn_Click;
         }
 
         async private void btn_Click(object sender, RoutedEventArgs e)
         {
+            App.PushpinCollection.Clear();
+            pushpinsItemsControl.ItemsSource = App.PushpinCollection;
             prog.IsActive = true;
             textBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
             
             // position me there 
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
-            MapLayer.SetPosition(_locationIcon100m, commonApiHandler.myLocation);
+            MapLayer.SetPosition(_locationIcon100m, App.myLocation);
 
-            String error = await commonApiHandler.QueryForEventsWithinAnArea(offset, DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
-                DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
+            String error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
+                DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
 
             if (error != null)
             {
@@ -388,7 +376,7 @@ namespace Event_Finder.Views
 
             }
             prog.IsActive = false;
-            
+        
         }
 
       

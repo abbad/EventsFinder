@@ -1,4 +1,6 @@
-﻿using Event_Finder.Models;
+﻿using Bing.Maps;
+using Event_Finder.Common;
+using Event_Finder.Models;
 using Event_Finder.ViewModel;
 using Event_Finder.Views;
 using Facebook.Client;
@@ -10,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -29,15 +32,29 @@ namespace Event_Finder
     /// </summary>
     sealed partial class App : Application
     {
-
+         
+            
+        internal static Geoposition myPosition;
         internal static string AccessToken = String.Empty;
         internal static string FacebookId = String.Empty;
         public static bool isAuthenticated = false;
         public static FacebookSessionClient FacebookSessionClient = new FacebookSessionClient(Constants.FacebookAppId);
 
+        internal static string errorMessage = "";
+
+        internal static bool errorOccured = false;
+
+        internal static CommonApiHandler commonApiHandler = new CommonApiHandler();
         // List of pushpin collection
         internal static ObservableCollection<Event> PushpinCollection { get; set; }
 
+        internal static DateTime endRange = DateTime.Today.AddDays(5);
+
+        internal static DateTime startRange = DateTime.Today;
+
+        internal static double offset = 0.5;
+
+        internal static Location myLocation = null;
         public ObservableCollection<Event> pushpinCollection
         {
             get
@@ -77,6 +94,7 @@ namespace Event_Finder
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+         
         }
 
         /// <summary>

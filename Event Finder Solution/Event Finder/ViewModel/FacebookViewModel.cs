@@ -158,8 +158,7 @@ namespace Event_Finder.ViewModel
 
         private String MakeQueryForUserEvents(double dt, double dtEndRange) 
         {
-            return String.Format(@"SELECT eid, start_time, end_time, pic_big, pic_square, name, description, venue FROM event WHERE eid IN (
-                SELECT eid FROM event_member WHERE uid = me()) and start_time > {0} and start_time < {1}", dt.ToString(),
+            return String.Format(@"SELECT eid, start_time, end_time, pic_big, pic_square, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid = me()) and start_time > {0} and start_time < {1}", dt.ToString(),
                                        dtEndRange.ToString());
         }
 

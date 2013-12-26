@@ -19,7 +19,7 @@ namespace Event_Finder.Common
         // controller for geolocation. 
         public LocationController lController;
         // application location
-        public Location myLocation {set; get;}
+       
 
         private String cityName = "";
         public CommonApiHandler()
@@ -30,7 +30,6 @@ namespace Event_Finder.Common
 
         private void initializeObjects()
         {
-            myLocation = null;
             lController = new LocationController();
             facebookApi = new FacebookViewModel();
         }
@@ -57,7 +56,7 @@ namespace Event_Finder.Common
             try
             {
                 cityName = await lController.ReverseGeocodePoint(
-                    new Location(myLocation.Latitude, myLocation.Longitude));
+                    new Location(App.myLocation.Latitude, App.myLocation.Longitude));
             }
             catch (System.ArgumentOutOfRangeException)
             {
@@ -73,8 +72,8 @@ namespace Event_Finder.Common
             }
             
             // get list of events. 
-            results = await facebookApi.GetAllEvents(SafeDBString(cityName), offset, myLocation.Latitude,
-               myLocation.Longitude,
+            results = await facebookApi.GetAllEvents(SafeDBString(cityName), App.offset, App.myLocation.Latitude,
+               App.myLocation.Longitude,
                 startRange ,
                 endRange );
             
