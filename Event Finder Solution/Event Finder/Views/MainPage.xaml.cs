@@ -45,8 +45,6 @@ namespace Event_Finder.Views
         private void setInitialItemsToCollapsed() 
         {
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-          
-            
         }
         public MainPage()
         { 
@@ -84,7 +82,7 @@ namespace Event_Finder.Views
             }
         }
 
-        private void OnLoad(object sender, RoutedEventArgs e)
+        async private void OnLoad(object sender, RoutedEventArgs e)
         {
             prog.IsActive = true;
             PositionUserOnMap();
@@ -93,13 +91,13 @@ namespace Event_Finder.Views
             {
                 pushpinsItemsControl.ItemsSource = App.AttendingCollection;
                 myEventsButton.Label = "View All Events";
-                
             }
             else 
             {
                 pushpinsItemsControl.ItemsSource = App.ItemEventsList;
                 myEventsButton.Label = "My Events";
             }
+            await App.commonApiHandler.GettingEventsFinished.Task;
             prog.IsActive = false;
             
         }
@@ -350,7 +348,6 @@ namespace Event_Finder.Views
 
                 }
                 prog.IsActive = false;
-           
             }
         }
 

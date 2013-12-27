@@ -20,6 +20,7 @@ namespace Event_Finder.Common
         // controller for geolocation. 
         public LocationController lController;
         // application location
+        public TaskCompletionSource<bool> GettingEventsFinished = new TaskCompletionSource<bool>();
        
 
         private String cityName = "";
@@ -86,7 +87,7 @@ namespace Event_Finder.Common
                 return "Could not connect to internet"; 
             }
 
-           
+            GettingEventsFinished.TrySetResult(true);
             return null;
             
         }
