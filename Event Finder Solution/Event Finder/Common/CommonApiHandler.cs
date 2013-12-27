@@ -60,21 +60,15 @@ namespace Event_Finder.Common
             catch (System.ArgumentOutOfRangeException)
             {
                 return "Could not find city Name";
-
-
-
             }
             catch (System.TimeoutException)
             {
                 return "Could not connect to the internet";
-
             }
             catch (System.ServiceModel.EndpointNotFoundException) 
             {
-                return "Could not connect to endpoint"; 
-                
+                return "Could not connect to endpoint";
             }
-
 
             try
             {

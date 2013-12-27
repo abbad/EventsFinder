@@ -3,8 +3,6 @@ using Event_Finder.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
@@ -14,7 +12,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Event_Finder.ViewModel;
 using Event_Finder.Icons;
@@ -42,8 +39,7 @@ namespace Event_Finder.Views
         MessageDialog dialog = new MessageDialog("Could not get city name!");
         private void addInitialChildrenToMap()
         {
-            MainMap.Children.Add(_locationIcon100m);
-           
+            MainMap.Children.Add(_locationIcon100m);  
         }
 
         private void setInitialItemsToCollapsed() 
@@ -68,20 +64,19 @@ namespace Event_Finder.Views
         }
 
         
-        private void PositionUserOnMap() 
+        async private void PositionUserOnMap() 
         {
             
             try
             {
                 // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
                 double zoomLevel = 13.0f;
-
+                await App.GettingPositionFinished.Task; 
                 MapLayer.SetPosition(_locationIcon100m, App.myLocation);
                 _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                
                 MainMap.SetView(App.myLocation, zoomLevel);
-         
-
-
+                
             }
             catch (System.UnauthorizedAccessException )
             {
@@ -93,7 +88,7 @@ namespace Event_Finder.Views
         {
             prog.IsActive = true;
             PositionUserOnMap();
-            MainMap.DataContext = this;
+            
             if (App.myEventsSelected)
             {
                 pushpinsItemsControl.ItemsSource = App.AttendingCollection;
@@ -109,11 +104,8 @@ namespace Event_Finder.Views
             
         }
 
-        
-
         private void clearAllCollections() 
         {
-           
             App.AttendingCollection.Clear();
             App.ItemEventsList.Clear();
         }
@@ -121,10 +113,10 @@ namespace Event_Finder.Views
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             clearAllCollections();
-
+            prog.IsActive = true;
             App.startRange = startRangeDateTimePicker.Date.Date;
             App.endRange = endRangeDateTimePicker.Date.Date;
-            prog.IsActive = true;
+         
             // get list of atteneded events by user.
             App.commonApiHandler.FillAttendedEventsByUserInCollection(await App.commonApiHandler.facebookApi.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
                 DateTimeConverter.DateTimeToUnixTimestamp(App.endRange)));
@@ -143,12 +135,6 @@ namespace Event_Finder.Views
                 catch (Exception) { }
             }
             prog.IsActive = false; 
-        }
-
-        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            Event selectedEvent = (Event)e.ClickedItem;
-            LoadInfoBox(selectedEvent);
         }
 
         private void SetButtonToStatus(RSVP rsvp)
@@ -300,20 +286,7 @@ namespace Event_Finder.Views
 
         }
 
-
       
-        private Button CreateButton() 
-        {
-            Button x = new Button();
-            x.Height = 80;
-            x.Width = 150;
-            x.Margin = new Thickness(-90, -110, 0, 0);//left top right bottom
-            x.Style = (Style)Application.Current.Resources["setPos"];
-
-            return x;
-        
-        }
-
         private void appBarNavigateButton_Click(object sender, RoutedEventArgs e)
         {
             Frame.Navigate(typeof(GridViewPage));

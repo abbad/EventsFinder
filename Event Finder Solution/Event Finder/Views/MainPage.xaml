@@ -77,76 +77,12 @@
         </Grid.ColumnDefinitions>
 
 
-        <!-- row 0 logo, name, search, toggle buttons -->
         <TextBlock Text="EVENT FINDER" Grid.Row="0" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Margin="0,6" Width="324"  />
 
-        <!-- row 1 Categories, Event labels  -->
+     
         <Image Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"    Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill"/>
 
-        <!-- row 2 Categories, Events stacks -->
-        <!--
-        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
-            <ListView x:Name="allItemsList"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="310" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsSwipeEnabled="False" >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel  Orientation="Horizontal"  >
-                            <StackPanel>
-                                <Image Source="{Binding pic_square}"  Height="50" Width="50"/>
-                            </StackPanel>
-                            <StackPanel d:DesignWidth="142.433" d:DesignHeight="148.896">
-                                <TextBlock Foreground="Azure" TextWrapping="Wrap" FontFamily="Global User Interface">
-                    				<Bold>
-                    					<Run Text="Event:"/>
-                    				</Bold>
-                    				<Run Text="{Binding name}"/>
-                                </TextBlock>
-                                <TextBlock Foreground="Azure" TextWrapping="Wrap">
-                    				<Bold FontFamily="Global User Interface">
-                    					<Run Text="Date:"/>
-                    				</Bold>
-                    				<Run Text="{Binding start_time}" FontFamily="Global User Interface" />
-                                </TextBlock>
-                            </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            
-             Events attending stack and item list -->
-        <!--    
-        <StackPanel >
-                <TextBlock Text="My Events" FontSize="30" HorizontalAlignment="Center"/>
-                <ListView IsSwipeEnabled="False"  x:Name="AttendingListView"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="230" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding attendingCollection}" >
-
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel  Orientation="Horizontal"  >
-                                <StackPanel>
-                                    <Image Source="{Binding pic_square}"  Height="50" Width="50"/>
-                                </StackPanel>
-                                <StackPanel d:DesignWidth="142.433" d:DesignHeight="148.896">
-                                    <TextBlock Foreground="Azure" TextWrapping="Wrap" FontFamily="Global User Interface">
-                    				<Bold>
-                    					<Run Text="Event:"/>
-                    				</Bold>
-                    				<Run Text="{Binding name}"/>
-                                    </TextBlock>
-                                    <TextBlock Foreground="Azure" TextWrapping="Wrap">
-                    				<Bold FontFamily="Global User Interface">
-                    					<Run Text="Date:"/>
-                    				</Bold>
-                    				<Run Text="{Binding start_time}" FontFamily="Global User Interface" />
-                                    </TextBlock>
-                                </StackPanel>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-
-            </StackPanel>
-
-        </StackPanel>
-        --> 
+     
         <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
         <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h" x:Name="MainMap" PointerPressedOverride="MainMap_PointerPressed" Loaded="OnLoad" Grid.RowSpan="2" Grid.Row="2">
 
@@ -186,7 +122,6 @@
         <DatePicker  Header="To" x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Right" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" Grid.Row="1" />
         <DatePicker Header="From" x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Left" Margin="10,0,0,0" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" Grid.Row="1" />
         <TextBlock Text="Date Range" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"  Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Grid.Row="1" />
-        	
         
     </Grid>
 

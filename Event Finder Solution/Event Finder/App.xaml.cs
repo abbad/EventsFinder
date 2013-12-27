@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Devices.Geolocation;
@@ -32,7 +33,7 @@ namespace Event_Finder
     /// </summary>
     sealed partial class App : Application
     {
-         
+        internal static TaskCompletionSource<bool> GettingPositionFinished = new TaskCompletionSource<bool>();
             
         internal static Geoposition myPosition;
         internal static string AccessToken = String.Empty;
@@ -55,8 +56,12 @@ namespace Event_Finder
 
         internal static double offset = 0.5;
 
-        internal static Location myLocation = null;
-       
+        internal static Location myLocation;
+
+        internal static Location MyLocation 
+        {
+            get { return myLocation; }
+        }
 
         // List of events attended by user.
         internal static ObservableCollection<Event> AttendingCollection { get; set; }

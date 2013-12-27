@@ -3,20 +3,13 @@ using Event_Finder.ViewModel;
 using Facebook.Client;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -32,7 +25,6 @@ namespace Event_Finder.Views
         public LoginPage()
         {
             this.InitializeComponent();
-            
         }
         private async Task<bool> Authenticate()
         {
@@ -68,14 +60,12 @@ namespace Event_Finder.Views
 
         async private void btnFacebookLogin_Click(object sender, RoutedEventArgs e)
         {
-            App.myPosition = await App.commonApiHandler.lController.GetCurrentLocation();
-            App.myLocation = new Location(App.myPosition.Coordinate.Point.Position.Latitude, App.myPosition.Coordinate.Point.Position.Longitude);
+          
             bool error = false ;
             if (!App.isAuthenticated)
             {
                 try
                 {
-
                     btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
                     error = await Authenticate();
                     App.isAuthenticated = error;
@@ -97,7 +87,9 @@ namespace Event_Finder.Views
         {
             base.OnNavigatedFrom(e);
 
-           
+            App.myPosition = await App.commonApiHandler.lController.GetCurrentLocation();
+            App.myLocation = new Location(App.myPosition.Coordinate.Point.Position.Latitude, App.myPosition.Coordinate.Point.Position.Longitude);
+            App.GettingPositionFinished.SetResult(true);
             // get list of atteneded events by user.
             App.commonApiHandler.FillAttendedEventsByUserInCollection(await App.commonApiHandler.facebookApi.getListOfEventsAttendedByUser(
                 DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
@@ -112,8 +104,6 @@ namespace Event_Finder.Views
                 App.errorOccured = true;
                 App.errorMessage = error;
             }
-
-
            
 
         }

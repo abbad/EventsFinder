@@ -26,7 +26,6 @@ namespace Event_Finder.Views
         {
             this.InitializeComponent();
             EventsGridView.Loaded += EventsGridView_Loaded;
-            
         }
 
         void EventsGridView_Loaded(object sender, RoutedEventArgs e)
