@@ -5,11 +5,6 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Event Finder", "Event Finder\Event Finder.csproj", "{562843FA-8C60-4FF0-887B-FE4974E094F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Event Finder Tests", "Event Finder Tests\Event Finder Tests.csproj", "{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}"
-	ProjectSection(ProjectDependencies) = postProject
-		{562843FA-8C60-4FF0-887B-FE4974E094F7} = {562843FA-8C60-4FF0-887B-FE4974E094F7}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,42 +57,6 @@ Global
 		{562843FA-8C60-4FF0-887B-FE4974E094F7}.Release|x86.ActiveCfg = Release|x86
 		{562843FA-8C60-4FF0-887B-FE4974E094F7}.Release|x86.Build.0 = Release|x86
 		{562843FA-8C60-4FF0-887B-FE4974E094F7}.Release|x86.Deploy.0 = Release|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|ARM.ActiveCfg = Debug|ARM
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|ARM.Build.0 = Debug|ARM
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|ARM.Deploy.0 = Debug|ARM
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|Mixed Platforms.Deploy.0 = Debug|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|Win32.ActiveCfg = Debug|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|Win32.Build.0 = Debug|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|Win32.Deploy.0 = Debug|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|x64.ActiveCfg = Debug|x64
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|x64.Build.0 = Debug|x64
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|x64.Deploy.0 = Debug|x64
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|x86.ActiveCfg = Debug|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|x86.Build.0 = Debug|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Debug|x86.Deploy.0 = Debug|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|ARM.ActiveCfg = Release|ARM
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|ARM.Build.0 = Release|ARM
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|ARM.Deploy.0 = Release|ARM
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|Mixed Platforms.Build.0 = Release|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|Mixed Platforms.Deploy.0 = Release|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|Win32.ActiveCfg = Release|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|Win32.Build.0 = Release|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|Win32.Deploy.0 = Release|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|x64.ActiveCfg = Release|x64
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|x64.Build.0 = Release|x64
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|x64.Deploy.0 = Release|x64
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|x86.ActiveCfg = Release|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|x86.Build.0 = Release|x86
-		{A909DBA8-A02A-476E-B8A8-CB36723D7FE9}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

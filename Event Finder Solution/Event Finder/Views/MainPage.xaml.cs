@@ -63,8 +63,7 @@ namespace Event_Finder.Views
 
         
         async private void PositionUserOnMap() 
-        {
-            
+        {   
             try
             {
                 // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
@@ -184,6 +183,8 @@ namespace Event_Finder.Views
 
             // see RSVP status of event.
             RootObject rsvp = await App.commonApiHandler.facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
+
+            FriendRoot vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
             if (rsvp.data.Count != 0)
             {
                 SetButtonToStatus(rsvp.data[0]);

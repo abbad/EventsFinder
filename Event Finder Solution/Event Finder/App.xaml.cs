@@ -47,8 +47,6 @@ namespace Event_Finder
         internal static bool errorOccured = false;
 
         internal static CommonApiHandler commonApiHandler = new CommonApiHandler();
-        // List of pushpin collection
-
 
         internal static DateTime endRange = DateTime.Today.AddDays(5);
 

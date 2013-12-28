@@ -124,6 +124,7 @@
     <Compile Include="Icons\LocationIcon10m.xaml.cs">
       <DependentUpon>LocationIcon10m.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\FriendRoot.cs" />
     <Compile Include="Models\RSVP.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\Data.cs" />

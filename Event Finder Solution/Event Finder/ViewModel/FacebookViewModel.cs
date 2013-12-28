@@ -14,14 +14,15 @@ namespace Event_Finder.ViewModel
     public class FacebookViewModel
     {
 
-      
-        public FacebookViewModel() 
+        async public Task<FriendRoot> GetFriendsAttendingEvent(string eid) 
         {
+            String result = await CallFacebookFQL(MakeQueryForFriendsAttendingEvent(eid));
+            return ParseFriends(result);
         }
 
         async public Task<RootObject> GetRSVPStatusForUser(String eID) 
         {
-            String result = await CallFacebookFQL(makeQueryRSVPStatus(eID));
+            String result = await CallFacebookFQL(MakeQueryRSVPStatus(eID));
 
             List<string> errors = new List<string>();
             return JsonConvert.DeserializeObject<RootObject>(result,
@@ -47,7 +48,7 @@ namespace Event_Finder.ViewModel
         async public Task<List<Data>> GetAllEvents(string searchString, double offset, double latitude, double longitude, double dt, double dtEndRange)
         { 
             List<Data> results = new List<Data>();
-            String result = await CallFacebookFQL(makeQueryWithContains(offset, latitude, longitude, dt, dtEndRange, searchString));
+            String result = await CallFacebookFQL(MakeQueryWithContains(offset, latitude, longitude, dt, dtEndRange, searchString));
             results.Add(ParseEvents(result));
             result = await CallFacebookFQL(MakeQueryForMeAndFriendsEvents(offset, latitude, longitude, dt, dtEndRange));
             results.Add(ParseEvents(result));
@@ -58,7 +59,7 @@ namespace Event_Finder.ViewModel
         async public Task<List<Data>> SearchEventsFromFacebook(string searchString, double offset, double latitude, double longitude, double dt, double dtEndRange)
         { 
             List<Data> results = new List<Data>();
-            String result = await CallFacebookFQL(makeQueryWithContains(offset, latitude, longitude, dt, dtEndRange, searchString));
+            String result = await CallFacebookFQL(MakeQueryWithContains(offset, latitude, longitude, dt, dtEndRange, searchString));
             results.Add(ParseEvents(result));
             return results;
         }
@@ -71,7 +72,7 @@ namespace Event_Finder.ViewModel
             return results; 
         }
 
-        public Data ParseEvents(String jsonListOfEvents)
+        private Data ParseEvents(String jsonListOfEvents)
         {
             List<string> errors = new List<string>();
             return JsonConvert.DeserializeObject<Data>(jsonListOfEvents,
@@ -84,6 +85,21 @@ namespace Event_Finder.ViewModel
                 });
         }
 
+        private FriendRoot ParseFriends(String listOfFriends) 
+        {
+            List<string> errors = new List<string>();
+            return JsonConvert.DeserializeObject<FriendRoot>(listOfFriends,
+                new JsonSerializerSettings
+                {
+                    Error = delegate(object sender, ErrorEventArgs args)
+                    {
+                        errors.Add(args.ErrorContext.Error.Message);
+                        args.ErrorContext.Handled = true;
+                    }
+                });
+            
+        
+        }
 
         /// <summary>
         ///  Function that will try to reserve a person in an event.
@@ -123,9 +139,8 @@ namespace Event_Finder.ViewModel
         }
 
 
-        private String makeQueryWithContains(double offset, double latitude, double longitude, double dt, double dtEndRange, String searchString)
+        private String MakeQueryWithContains(double offset, double latitude, double longitude, double dt, double dtEndRange, String searchString)
         {
-            //AND venue.longitude < \''. ($long+$offset) .'\' AND venue.latitude < \''. ($lat+$offset) .'\' AND venue.longitude > \''. ($long-$offset) .'\' AND venue.latitude > \''. ($lat-$offset) .'\' ORDER BY start_time ASC '. $limit
             return String.Format(@"SELECT eid, start_time, end_time, pic_big, pic_square, name, description, venue FROM event WHERE contains('""{5}""') AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time > ""{4}"" and start_time < ""{6}"" ORDER BY start_time ASC",
                                        (latitude - offset).ToString(),
                                        (latitude + offset).ToString(),
@@ -137,7 +152,7 @@ namespace Event_Finder.ViewModel
                                         
         }
 
-        private String makeQueryRSVPStatus(String eid) 
+        private String MakeQueryRSVPStatus(String eid) 
         {
             return String.Format("SELECT rsvp_status FROM event_member WHERE eid={0} AND uid=me()", eid);
         }
@@ -160,7 +175,10 @@ namespace Event_Finder.ViewModel
                                        dtEndRange.ToString());
         }
 
-       
+        private String MakeQueryForFriendsAttendingEvent(string eid) 
+        {
+            return String.Format(@"SELECT first_name, last_name, pic_big FROM user WHERE uid IN (SELECT uid FROM event_member WHERE eid = {0}  AND rsvp_status = 'attending' AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me()))", eid);
+        }
 
     }
 }
