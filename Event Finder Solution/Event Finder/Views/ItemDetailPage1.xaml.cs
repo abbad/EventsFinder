@@ -60,6 +60,7 @@ namespace Event_Finder.Views
 
         async void ItemDetailPage1_Loaded(object sender, RoutedEventArgs e)
         {
+            App.commonApiHandler.friendList.Clear();
             FriendRoot vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
             App.commonApiHandler.FillFriendsAttendingCollection(vsx);
             attendFr.ItemsSource = App.commonApiHandler.friendList;
@@ -98,8 +99,6 @@ namespace Event_Finder.Views
                 navigationParameter = (Event)e.PageState["SelectedItem"];
                  
             }
-            /*
-           */
            
             // TODO: Assign a bindable group to this.DefaultViewModel["Group"]
             // TODO: Assign a collection of bindable items to this.DefaultViewModel["Items"]
@@ -110,7 +109,6 @@ namespace Event_Finder.Views
 
         private void SetButtonToStatus(RSVP rsvp)
         {
-
             if (rsvp != null)
             {
                 if (rsvp.rsvp_status == "attending")

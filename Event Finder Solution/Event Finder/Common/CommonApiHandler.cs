@@ -119,7 +119,7 @@
             
             for (i = 0; i < fr.data.Count; i++)
             {
-                friendList.Add(fr.data[0]);
+                friendList.Add(fr.data[i]);
             }
             
         }
@@ -131,12 +131,20 @@
             {
                 foreach (var itemEvent in result.data)
                 {
+                    if (itemEvent.venue != null) { 
 
                     if (CheckEventForLatitudeAndLongitude(itemEvent))
                     {
+                        if (CheckEventForVenueName(itemEvent))
+                        {
+                            itemEvent.venueName = itemEvent.venue["name"];
+                        }
+
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
                         // fill it in item lsit of events
                         App.ItemEventsList.Add(itemEvent);
+                    }
+
                     }
                 }
 
@@ -164,6 +172,7 @@
             {
                 foreach (var itemEvent in result.data)
                 {
+                    if (itemEvent.venue != null) { 
                     if (CheckEventForLatitudeAndLongitude(itemEvent))
                     {
                         // check for venue name
@@ -177,6 +186,7 @@
                         // fill it in the item list of users event.
                         App.AttendingCollection.Add(itemEvent);
 
+                    }
                     }
                 }
             }

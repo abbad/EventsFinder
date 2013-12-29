@@ -83,26 +83,27 @@
             </bm:MapLayer>
             <!-- Infobox map Layer -->
             <bm:MapLayer Margin="800,100,0,0">
+             
                 <Grid x:Name="Infobox" Visibility="Collapsed" Background="#FF0071BB" Height="500" Width="500">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="100"/>
                     </Grid.RowDefinitions>
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="130"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="130"/>
                     </Grid.ColumnDefinitions>
                     <!--pic-->
+                    <ProgressBar x:Name="InfoBoxProgressBar" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" VerticalAlignment="Top" Height="100" HorizontalAlignment="Stretch" IsIndeterminate="True"/>
                     <Image Source="{Binding pic_big}" Height="100" Width="100"/>
                     <!--Event Name-->
                     <Border Background="#FF3C3838" Grid.Column="1" Grid.ColumnSpan="2">
                         <TextBlock Text="{Binding name}" MaxHeight="60" MaxWidth="240" TextWrapping="Wrap" FontSize="30"  HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Aharoni" />
                     </Border>
-                    <!--Lefy square Elements-->
-                    <Grid Grid.Row="1">
+                    <!--Left square Elements-->
+                    <Grid Grid.Row="1" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="100"/>
                             <RowDefinition Height="100"/>
@@ -114,7 +115,6 @@
                             <TextBlock Text="27/12/2013" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
                             <TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
                         </StackPanel>
-
 
                         <StackPanel Grid.Row="1"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
                             <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" Margin="0,15,0,0"  />
@@ -136,9 +136,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Border Background="#FF3C3838" Grid.ColumnSpan="3"/>
-                        <Button x:Name="AttendButton" Content="ATTEND" Height="100" FontSize="12.5" FontFamily="Aharoni" Click="AttendButton_Click" />
-                        <Button x:Name="DeclineButton" Content="MAYBE" Height="100" FontSize="13.6" Grid.Column="1" FontFamily="Aharoni" Click="MaybeButton_Click" />
-                        <Button x:Name="MaybeButton" Content="DECLINE" Height="100" FontSize="11.68" Grid.Column="2" FontFamily="Aharoni" Click="DeclineButton_Click"/>
+                        <Button x:Name="AttendButton" Content="Attend" Height="100" FontSize="12.5" FontFamily="Aharoni" Click="AttendButton_Click" />
+                        <Button x:Name="MaybeButton" Content="Maybe" Height="100" FontSize="12.5" Grid.Column="1" FontFamily="Aharoni" Click="MaybeButton_Click" />
+                        <Button x:Name="DeclineButton" Content="Decline" Height="100" FontSize="12.5" Grid.Column="2" FontFamily="Aharoni" Click="DeclineButton_Click"/>
 
                     </Grid>
 

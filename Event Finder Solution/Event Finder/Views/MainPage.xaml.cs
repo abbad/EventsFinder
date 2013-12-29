@@ -155,6 +155,7 @@ namespace Event_Finder.Views
 
         async private void LoadInfoBox(Event selectedEvent) 
         {
+            InfoBoxProgressBar.IsEnabled = true;
             MainMap.SetView(selectedEvent.Location, 15.0f);
             App.commonApiHandler.friendList.Clear();
             // see RSVP status of event.
@@ -202,7 +203,7 @@ namespace Event_Finder.Views
             {
                 Infobox.Visibility = Visibility.Collapsed;
             }
-            
+            InfoBoxProgressBar.IsEnabled = false;
         }
         private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
@@ -242,6 +243,7 @@ namespace Event_Finder.Views
 
         async private void AttendButton_Click(object sender, RoutedEventArgs e)
         {
+            InfoBoxProgressBar.IsEnabled = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -259,10 +261,12 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
+            InfoBoxProgressBar.IsEnabled = false;
         }
 
         async private void MaybeButton_Click(object sender, RoutedEventArgs e)
         {
+            InfoBoxProgressBar.IsEnabled = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
             bool maybe = false;
@@ -284,11 +288,12 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-
+            InfoBoxProgressBar.IsEnabled = false;
         }
 
         async private void DeclineButton_Click(object sender, RoutedEventArgs e)
         {
+            InfoBoxProgressBar.IsEnabled = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -308,7 +313,7 @@ namespace Event_Finder.Views
                 dialog.Content= "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-
+            InfoBoxProgressBar.IsEnabled = false;
         }
 
       
