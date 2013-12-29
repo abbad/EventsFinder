@@ -16,7 +16,11 @@
         <CommandBar>
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="appBarNavigateButton" Label="Grid View" Icon="ViewAll" Click="appBarNavigateButton_Click"/>
+                <AppBarButton x:Name="setPositionButton" Label="Change Position" Icon="Pin"  Click="setPositionButton_Click"/>
             </CommandBar.SecondaryCommands>
+            <CommandBar.PrimaryCommands>
+                <AppBarButton x:Name="myEventsButton" Label="My Events" Icon="Bookmarks"  Click="myEventsButton_Click"/>
+            </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
     <Page.Resources>
@@ -68,72 +72,8 @@
         <!-- row 1 Categories, Event labels  -->
         <Image Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"    Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill"/>
 
-        <!-- row 2 Categories, Events stacks -->
-        <!--
-        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,10">
-            <ListView x:Name="allItemsList"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="310" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsSwipeEnabled="False" >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel  Orientation="Horizontal"  >
-                            <StackPanel>
-                                <Image Source="{Binding pic_square}"  Height="50" Width="50"/>
-                            </StackPanel>
-                            <StackPanel d:DesignWidth="142.433" d:DesignHeight="148.896">
-                                <TextBlock Foreground="Azure" TextWrapping="Wrap" FontFamily="Global User Interface">
-                    				<Bold>
-                    					<Run Text="Event:"/>
-                    				</Bold>
-                    				<Run Text="{Binding name}"/>
-                                </TextBlock>
-                                <TextBlock Foreground="Azure" TextWrapping="Wrap">
-                    				<Bold FontFamily="Global User Interface">
-                    					<Run Text="Date:"/>
-                    				</Bold>
-                    				<Run Text="{Binding start_time}" FontFamily="Global User Interface" />
-                                </TextBlock>
-                            </StackPanel>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            
-             Events attending stack and item list -->
-        <!--    
-        <StackPanel >
-                <TextBlock Text="My Events" FontSize="30" HorizontalAlignment="Center"/>
-                <ListView IsSwipeEnabled="False"  x:Name="AttendingListView"  IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Height="230" SelectionMode="None" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ItemsSource="{Binding attendingCollection}" >
-
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel  Orientation="Horizontal"  >
-                                <StackPanel>
-                                    <Image Source="{Binding pic_square}"  Height="50" Width="50"/>
-                                </StackPanel>
-                                <StackPanel d:DesignWidth="142.433" d:DesignHeight="148.896">
-                                    <TextBlock Foreground="Azure" TextWrapping="Wrap" FontFamily="Global User Interface">
-                    				<Bold>
-                    					<Run Text="Event:"/>
-                    				</Bold>
-                    				<Run Text="{Binding name}"/>
-                                    </TextBlock>
-                                    <TextBlock Foreground="Azure" TextWrapping="Wrap">
-                    				<Bold FontFamily="Global User Interface">
-                    					<Run Text="Date:"/>
-                    				</Bold>
-                    				<Run Text="{Binding start_time}" FontFamily="Global User Interface" />
-                                    </TextBlock>
-                                </StackPanel>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-
-            </StackPanel>
-
-        </StackPanel>
-        -->
         <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
-        <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  Holding="MainMap_Holding" RightTapped="MainMap_RightTapped" x:Name="MainMap" Loaded="OnLoad" Grid.RowSpan="2" Grid.Row="2">
+        <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  PointerPressedOverride="MainMap_PointerPressed"  x:Name="MainMap" Loaded="OnLoad" Grid.RowSpan="2" Grid.Row="2">
 
             <ProgressRing x:Name="prog" Height="200" Width="200" Margin="590,210,0,0" Foreground="#FF0025BB"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <!-- list of pushpins maplayer -->
@@ -155,13 +95,9 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="130"/>
                     </Grid.ColumnDefinitions>
-
                     <!--pic-->
-
                     <Image Source="{Binding pic_big}" Height="100" Width="100"/>
-
                     <!--Event Name-->
-
                     <Border Background="#FF3C3838" Grid.Column="1" Grid.ColumnSpan="2">
                         <TextBlock Text="{Binding name}" MaxHeight="60" MaxWidth="240" TextWrapping="Wrap" FontSize="30"  HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Aharoni" />
                     </Border>
@@ -177,7 +113,6 @@
                             <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" Margin="0,15,0,0"  />
                             <TextBlock Text="27/12/2013" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
                             <TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
-
                         </StackPanel>
 
 
@@ -185,14 +120,11 @@
                             <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" Margin="0,15,0,0"  />
                             <TextBlock Text="27/12/2013" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
                             <TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
-
                         </StackPanel>
 
                         <StackPanel Grid.Row="2"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
                             <TextBlock Text="Location"   HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" Margin="0,10,0,0" />
                             <TextBlock Text="Friday" MaxHeight="70" TextWrapping="Wrap" MaxWidth="120" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
-
-
                         </StackPanel>
 
 
@@ -228,28 +160,25 @@
                     </Grid>
 
                     <!--friends-->
-                    <TextBlock  Text="Friends" HorizontalAlignment="Center" Grid.Column="2"  VerticalAlignment="Center"  FontSize="25"/>
+                    <TextBlock  Text="Friends Going" HorizontalAlignment="Center" Grid.Column="2"  VerticalAlignment="Center"  FontSize="14"/>
                     <Border Background="#FF3C3838" Grid.Row="1" Grid.Column="2" />
-                    <ListView  x:Name="attendFr" Width="120" 
-          VerticalAlignment="Stretch" HorizontalAlignment="Center" 
-          CanReorderItems="True" CanDragItems="True" 
-          Grid.Row="1" Grid.Column="2"  >
-                        <ListView.ItemTemplate>
+                    <ListView  x:Name="attendFr" Width="120" VerticalAlignment="Stretch" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2"  >
+                        <ListView.ItemTemplate >
                             <DataTemplate>
-
                                 <Border Height="80" Width="80" >
-                                    <Image Source="{Binding pic_big}" Width="50" Height="50" Stretch="UniformToFill"/>
+                                    <Image Source="{Binding pic_big}" Width="50" Height="50" Stretch="UniformToFill">
+                                        <ToolTipService.ToolTip>
+                                            <TextBlock Text="{Binding first_name}"/>
+                                        </ToolTipService.ToolTip>
+                                    </Image>
                                 </Border>
-
                             </DataTemplate>
                         </ListView.ItemTemplate>
-
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <ItemsWrapGrid MaximumRowsOrColumns="1" />
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
-
                     </ListView>
 
 

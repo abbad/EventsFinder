@@ -44,5 +44,11 @@ namespace Event_Finder.Views
         {
             Frame.Navigate(typeof(MainPage));
         }
+
+        private void EventsGridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            var itemDet = (Event_Finder.Models.Event)e.ClickedItem;
+            this.Frame.Navigate(typeof(ItemDetailPage1), itemDet);
+        }
     }
 }

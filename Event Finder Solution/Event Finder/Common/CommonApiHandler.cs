@@ -1,19 +1,20 @@
-﻿using Bing.Maps;
-using Event_Finder.Models;
-using Event_Finder.ViewModel;
-using Event_Finder.Views;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿    using Bing.Maps;
+    using Event_Finder.Models;
+    using Event_Finder.ViewModel;
+    using Event_Finder.Views;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
 
-namespace Event_Finder.Common
-{
+    namespace Event_Finder.Common
+    {
     class CommonApiHandler
     {
-       
+
+        public ObservableCollection<Friend> friendList = new ObservableCollection<Friend>();
         
         // controller for facebook functions
         public FacebookViewModel facebookApi;
@@ -41,10 +42,8 @@ namespace Event_Finder.Common
             App.AttendingCollection = new ObservableCollection<Event>();
             App.ItemEventsList = new ObservableCollection<Event>();
         }
-
-        
      
-          /// <summary>
+            /// <summary>
         ///  a function that will reload all items displayed on screen.
         /// </summary>
         /// <param name="myPosition"></param>
@@ -75,7 +74,7 @@ namespace Event_Finder.Common
             {
                 // get list of events. 
                 results = await facebookApi.GetAllEvents(SafeDBString(cityName), App.offset, App.myLocation.Latitude,
-                   App.myLocation.Longitude,
+                    App.myLocation.Longitude,
                     startRange,
                     endRange);
 
@@ -97,6 +96,16 @@ namespace Event_Finder.Common
             return inputValue.Replace("'", " ");
         }
 
+        public void FillFriendsAttendingCollection(FriendRoot fr)
+        {   
+            int i;
+            
+            for (i = 0; i < fr.data.Count; i++)
+            {
+                friendList.Add(fr.data[0]);
+            }
+            
+        }
 
         private void FillEventsCollection(List<Data> results)
         {
@@ -151,4 +160,4 @@ namespace Event_Finder.Common
 
         }
     }
-}
+    }

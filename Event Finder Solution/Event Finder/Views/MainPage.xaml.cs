@@ -176,15 +176,15 @@ namespace Event_Finder.Views
         
         }
 
-
         async private void LoadInfoBox(Event selectedEvent) 
         {
             MainMap.SetView(selectedEvent.Location, 15.0f);
-
+            App.commonApiHandler.friendList.Clear();
             // see RSVP status of event.
             RootObject rsvp = await App.commonApiHandler.facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
-
+            // git list of friends.
             FriendRoot vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
+            App.commonApiHandler.FillFriendsAttendingCollection(vsx);
             if (rsvp.data.Count != 0)
             {
                 SetButtonToStatus(rsvp.data[0]);
@@ -207,7 +207,8 @@ namespace Event_Finder.Views
             {
                 Infobox.Visibility = Visibility.Collapsed;
             }
-        
+       
+            attendFr.ItemsSource = App.commonApiHandler.friendList;
         }
         private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
