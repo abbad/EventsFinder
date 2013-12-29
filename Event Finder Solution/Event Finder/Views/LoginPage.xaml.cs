@@ -50,7 +50,7 @@ namespace Event_Finder.Views
                 try
                 {
                     await dialog.ShowAsync();
-                    return false;
+                    return true;
                 }
                 catch (Exception) { }
             }
@@ -64,33 +64,44 @@ namespace Event_Finder.Views
             bool error = false ;
             if (!App.isAuthenticated)
             {
-                try
+
+                btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                error = await Authenticate();
+                App.isAuthenticated = !error;
+                if (App.isAuthenticated)
                 {
-                    btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                    error = await Authenticate();
-                    App.isAuthenticated = error;
-                    if (!error)
-                    { 
-                        Frame.Navigate(typeof(MainPage));
-                    }
+                    Frame.Navigate(typeof(MainPage));
                 }
-                catch (Exception ) 
+                else
                 {
                     App.isAuthenticated = false;
                     btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                
                 }
+            }
+            else {
+                Frame.Navigate(typeof(MainPage));
             }
         }
 
         async protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
-
-            App.myPosition = await App.commonApiHandler.lController.GetCurrentLocation();
+            try
+            {
+                App.myPosition = await App.commonApiHandler.lController.GetCurrentLocation();
+                App.ErrorOccuredFinished.TrySetResult(false);
+            }
+            catch (System.UnauthorizedAccessException) { App.errorOccured = true; 
+                                                            App.errorMessage = "Could not find your location. Please set your location on the map using app bar.";
+                                                            App.ErrorOccuredFinished.TrySetResult(true);
+                                                            return; }
+            catch (System.Exception) { App.errorOccured = true; 
+                                                    App.errorMessage = "Could not find your location. Please set your location on the map using app bar.";
+                                                    App.ErrorOccuredFinished.TrySetResult(true);   
+                                                    return; }
             App.myLocation = new Location(App.myPosition.Coordinate.Point.Position.Latitude, App.myPosition.Coordinate.Point.Position.Longitude);
             App.GettingPositionFinished.SetResult(true);
-            // get list of atteneded events by user.
+            // get list of atteneded events by user.by 
             String error = await App.commonApiHandler.QueryForUserEvents();
 
             // QueryForEventsWithinAnArea
@@ -101,7 +112,9 @@ namespace Event_Finder.Views
             {
                 App.errorOccured = true;
                 App.errorMessage = error;
+                App.ErrorOccuredFinished.TrySetResult(true);
             }
+
            
 
         }

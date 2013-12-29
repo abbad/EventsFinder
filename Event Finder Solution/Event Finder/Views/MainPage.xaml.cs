@@ -75,19 +75,24 @@ namespace Event_Finder.Views
 
         async private void OnLoad(object sender, RoutedEventArgs e)
         {
-
+            await App.ErrorOccuredFinished.Task; 
+            prog.IsActive = true;
             // check if error happend before.
             if (App.errorOccured) 
             {
                 try
                 {
+                    prog.IsActive = false;
                     dialog.Content = App.errorMessage;
                     await dialog.ShowAsync();
+                    App.errorOccured = false;
+                    App.GettingPositionFinished.TrySetResult(true);
+                    return;
                 }
                 catch (Exception){ }
+               
             }
 
-            prog.IsActive = true;
             PositionUserOnMap();
             
             if (App.myEventsSelected)
