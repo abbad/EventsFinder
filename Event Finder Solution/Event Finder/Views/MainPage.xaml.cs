@@ -64,21 +64,16 @@ namespace Event_Finder.Views
         
         async private void PositionUserOnMap() 
         {   
-            try
-            {
-                // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
-                double zoomLevel = 13.0f;
-                await App.GettingPositionFinished.Task; 
-                MapLayer.SetPosition(_locationIcon100m, App.myLocation);
-                _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            
+            // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
+            double zoomLevel = 13.0f;
+            await App.GettingPositionFinished.Task; 
+            MapLayer.SetPosition(_locationIcon100m, App.myLocation);
+            _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 
-                MainMap.SetView(App.myLocation, zoomLevel);
+            MainMap.SetView(App.myLocation, zoomLevel);
                 
-            }
-            catch (System.UnauthorizedAccessException )
-            {
-                dialog.Content = "Could not find location";
-            }
+            
         }
 
         async private void OnLoad(object sender, RoutedEventArgs e)
@@ -183,7 +178,7 @@ namespace Event_Finder.Views
                 try
                 {
                     dialog.Content = "Internet connection lost";
-                    dialog.ShowAsync();
+                    await dialog.ShowAsync();
                 }
                 catch (Exception){}
                 App.errorOccured = false;
