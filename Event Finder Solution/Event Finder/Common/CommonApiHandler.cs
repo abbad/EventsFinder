@@ -42,6 +42,23 @@
             App.AttendingCollection = new ObservableCollection<Event>();
             App.ItemEventsList = new ObservableCollection<Event>();
         }
+
+        async public Task<String> QueryForUserEvents()
+        {
+            List<Data> results;
+            try { 
+                results = await App.commonApiHandler.facebookApi.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
+                    DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
+            }
+            catch (System.Threading.Tasks.TaskCanceledException) 
+            {
+                return "Internet connection lost";
+            }
+               // get list of atteneded events by user.
+            App.commonApiHandler.FillAttendedEventsByUserInCollection(results);
+            
+            return null;
+        }
      
             /// <summary>
         ///  a function that will reload all items displayed on screen.
@@ -135,7 +152,7 @@
 
     
 
-        public void FillAttendedEventsByUserInCollection(List<Data> attendedEvents)
+        private void FillAttendedEventsByUserInCollection(List<Data> attendedEvents)
         {
 
             // add attended events to collection.

@@ -83,6 +83,18 @@ namespace Event_Finder.Views
 
         async private void OnLoad(object sender, RoutedEventArgs e)
         {
+
+            // check if error happend before.
+            if (App.errorOccured) 
+            {
+                try
+                {
+                    dialog.Content = App.errorMessage;
+                    await dialog.ShowAsync();
+                }
+                catch (Exception){ }
+            }
+
             prog.IsActive = true;
             PositionUserOnMap();
             
@@ -113,12 +125,13 @@ namespace Event_Finder.Views
             prog.IsActive = true;
             App.startRange = startRangeDateTimePicker.Date.Date;
             App.endRange = endRangeDateTimePicker.Date.Date;
-         
-            // get list of atteneded events by user.
-            App.commonApiHandler.FillAttendedEventsByUserInCollection(await App.commonApiHandler.facebookApi.getListOfEventsAttendedByUser(DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
-                DateTimeConverter.DateTimeToUnixTimestamp(App.endRange)));
+
+            // get user events.
+            String error = await App.commonApiHandler.QueryForUserEvents();
+                
+           
             // QueryForEventsWithinAnArea
-            String error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
+            error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(startRangeDateTimePicker.Date.Date),
                 DateTimeConverter.DateTimeToUnixTimestamp(endRangeDateTimePicker.Date.Date));
 
             if (error != null)
@@ -132,6 +145,72 @@ namespace Event_Finder.Views
                 catch (Exception) { }
             }
             prog.IsActive = false; 
+        }
+
+        
+
+        private void Pushpin_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            Pushpin selectedPushpin = (Pushpin)sender;
+            Event selectedEvent = (Event)selectedPushpin.DataContext;
+            LoadInfoBox(selectedEvent);
+        
+        }
+
+        async private void LoadInfoBox(Event selectedEvent) 
+        {
+            MainMap.SetView(selectedEvent.Location, 15.0f);
+            App.commonApiHandler.friendList.Clear();
+            // see RSVP status of event.
+            try{
+                RootObject rsvp = await App.commonApiHandler.facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
+                if (rsvp.data.Count != 0)
+                {
+                    SetButtonToStatus(rsvp.data[0]);
+                }
+                else
+                {
+                    // enable all buttons.
+                    SetButtonToStatus(null);
+                }
+            // git list of friends.
+            }catch (System.Threading.Tasks.TaskCanceledException) 
+            {
+                App.errorOccured = true;
+            }
+            if (App.errorOccured) 
+            {
+                try
+                {
+                    dialog.Content = "Internet connection lost";
+                    dialog.ShowAsync();
+                }
+                catch (Exception){}
+                App.errorOccured = false;
+            }
+
+            
+            //Ensure there is content to be displayed before modifying the infobox control
+            if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
+            {
+                Infobox.DataContext = selectedEvent;
+
+                Infobox.Visibility = Visibility.Visible;
+
+                MapLayer.SetPosition(Infobox, MapLayer.GetPosition(selectedEvent.Location));
+                FriendRoot vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
+                App.commonApiHandler.FillFriendsAttendingCollection(vsx);
+                attendFr.ItemsSource = App.commonApiHandler.friendList;
+            }
+            else
+            {
+                Infobox.Visibility = Visibility.Collapsed;
+            }
+            
+        }
+        private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            Infobox.Visibility = Visibility.Collapsed;
         }
 
         private void SetButtonToStatus(RSVP rsvp)
@@ -166,53 +245,6 @@ namespace Event_Finder.Views
                 MaybeButton.IsEnabled = true;
 
             }
-        }
-
-        private void Pushpin_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            Pushpin selectedPushpin = (Pushpin)sender;
-            Event selectedEvent = (Event)selectedPushpin.DataContext;
-            LoadInfoBox(selectedEvent);
-        
-        }
-
-        async private void LoadInfoBox(Event selectedEvent) 
-        {
-            MainMap.SetView(selectedEvent.Location, 15.0f);
-            App.commonApiHandler.friendList.Clear();
-            // see RSVP status of event.
-            RootObject rsvp = await App.commonApiHandler.facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
-            // git list of friends.
-            FriendRoot vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
-            App.commonApiHandler.FillFriendsAttendingCollection(vsx);
-            if (rsvp.data.Count != 0)
-            {
-                SetButtonToStatus(rsvp.data[0]);
-            }
-            else 
-            {
-                // enable all buttons.
-                SetButtonToStatus(null);
-            }
-            //Ensure there is content to be displayed before modifying the infobox control
-            if (!String.IsNullOrEmpty(selectedEvent.name) || !String.IsNullOrEmpty(selectedEvent.description))
-            {
-                Infobox.DataContext = selectedEvent;
-
-                Infobox.Visibility = Visibility.Visible;
-
-                MapLayer.SetPosition(Infobox, MapLayer.GetPosition(selectedEvent.Location));
-            }
-            else
-            {
-                Infobox.Visibility = Visibility.Collapsed;
-            }
-       
-            attendFr.ItemsSource = App.commonApiHandler.friendList;
-        }
-        private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            Infobox.Visibility = Visibility.Collapsed;
         }
 
         async private void AttendButton_Click(object sender, RoutedEventArgs e)

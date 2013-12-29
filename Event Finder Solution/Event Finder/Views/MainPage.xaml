@@ -126,8 +126,6 @@
                             <TextBlock Text="Location"   HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" Margin="0,10,0,0" />
                             <TextBlock Text="Friday" MaxHeight="70" TextWrapping="Wrap" MaxWidth="120" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
                         </StackPanel>
-
-
                     </Grid>
 
                     <!--buttons on the bottom-->
@@ -180,9 +178,6 @@
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
                     </ListView>
-
-
-
                 </Grid>
             </bm:MapLayer>
         </bm:Map>

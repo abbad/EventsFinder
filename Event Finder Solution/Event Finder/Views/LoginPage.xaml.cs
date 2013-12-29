@@ -91,12 +91,10 @@ namespace Event_Finder.Views
             App.myLocation = new Location(App.myPosition.Coordinate.Point.Position.Latitude, App.myPosition.Coordinate.Point.Position.Longitude);
             App.GettingPositionFinished.SetResult(true);
             // get list of atteneded events by user.
-            App.commonApiHandler.FillAttendedEventsByUserInCollection(await App.commonApiHandler.facebookApi.getListOfEventsAttendedByUser(
-                DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
-                DateTimeConverter.DateTimeToUnixTimestamp(App.endRange)));
+            String error = await App.commonApiHandler.QueryForUserEvents();
 
             // QueryForEventsWithinAnArea
-            String error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
+            error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
                 DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
 
             if (error != null)

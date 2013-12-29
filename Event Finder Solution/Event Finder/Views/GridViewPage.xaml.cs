@@ -50,5 +50,25 @@ namespace Event_Finder.Views
             var itemDet = (Event_Finder.Models.Event)e.ClickedItem;
             this.Frame.Navigate(typeof(ItemDetailPage1), itemDet);
         }
+
+        private void myEventsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            string toggle = myEventsButton.Label;
+            if (toggle == "My Events")
+            {
+                myEventsButton.Label = "View All Events";
+
+                EventsGridView.ItemsSource = App.AttendingCollection;
+                App.myEventsSelected = true;
+            }
+            else
+            {
+                EventsGridView.ItemsSource = App.ItemEventsList;
+                myEventsButton.Label = "My Events";
+                App.myEventsSelected = false;
+            }
+
+        }
     }
 }

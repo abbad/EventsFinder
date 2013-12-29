@@ -220,9 +220,9 @@
             
             <!--buttons-->
             <StackPanel Background="#FF3C3838" VerticalAlignment="Bottom" Width="580" Height="100" Orientation="Horizontal"  Grid.Column="1 ">
-                <Button Content="ATTEND" Height="100" Width="190" Margin="9,0,0,0" FontSize="30" HorizontalAlignment="Left" Style="{StaticResource DetButt}"/>
-                <Button Content="MAYBE" Height="100" Width="190" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource DetButt}"/>
-                <Button Content="DECLINE" Height="100" Width="190" FontSize="30" HorizontalAlignment="Right" Style="{StaticResource DetButt}"/>
+                <Button x:Name="AttendButton" Content="Attend" Height="100" Width="190" Margin="9,0,0,0" FontSize="30" HorizontalAlignment="Left" Style="{StaticResource DetButt}"/>
+                <Button x:Name="MaybeButton" Content="Maybe" Height="100" Width="190" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource DetButt}"/>
+                <Button x:Name="DeclineButton" Content="Decline" Height="100" Width="190" FontSize="30" HorizontalAlignment="Right" Style="{StaticResource DetButt}"/>
             </StackPanel>
 
             <!--RSPV-->
