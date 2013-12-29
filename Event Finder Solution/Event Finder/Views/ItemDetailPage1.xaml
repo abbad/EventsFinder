@@ -125,11 +125,10 @@
                 </Grid.RowDefinitions>
                 <Border  Height="{Binding Height, ElementName=grid}" Width="{Binding Width, ElementName=grid}" Grid.ColumnSpan="2" Background="DarkGray" />
                 <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled" Background="{x:Null}" Margin="0,10,23,0" BorderThickness="0" Grid.RowSpan="2">
-                    <TextBlock TextWrapping="Wrap" Width="530" FontFamily="Aharoni"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="30" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}"/>
+                    <!--  <TextBlock TextWrapping="Wrap" Width="530" FontFamily="Aharoni"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="30" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}"/> -->
+                    <TextBlock Text="{Binding description}" Grid.Row="2"  VerticalAlignment="Center"  FontSize="26.667" FontFamily="Aharoni" Margin="20,97,20,20" Height="301"/>
                 </ScrollViewer>
-                <TextBlock Text="DESCRIPTION:" Grid.Row="1"  VerticalAlignment="Center"  FontSize="40" FontFamily="Aharoni" Margin="20,28,23,22"/>
-                <TextBlock Text="EVENT NAME"  VerticalAlignment="Center"  FontSize="40" FontFamily="Aharoni" Margin="20,32,4,28"/>
-                <TextBlock Text="This is a test hfjsakhd jksa hjkh jkh jkh dsahjkdhsajkhdjsakhdjksahjkdhsajkdhskjahdjsakdsjkh jk hjdsahjkd shajdh asjh jk" Grid.Row="2"  VerticalAlignment="Center"  FontSize="26.667" FontFamily="Aharoni" Margin="20,97,20,20" Height="301"/>
+                
             </Grid>
 
 
@@ -151,27 +150,18 @@
           Grid.Row="1"  >
                     <ListView.ItemTemplate>
                         <DataTemplate>
-
                             <Border Height="80" Width="80" >
                                 <Image Source="{Binding pic_big}" Width="50" Height="50" Stretch="UniformToFill"/>
                             </Border>
-
                         </DataTemplate>
                     </ListView.ItemTemplate>
-
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <ItemsWrapGrid MaximumRowsOrColumns="2" />
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
-
                 </ListView>
-
-
             </Grid>
-
-
-
 
 
             <!--Left Element-->
@@ -189,22 +179,22 @@
                 <!--start date-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="361" Background="DarkGray" >
                     <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="30" Margin="0,7,0,0"  />
-                    <TextBlock Text="27/12/2013" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="32" />
-                    <TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="26.667" />
+                    <TextBlock Text="{Binding start_time}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="32" />
+                    <!--<TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="26.667" /> -->
 
                 </StackPanel>
 
                 <!--End Date-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Center" Height="100" Width="361" HorizontalAlignment="Left" Background="DarkGray" Margin="0,129" >
-                    <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="30" Margin="0,7,0,0"  />
-                    <TextBlock Text="27/12/2013" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="29.333" />
-                    <TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="26.667" />
+                    <TextBlock Text="End Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="30" Margin="0,7,0,0"  />
+                    <TextBlock Text="{Binding end_time}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="29.333" />
+                    <!--<TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="26.667" /> -->
 
                 </StackPanel>
                 <!--Location-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Bottom" Height="100" Width="361" HorizontalAlignment="Center" Background="DarkGray" >
                     <TextBlock Text="Location" FontFamily="Aharoni" FontSize="30" Margin="0,18,0,0" HorizontalAlignment="Center" />
-                    <TextBlock Text="Second cup" TextWrapping="Wrap" MaxWidth="280" MaxHeight="60" Foreground="#FF0E8AA6" FontFamily="Aharoni" FontSize="30" Margin="0" HorizontalAlignment="Center" Width="160" />
+                    <TextBlock Text="{Binding venueName}" TextWrapping="Wrap" MaxWidth="280" MaxHeight="60" Foreground="#FF0E8AA6" FontFamily="Aharoni" FontSize="30" Margin="0" HorizontalAlignment="Center" Width="160" />
 
                 </StackPanel>
 

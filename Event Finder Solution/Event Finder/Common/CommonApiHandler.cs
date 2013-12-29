@@ -150,7 +150,10 @@
             return (Item.venue.ContainsKey("latitude") && Item.venue.ContainsKey("longitude"));
         }
 
-    
+        private bool CheckEventForVenueName(Event Item) 
+        {
+            return Item.venue.ContainsKey("name");
+        }
 
         private void FillAttendedEventsByUserInCollection(List<Data> attendedEvents)
         {
@@ -163,6 +166,11 @@
                 {
                     if (CheckEventForLatitudeAndLongitude(itemEvent))
                     {
+                        // check for venue name
+                        if (CheckEventForVenueName(itemEvent)) 
+                        {
+                            itemEvent.venueName = itemEvent.venue["name"];
+                        }
                         // create the instance of location 
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
 
