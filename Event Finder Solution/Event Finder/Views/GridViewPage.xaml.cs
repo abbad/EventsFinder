@@ -33,10 +33,12 @@ namespace Event_Finder.Views
             if (App.myEventsSelected)
             {
                 EventsGridView.ItemsSource = App.AttendingCollection;
+                myEventsButton.Label = "View All Events";
             }
             else
             {
                 EventsGridView.ItemsSource = App.ItemEventsList;
+                myEventsButton.Label = "My Events";
             }
         }
 

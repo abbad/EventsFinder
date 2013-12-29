@@ -64,7 +64,6 @@ namespace Event_Finder.Views
         
         async private void PositionUserOnMap() 
         {   
-            
             // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
             double zoomLevel = 13.0f;
             await App.GettingPositionFinished.Task; 
@@ -72,8 +71,6 @@ namespace Event_Finder.Views
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 
             MainMap.SetView(App.myLocation, zoomLevel);
-                
-            
         }
 
         async private void OnLoad(object sender, RoutedEventArgs e)
@@ -149,7 +146,6 @@ namespace Event_Finder.Views
             Pushpin selectedPushpin = (Pushpin)sender;
             Event selectedEvent = (Event)selectedPushpin.DataContext;
             LoadInfoBox(selectedEvent);
-        
         }
 
         async private void LoadInfoBox(Event selectedEvent) 
@@ -157,7 +153,8 @@ namespace Event_Finder.Views
             MainMap.SetView(selectedEvent.Location, 15.0f);
             App.commonApiHandler.friendList.Clear();
             // see RSVP status of event.
-            try{
+            try
+            {
                 RootObject rsvp = await App.commonApiHandler.facebookApi.GetRSVPStatusForUser(selectedEvent.eid);
                 if (rsvp.data.Count != 0)
                 {
@@ -168,11 +165,10 @@ namespace Event_Finder.Views
                     // enable all buttons.
                     SetButtonToStatus(null);
                 }
-            // git list of friends.
-            }catch (System.Threading.Tasks.TaskCanceledException) 
-            {
-                App.errorOccured = true;
+                // git list of friends.
             }
+            catch (System.Threading.Tasks.TaskCanceledException){ App.errorOccured = true;}
+            catch (Facebook.WebExceptionWrapper) { App.errorOccured = true; }
             if (App.errorOccured) 
             {
                 try
@@ -210,7 +206,6 @@ namespace Event_Finder.Views
 
         private void SetButtonToStatus(RSVP rsvp)
         {
-
             if (rsvp != null)
             {
                 if (rsvp.rsvp_status == "attending")
@@ -231,14 +226,12 @@ namespace Event_Finder.Views
                     AttendButton.IsEnabled = true;
                     MaybeButton.IsEnabled = true;
                 }
-
             }
             else
             {
                 DeclineButton.IsEnabled = true;
                 AttendButton.IsEnabled = true;
                 MaybeButton.IsEnabled = true;
-
             }
         }
 
