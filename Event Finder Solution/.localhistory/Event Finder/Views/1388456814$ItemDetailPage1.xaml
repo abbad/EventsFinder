@@ -87,7 +87,7 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
-    <Grid x:Name="grid1" Background="#FF0071BB">
+    <Grid Background="#FF0071BB">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
@@ -98,8 +98,6 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
-
-
 
         <!--
             TODO: Content should be placed within the following grid 
@@ -252,13 +250,7 @@
             <TextBlock x:Name="pageTitle" Text="{Binding name}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
-
-        <!--Progress Bar-->
-        <ProgressBar x:Name="progBar"  MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding  ActualWidth, ElementName=grid1, Mode=OneWay}"  />
-
     </Grid>
-    
-    
 
     <!-- event name, description ,time , pic,   -->
 </Page>

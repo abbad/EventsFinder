@@ -107,7 +107,7 @@
                         <TextBlock Text="{Binding name}" MaxHeight="60" MaxWidth="240" TextWrapping="Wrap" FontSize="30"  HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Aharoni" />
                     </Border>
 
-                    <ProgressBar x:Name="InfoBoxProgressBar" Grid.Column="1"    HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" Foreground="Black" Background="Transparent"  Height="10" MinHeight="8" FontSize="14" Width="Auto" />
+                    <ProgressBar x:Name="InfoBoxProgressBar" Grid.ColumnSpan="3" IsIndeterminate="True"  HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="400" Foreground="Black" Background="Transparent"  Height="10" MinHeight="8" FontSize="14" Width="500" />
 
                     <!--CloseButton-->
                     <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45"  FontSize="10" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseInfo"/>

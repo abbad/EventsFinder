@@ -60,7 +60,6 @@ namespace Event_Finder.Views
 
         async void ItemDetailPage1_Loaded(object sender, RoutedEventArgs e)
         {
-            progBar.IsIndeterminate = true;
             App.commonApiHandler.friendList.Clear();
             FriendRoot vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
             App.commonApiHandler.FillFriendsAttendingCollection(vsx);
@@ -79,8 +78,6 @@ namespace Event_Finder.Views
                 // enable all buttons.
                 SetButtonToStatus(null);
             }
-
-            progBar.IsIndeterminate = false;
         }
 
         /// <summary>
@@ -145,8 +142,6 @@ namespace Event_Finder.Views
 
         async private void AttendButton_Click(object sender, RoutedEventArgs e)
         {
-            progBar.IsIndeterminate = true;
-
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -165,14 +160,10 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-
-            progBar.IsIndeterminate = false;
         }
 
         async private void MaybeButton_Click(object sender, RoutedEventArgs e)
         {
-            progBar.IsIndeterminate = true;
-
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
             bool maybe = false;
@@ -195,14 +186,10 @@ namespace Event_Finder.Views
                 await dialog.ShowAsync();
             }
 
-            progBar.IsIndeterminate = false;
-
         }
 
         async private void DeclineButton_Click(object sender, RoutedEventArgs e)
         {
-            progBar.IsIndeterminate = true;
-
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -222,8 +209,6 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-
-            progBar.IsIndeterminate = false;
 
         }
 

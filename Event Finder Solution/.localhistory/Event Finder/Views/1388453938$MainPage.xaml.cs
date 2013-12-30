@@ -66,9 +66,7 @@ namespace Event_Finder.Views
         {   
             // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
             double zoomLevel = 13.0f;
-            await App.GettingPositionFinished.Task;
-            //PushPinMapLayer.
-            //MapLayer.
+            await App.GettingPositionFinished.Task; 
             MapLayer.SetPosition(_locationIcon100m, App.myLocation);
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 

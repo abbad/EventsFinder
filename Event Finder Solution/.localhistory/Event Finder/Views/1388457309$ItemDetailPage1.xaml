@@ -254,7 +254,7 @@
         </Grid>
 
         <!--Progress Bar-->
-        <ProgressBar x:Name="progBar"  MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding  ActualWidth, ElementName=grid1, Mode=OneWay}"  />
+        <ProgressBar x:Name="progBar" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding  ActualWidth, ElementName=grid1, Mode=OneWay}"  />
 
     </Grid>
     

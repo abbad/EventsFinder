@@ -66,9 +66,7 @@ namespace Event_Finder.Views
         {   
             // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
             double zoomLevel = 13.0f;
-            await App.GettingPositionFinished.Task;
-            //PushPinMapLayer.
-            //MapLayer.
+            await App.GettingPositionFinished.Task; 
             MapLayer.SetPosition(_locationIcon100m, App.myLocation);
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 
@@ -241,13 +239,11 @@ namespace Event_Finder.Views
                 AttendButton.IsEnabled = true;
                 MaybeButton.IsEnabled = true;
             }
-
-            
         }
 
         async private void AttendButton_Click(object sender, RoutedEventArgs e)
         {
-            InfoBoxProgressBar.IsIndeterminate = true;
+            InfoBoxProgressBar.IsEnabled = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -265,12 +261,12 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-            InfoBoxProgressBar.IsIndeterminate = false;
+            InfoBoxProgressBar.IsEnabled = false;
         }
 
         async private void MaybeButton_Click(object sender, RoutedEventArgs e)
         {
-            InfoBoxProgressBar.IsIndeterminate = true;
+            InfoBoxProgressBar.IsEnabled = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
             bool maybe = false;
@@ -292,12 +288,12 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-            InfoBoxProgressBar.IsIndeterminate = false;
+            InfoBoxProgressBar.IsEnabled = false;
         }
 
         async private void DeclineButton_Click(object sender, RoutedEventArgs e)
         {
-            InfoBoxProgressBar.IsIndeterminate = true;
+            InfoBoxProgressBar.IsEnabled = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -317,7 +313,7 @@ namespace Event_Finder.Views
                 dialog.Content= "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-            InfoBoxProgressBar.IsIndeterminate = false;
+            InfoBoxProgressBar.IsEnabled = false;
         }
 
       
