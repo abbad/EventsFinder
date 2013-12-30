@@ -6,10 +6,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Event_Finder.Views"
     xmlns:common="using:Event_Finder.Common"
+    xmlns:viewModel="using:Event_Finder.ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
     <Page.Resources>
+        <viewModel:DateConverter x:Key="Convert" />
         <Style x:Key="DetButt" TargetType="Button">
             <Setter Property="Background" Value="{ThemeResource ButtonBackgroundThemeBrush}"/>
             <Setter Property="Foreground" Value="{ThemeResource ButtonForegroundThemeBrush}"/>
@@ -187,7 +189,7 @@
                 <!--start date-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="361" Background="DarkGray" >
                     <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="30" Margin="0,7,0,0"  />
-                    <TextBlock Text="{Binding start_time}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="32" />
+                    <TextBlock Text="{Binding startTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="32" />
                     <!--<TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="26.667" /> -->
 
                 </StackPanel>
@@ -195,7 +197,7 @@
                 <!--End Date-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Center" Height="100" Width="361" HorizontalAlignment="Left" Background="DarkGray" Margin="0,129" >
                     <TextBlock Text="End Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="30" Margin="0,7,0,0"  />
-                    <TextBlock Text="{Binding end_time}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="29.333" />
+                    <TextBlock Text="{Binding endTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="29.333" />
                     <!--<TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="26.667" /> -->
 
                 </StackPanel>
