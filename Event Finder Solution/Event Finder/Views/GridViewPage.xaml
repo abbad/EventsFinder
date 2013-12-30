@@ -17,7 +17,7 @@
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
-    
+
     <!--Grid Defintions-->
     <Grid Background="#FF0071BB">
         <Grid.ChildrenTransitions>
@@ -36,7 +36,7 @@
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
                   Padding="30,50,0,0" ItemClick="EventsGridView_ItemClick" >
-            
+
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <Grid Background="#FF939598" Height="250" Width="250">
@@ -55,10 +55,12 @@
             </GridView.ItemTemplate>
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ItemsWrapGrid MaximumRowsOrColumns="2" />
+                    <ItemsWrapGrid MaximumRowsOrColumns="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
-            
+
             <!-- not working-->
 
             <GridView.GroupStyle>
@@ -92,18 +94,17 @@
         </GridView>
 
         <!--1 first row elements-->
-        
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" 
+            <Button x:Name="backButton" Margin="39,59,39,0" Click="appBarNavigateButton_Click"
                         VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button" Style="{StaticResource NavigationBackButtonNormalStyle}"
-                   Click="appBarNavigateButton_Click" />
+                        AutomationProperties.ItemType="Navigation Button" Style="{StaticResource NavigationBackButtonNormalStyle}"/>
             <TextBlock x:Name="pageTitle" Text="Events" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>

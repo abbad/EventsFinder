@@ -76,13 +76,13 @@ namespace Event_Finder.Views
         async private void OnLoad(object sender, RoutedEventArgs e)
         {
             await App.ErrorOccuredFinished.Task; 
-            prog.IsActive = true;
+            prog.IsIndeterminate = true;
             // check if error happend before.
             if (App.errorOccured) 
             {
                 try
                 {
-                    prog.IsActive = false;
+                    prog.IsIndeterminate = false;
                     dialog.Content = App.errorMessage;
                     await dialog.ShowAsync();
                     App.errorOccured = false;
@@ -106,7 +106,7 @@ namespace Event_Finder.Views
                 myEventsButton.Label = "My Events";
             }
             await App.commonApiHandler.GettingEventsFinished.Task;
-            prog.IsActive = false;
+            prog.IsIndeterminate = false;
             
         }
 
@@ -119,7 +119,7 @@ namespace Event_Finder.Views
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             clearAllCollections();
-            prog.IsActive = true;
+            prog.IsIndeterminate = true;
             App.startRange = startRangeDateTimePicker.Date.Date;
             App.endRange = endRangeDateTimePicker.Date.Date;
 
@@ -141,7 +141,7 @@ namespace Event_Finder.Views
                 }
                 catch (Exception) { }
             }
-            prog.IsActive = false; 
+            prog.IsIndeterminate = false; 
         }
 
         
@@ -205,7 +205,7 @@ namespace Event_Finder.Views
             }
             InfoBoxProgressBar.IsEnabled = false;
         }
-        private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void CloseInfo(object sender, RoutedEventArgs e)
         {
             Infobox.Visibility = Visibility.Collapsed;
         }
@@ -354,7 +354,7 @@ namespace Event_Finder.Views
             if (x) {
                 App.ItemEventsList.Clear();
                 x = false;
-                prog.IsActive = true;
+                prog.IsIndeterminate = true;
                 setPositionButton.IsEnabled = true;
                 Location loc = new Location();
                 this.MainMap.TryPixelToLocation(e.GetCurrentPoint(MainMap).Position, out loc);
@@ -379,7 +379,7 @@ namespace Event_Finder.Views
                     catch (Exception) { }
 
                 }
-                prog.IsActive = false;
+                prog.IsIndeterminate = false;
             }
         }
 

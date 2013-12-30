@@ -155,7 +155,6 @@
 
             }
           
-
         }
 
         private bool CheckEventForLatitudeAndLongitude(Event Item) 

@@ -38,7 +38,7 @@
                         <Border.Background>
                             <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Icons/pushpinleft.png"/>
                         </Border.Background>
-                        <Border Width="108.1" Height="106" Margin="0,0,-3,5"  CornerRadius="48" BorderThickness="4" BorderBrush="#FF0099CB"  >
+                        <Border Width="108.1" Height="106" Margin="0,0,-3,5"  CornerRadius="48" BorderThickness="7"  >
                             <Border.Background>
                                 <ImageBrush ImageSource="{Binding pic_big}"/>
                             </Border.Background>
@@ -73,9 +73,12 @@
         <Image Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"    Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill"/>
 
         <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
+        
+        <!--Progress Bar-->
+        <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}"  />
+        
         <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  PointerPressedOverride="MainMap_PointerPressed"  x:Name="MainMap" Loaded="OnLoad" Grid.RowSpan="2" Grid.Row="2">
 
-            <ProgressRing x:Name="prog" Height="200" Width="200" Margin="590,210,0,0" Foreground="#FF0025BB"  IsActive="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <!-- list of pushpins maplayer -->
             <bm:MapLayer x:Name="PushPinMapLayer">
                 <bm:MapItemsControl x:Name="pushpinsItemsControl"  ItemTemplate="{StaticResource PushPinTemplate}" Margin="0,-120,0,0" >
@@ -83,27 +86,38 @@
             </bm:MapLayer>
             <!-- Infobox map Layer -->
             <bm:MapLayer Margin="800,100,0,0">
-             
+
                 <Grid x:Name="Infobox" Visibility="Collapsed" Background="#FF0071BB" Height="500" Width="500">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="100"/>
                     </Grid.RowDefinitions>
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="130"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="130"/>
                     </Grid.ColumnDefinitions>
                     <!--pic-->
-                    <ProgressBar x:Name="InfoBoxProgressBar" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="1" VerticalAlignment="Top" Height="100" HorizontalAlignment="Stretch" IsIndeterminate="True"/>
+                    <ProgressBar x:Name="InfoBoxProgressBar" />
                     <Image Source="{Binding pic_big}" Height="100" Width="100"/>
                     <!--Event Name-->
                     <Border Background="#FF3C3838" Grid.Column="1" Grid.ColumnSpan="2">
                         <TextBlock Text="{Binding name}" MaxHeight="60" MaxWidth="240" TextWrapping="Wrap" FontSize="30"  HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Aharoni" />
                     </Border>
-                    <!--Left square Elements-->
-                    <Grid Grid.Row="1" >
+
+                    <!--CloseButton-->
+                    <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45"  FontSize="10" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseInfo"/>
+
+                    <!--RSPV left-->
+                    <StackPanel Background="#FF262323"  Grid.Row="3">
+
+                        <TextBlock Text="RSPV" Height="100" VerticalAlignment="Center" Padding="0,35,0,0" HorizontalAlignment="Center" FontSize="25"/>
+                    </StackPanel>
+
+                    <!--Lefy square Elements-->
+                    <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="100"/>
                             <RowDefinition Height="100"/>
@@ -112,18 +126,19 @@
                         <!--first left Gray Box-->
                         <StackPanel Grid.Row="0"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
                             <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" Margin="0,15,0,0"  />
-                            <TextBlock Text="{Binding start_time}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
+                            <TextBlock Text="{Binding start_date}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
                             <TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
                         </StackPanel>
 
+
                         <StackPanel Grid.Row="1"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
                             <TextBlock Text="End Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" Margin="0,15,0,0"  />
-                            <TextBlock Text="{Binding end_time}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
+                            <TextBlock Text="{Binding end_date}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
                             <TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
                         </StackPanel>
 
                         <StackPanel Grid.Row="2"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
-                            <TextBlock Text="Venue Name"   HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" Margin="0,10,0,0" />
+                            <TextBlock Text="Venue Name" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" Margin="0,10,0,0" />
                             <TextBlock Text="{Binding venueName}" MaxHeight="70" TextWrapping="Wrap" MaxWidth="120" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
                         </StackPanel>
                     </Grid>
@@ -136,10 +151,9 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Border Background="#FF3C3838" Grid.ColumnSpan="3"/>
-                        <Button x:Name="AttendButton" Content="Attend" Height="100" FontSize="12.5" FontFamily="Aharoni" Click="AttendButton_Click" />
-                        <Button x:Name="MaybeButton" Content="Maybe" Height="100" FontSize="12.5" Grid.Column="1" FontFamily="Aharoni" Click="MaybeButton_Click" />
-                        <Button x:Name="DeclineButton" Content="Decline" Height="100" FontSize="12.5" Grid.Column="2" FontFamily="Aharoni" Click="DeclineButton_Click"/>
-
+                        <Button x:Name="AttendButton" Style="{StaticResource DetButton}" Content="ATTEND" Height="100" FontSize="12.5" FontFamily="Aharoni" Click="AttendButton_Click" />
+                        <Button x:Name="MaybeButton" Style="{StaticResource DetButton}" Content="MAYBE" Height="100" FontSize="12.6" Grid.Column="1" FontFamily="Aharoni" Click="MaybeButton_Click" />
+                        <Button x:Name="DeclineButton" Style="{StaticResource DetButton}" Content="DECLINE" Height="100" FontSize="11.68" Grid.Column="2" FontFamily="Aharoni" Click="DeclineButton_Click"/>
                     </Grid>
 
                     <!--Description-->
@@ -160,24 +174,37 @@
                     <!--friends-->
                     <TextBlock  Text="Friends Going" HorizontalAlignment="Center" Grid.Column="2"  VerticalAlignment="Center"  FontSize="14"/>
                     <Border Background="#FF3C3838" Grid.Row="1" Grid.Column="2" />
-                    <ListView  x:Name="attendFr" Width="120" VerticalAlignment="Stretch" HorizontalAlignment="Center" Grid.Row="1" Grid.Column="2"  >
-                        <ListView.ItemTemplate >
+                    <GridView 
+                              x:Name="attendFr" 
+                              Width="120"  
+                              ScrollViewer.HorizontalScrollMode="Disabled"
+                              ScrollViewer.VerticalScrollMode="Enabled"
+                              Grid.Row="1" 
+                              Grid.Column="2" 
+                              SelectionMode="None"
+                              >
+                        <GridView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapGrid MaximumRowsOrColumns="1" VerticalChildrenAlignment="Center"
+					  HorizontalChildrenAlignment="Center" Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </GridView.ItemsPanel>
+                        <GridView.ItemTemplate>
                             <DataTemplate>
                                 <Border Height="80" Width="80" >
-                                    <Image Source="{Binding pic_big}" Width="50" Height="50" Stretch="UniformToFill">
+                                    <Image Source="{Binding pic_big}" Width="80" Height="80"  Stretch="UniformToFill">
                                         <ToolTipService.ToolTip>
-                                            <TextBlock Text="{Binding first_name}"/>
+                                            <TextBlock>
+                                                <Run Text="{Binding first_name}"/>
+                                                <Run Text="{Binding last_name}"/>
+                                            </TextBlock>
                                         </ToolTipService.ToolTip>
                                     </Image>
                                 </Border>
                             </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <ItemsWrapGrid MaximumRowsOrColumns="1" />
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                    </ListView>
+                        </GridView.ItemTemplate>
+
+                    </GridView>
                 </Grid>
             </bm:MapLayer>
         </bm:Map>
