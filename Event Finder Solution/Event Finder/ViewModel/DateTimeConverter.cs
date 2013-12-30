@@ -29,6 +29,9 @@ namespace Event_Finder.ViewModel
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
+            if (value.ToString() == "01/01/0001 00:00:00") {
+                return "Unknown";
+            }
             DateTime date = (DateTime)value;
             return date.ToString("dd, MM, yy \n HH:mm.ff");
         }
