@@ -196,7 +196,7 @@
                 </StackPanel>
                 <!--Location-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Bottom" Height="100" Width="361" HorizontalAlignment="Center" Background="DarkGray" >
-                    <TextBlock Text="Location" FontFamily="Aharoni" FontSize="30" Margin="0,18,0,0" HorizontalAlignment="Center" />
+                    <TextBlock Text="Venue Name" FontFamily="Aharoni" FontSize="30" Margin="0,18,0,0" HorizontalAlignment="Center" />
                     <TextBlock Text="{Binding venueName}" TextWrapping="Wrap" MaxWidth="280" MaxHeight="60" Foreground="#FF0E8AA6" FontFamily="Aharoni" FontSize="30" Margin="0" HorizontalAlignment="Center" Width="160" />
 
                 </StackPanel>
@@ -215,7 +215,7 @@
             <!--buttons-->
             <!--RSPV-->
             <StackPanel Width="1366" HorizontalAlignment="Left" Grid.ColumnSpan="3" Height="100" VerticalAlignment="Bottom" Background="DarkGray"  >
-                <TextBlock Text="RSVP" FontFamily="Aharoni" Margin="1217,30,0,0" VerticalAlignment="Center" FontSize="40" HorizontalAlignment="Left" RenderTransformOrigin="1.231,0.3"/>
+                <TextBlock Text="RSVP Status" FontFamily="Aharoni" Margin="1217,30,0,0" VerticalAlignment="Center" FontSize="40" HorizontalAlignment="Left" RenderTransformOrigin="1.231,0.3"/>
             </StackPanel>
 
             <!--buttons-->
@@ -226,8 +226,6 @@
             </StackPanel>
 
             <!--RSPV-->
-
-            <!--Buttons Accept and likes-->
 
         </Grid>
 

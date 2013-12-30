@@ -139,7 +139,12 @@
                         {
                             itemEvent.venueName = itemEvent.venue["name"];
                         }
-
+                        else 
+                        {
+                            itemEvent.venueName = "Unknown";
+                        }
+                        if (itemEvent.start_time != null){itemEvent.startTimeObject = DateTime.Parse(itemEvent.start_time);}
+                        if (itemEvent.end_time != null) { itemEvent.endTimeObject = DateTime.Parse(itemEvent.end_time); }
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
                         // fill it in item lsit of events
                         App.ItemEventsList.Add(itemEvent);
@@ -163,6 +168,7 @@
             return Item.venue.ContainsKey("name");
         }
 
+
         private void FillAttendedEventsByUserInCollection(List<Data> attendedEvents)
         {
 
@@ -180,6 +186,14 @@
                         {
                             itemEvent.venueName = itemEvent.venue["name"];
                         }
+                        else
+                        {
+                            itemEvent.venueName = "Unknown";
+                        }
+
+                        if (itemEvent.start_time != null) { itemEvent.startTimeObject = DateTime.Parse(itemEvent.start_time); }
+                        if (itemEvent.end_time != null) { itemEvent.endTimeObject = DateTime.Parse(itemEvent.end_time); }
+
                         // create the instance of location 
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
 
