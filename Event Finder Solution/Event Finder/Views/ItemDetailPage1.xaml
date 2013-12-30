@@ -1,4 +1,4 @@
-﻿<Page
+<Page
     x:Name="pageRoot"
     x:Class="Event_Finder.Views.ItemDetailPage1"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
@@ -9,78 +9,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-	<Page.Resources>
-		<Style x:Key="DetButt" TargetType="Button">
-			<Setter Property="Background" Value="{ThemeResource ButtonBackgroundThemeBrush}"/>
-			<Setter Property="Foreground" Value="{ThemeResource ButtonForegroundThemeBrush}"/>
-			<Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderThemeBrush}"/>
-			<Setter Property="BorderThickness" Value="{ThemeResource ButtonBorderThemeThickness}"/>
-			<Setter Property="Padding" Value="12,4,12,4"/>
-			<Setter Property="HorizontalAlignment" Value="Left"/>
-			<Setter Property="VerticalAlignment" Value="Center"/>
-			<Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
-			<Setter Property="FontWeight" Value="SemiBold"/>
-			<Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
-			<Setter Property="Template">
-				<Setter.Value>
-					<ControlTemplate TargetType="Button">
-						<Grid>
-							<VisualStateManager.VisualStateGroups>
-								<VisualStateGroup x:Name="CommonStates">
-									<VisualState x:Name="Normal"/>
-									<VisualState x:Name="PointerOver">
-										<Storyboard>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPointerOverBackgroundThemeBrush}"/>
-											</ObjectAnimationUsingKeyFrames>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPointerOverForegroundThemeBrush}"/>
-											</ObjectAnimationUsingKeyFrames>
-										</Storyboard>
-									</VisualState>
-									<VisualState x:Name="Pressed">
-										<Storyboard>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedBackgroundThemeBrush}"/>
-											</ObjectAnimationUsingKeyFrames>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonPressedForegroundThemeBrush}"/>
-											</ObjectAnimationUsingKeyFrames>
-										</Storyboard>
-									</VisualState>
-									<VisualState x:Name="Disabled">
-										<Storyboard>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="Border">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledBackgroundThemeBrush}"/>
-											</ObjectAnimationUsingKeyFrames>
-											<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-												<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonDisabledForegroundThemeBrush}"/>
-											</ObjectAnimationUsingKeyFrames>
-										</Storyboard>
-									</VisualState>
-								</VisualStateGroup>
-								<VisualStateGroup x:Name="FocusStates">
-									<VisualState x:Name="Focused">
-										<Storyboard>
-											<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualWhite"/>
-											<DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="FocusVisualBlack"/>
-										</Storyboard>
-									</VisualState>
-									<VisualState x:Name="Unfocused"/>
-									<VisualState x:Name="PointerFocused"/>
-								</VisualStateGroup>
-							</VisualStateManager.VisualStateGroups>
-							<Border x:Name="Border" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Margin="3">
-								<ContentPresenter x:Name="ContentPresenter" AutomationProperties.AccessibilityView="Raw" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-							</Border>
-							<Rectangle x:Name="FocusVisualWhite" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="1.5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualWhiteStrokeThemeBrush}" StrokeDashArray="1,1"/>
-							<Rectangle x:Name="FocusVisualBlack" IsHitTestVisible="False" Opacity="0" StrokeDashOffset="0.5" StrokeEndLineCap="Square" Stroke="{ThemeResource FocusVisualBlackStrokeThemeBrush}" StrokeDashArray="1,1"/>
-						</Grid>
-					</ControlTemplate>
-				</Setter.Value>
-			</Setter>
-		</Style>
-	</Page.Resources>
+	
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -121,7 +50,7 @@
                 <Border Background="#FF262323" Grid.RowSpan="2"  Height="{Binding Height, ElementName=grid}" Width="{Binding Width, ElementName=grid}" />
                 <TextBlock Text="  DESCRIPTION:" Grid.Row="0"  VerticalAlignment="Center"  FontSize="40" FontFamily="Aharoni"/>
                 <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled">
-                    <TextBlock TextWrapping="Wrap" Width="530" FontFamily="Aharoni"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="30" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}"/>
+                    <TextBlock TextWrapping="Wrap" Width="450" FontFamily="Aharoni"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="30" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}"/>
                 </ScrollViewer>
             </Grid>
             
@@ -138,30 +67,39 @@
                 <TextBlock Text="Friends:" HorizontalAlignment="Center" Grid.Row="0"  VerticalAlignment="Center"  FontSize="40" FontFamily="Aharoni"/>
                 
                 <!--Friends Attending ListView-->
-                <ListView  x:Name="attendFr" Width="300" 
-          VerticalAlignment="Stretch" HorizontalAlignment="Center" 
-          CanReorderItems="True" CanDragItems="True" 
-          Grid.Row="1"  >
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            
-                                <Border Height="80" Width="80" >
-                                    <Image Source="{Binding pic_big}" Width="50" Height="50" Stretch="UniformToFill"/>
-                                </Border>
-                            
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-
-                    <ListView.ItemsPanel>
+                <GridView     x:Name="attendFr" 
+                              Width="300"  
+                              ScrollViewer.HorizontalScrollMode="Disabled"
+                              ScrollViewer.VerticalScrollMode="Enabled"
+                              Grid.Row="1" 
+                              SelectionMode="None"
+                              >
+                    <GridView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <ItemsWrapGrid MaximumRowsOrColumns="2" />
+                            <WrapGrid MaximumRowsOrColumns="2" VerticalChildrenAlignment="Center"
+					  HorizontalChildrenAlignment="Center" Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
+                    </GridView.ItemsPanel>
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Height="80" Width="80" >
+                                <Image Source="{Binding pic_big}" Width="80" Height="80"  Stretch="UniformToFill">
+                                    <ToolTipService.ToolTip>
+                                        <TextBlock>
+                                                <Run Text="{Binding first_name}"/>
+                                                <Run Text="{Binding last_name}"/>
+                                        </TextBlock>
+                                    </ToolTipService.ToolTip>
+                                </Image>
+                            </Border>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
 
-                </ListView>
+                </GridView>
+            
 
 
-            </Grid>
+        </Grid>
             
 
 
@@ -214,15 +152,15 @@
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="1.41*"/>
+                <ColumnDefinition Width="1.2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
             <!--buttons-->
-            <StackPanel Background="#FF3C3838" VerticalAlignment="Bottom" Width="580" Height="100" Orientation="Horizontal"  Grid.Column="1 ">
-                <Button x:Name="AttendButton" Content="Attend" Height="100" Width="190" Margin="9,0,0,0" FontSize="30" HorizontalAlignment="Left" Style="{StaticResource DetButt}"/>
-                <Button x:Name="MaybeButton" Content="Maybe" Height="100" Width="190" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource DetButt}"/>
-                <Button x:Name="DeclineButton" Content="Decline" Height="100" Width="190" FontSize="30" HorizontalAlignment="Right" Style="{StaticResource DetButt}"/>
+            <StackPanel Background="#FF3C3838" VerticalAlignment="Bottom" MaxWidth="520"  Height="100" Orientation="Horizontal"  Grid.Column="1 ">
+                <Button x:Name="AttendButton" Content="Attend" Height="100" Width="170"  FontSize="30" HorizontalAlignment="Left" Style="{StaticResource DetButton}"/>
+                <Button x:Name="MaybeButton" Content="Maybe" Height="100" Width="170" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource DetButton }"/>
+                <Button x:Name="DeclineButton" Content="Decline" Height="100" Width="170" FontSize="30" HorizontalAlignment="Right" Style="{StaticResource DetButton}"/>
             </StackPanel>
 
             <!--RSPV-->
