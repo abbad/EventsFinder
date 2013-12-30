@@ -1,4 +1,4 @@
-﻿<Page x:Name="pageRoot"
+<Page x:Name="pageRoot"
     x:Class="Event_Finder.Views.GridViewPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -55,7 +55,9 @@
             </GridView.ItemTemplate>
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <ItemsWrapGrid MaximumRowsOrColumns="2" />
+                    <ItemsWrapGrid MaximumRowsOrColumns="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
             
