@@ -1,0 +1,4 @@
+MainPackage=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\bin\x86\Release\Event Finder_1.1.0.0_Bundle\Event Finder_1.1.0.0_x86.appx
+SymbolPackage=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\AppPackages\Event Finder_1.1.0.0_Test\Event Finder_1.1.0.0_x86.appxsym
+ResourcePack=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\bin\x86\Release\Event Finder_1.1.0.0_Bundle\Event Finder_1.1.0.0_scale-140.appx
+ResourcePack=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\bin\x86\Release\Event Finder_1.1.0.0_Bundle\Event Finder_1.1.0.0_scale-180.appx

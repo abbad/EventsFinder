@@ -14,9 +14,10 @@
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>Event Finder_TemporaryKey.pfx</PackageCertificateKeyFile>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <PackageCertificateKeyFile>Event Finder_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>A9E350AD994E9F33FBF185C84891D5D02502ADF8</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -158,6 +159,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="Event Finder_StoreKey.pfx" />
     <None Include="Event Finder_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\ServiceReferences.Designer.ClientConfig" />
@@ -183,14 +185,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\1116splash.png" />
-    <Content Include="Assets\620splash.png" />
     <Content Include="Assets\868splash.png" />
     <Content Include="Assets\BadgeLogo.scale-100.png" />
     <Content Include="Assets\BadgeLogo.scale-140.png" />
     <Content Include="Assets\BadgeLogo.scale-180.png" />
-    <Content Include="Assets\facebook login.png" />
-    <Content Include="Assets\facebook-login.png" />
     <Content Include="Assets\fblog.png" />
     <Content Include="Assets\pushpin.png" />
     <Content Include="Assets\pushpinleft.png" />
@@ -207,34 +205,21 @@
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-140.png" />
     <Content Include="Assets\SplashScreen.scale-180.png" />
-    <Content Include="Assets\sqaure16.png" />
-    <Content Include="Assets\square150.png" />
-    <Content Include="Assets\square24.png" />
-    <Content Include="Assets\square248.png" />
-    <Content Include="Assets\square256.png" />
-    <Content Include="Assets\square30.png" />
+    <Content Include="Assets\square150.scale-100.png" />
     <Content Include="Assets\square310.scale-100.png" />
     <Content Include="Assets\square310.scale-140.png" />
     <Content Include="Assets\square310.scale-180.png" />
     <Content Include="Assets\square310.scale-80.png" />
-    <Content Include="Assets\square32.png" />
-    <Content Include="Assets\square33.png" />
-    <Content Include="Assets\square42.png" />
-    <Content Include="Assets\square43.png" />
-    <Content Include="Assets\square434.png" />
-    <Content Include="Assets\square48.png" />
-    <Content Include="Assets\square54.png" />
-    <Content Include="Assets\square558.png" />
     <Content Include="Assets\storelogo-50.png" />
     <Content Include="Assets\storelogo-70.scale-100.png" />
     <Content Include="Assets\storelogo-90.png" />
     <Content Include="Assets\StoreLogo.scale-140.png" />
     <Content Include="Assets\StoreLogo.scale-180.png" />
     <Content Include="Icons\button.png" />
-    <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Icons\pushpinleft.png" />
+    <None Include="Package.StoreAssociation.xml" />
     <None Include="Service References\geocodeservice\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

@@ -77,15 +77,12 @@
 
     <Grid  Background="#FF0099CB">
         <Image Source="ms-appx:///Assets/868splash.png" />
-
 		<Grid >
-			
-
 			<Grid.RowDefinitions>
 				<RowDefinition Height="350*"/>
 				<RowDefinition Height="119*"/>
 			</Grid.RowDefinitions>
 			<Button Grid.Row="1"   Height="124" HorizontalAlignment="Center"  x:Name="btnFacebookLogin" VerticalAlignment="Center" Width="533" Click="btnFacebookLogin_Click" FontFamily="Global User Interface"  Style="{StaticResource fbLog}" BorderThickness="0" />
-		</Grid>
-	</Grid>
+        </Grid> 
+    </Grid>
 </Page>
