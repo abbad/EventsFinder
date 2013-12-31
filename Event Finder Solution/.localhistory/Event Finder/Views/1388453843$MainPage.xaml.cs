@@ -239,13 +239,11 @@ namespace Event_Finder.Views
                 AttendButton.IsEnabled = true;
                 MaybeButton.IsEnabled = true;
             }
-
-            
         }
 
         async private void AttendButton_Click(object sender, RoutedEventArgs e)
         {
-            InfoBoxProgressBar.IsIndeterminate = true;
+            InfoBoxProgressBar.IsEnabled = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -263,12 +261,12 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-            InfoBoxProgressBar.IsIndeterminate = false;
+            InfoBoxProgressBar.IsEnabled = false;
         }
 
         async private void MaybeButton_Click(object sender, RoutedEventArgs e)
         {
-            InfoBoxProgressBar.IsIndeterminate = true;
+            InfoBoxProgressBar.IsEnabled = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
             bool maybe = false;
@@ -290,12 +288,12 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-            InfoBoxProgressBar.IsIndeterminate = false;
+            InfoBoxProgressBar.IsEnabled = false;
         }
 
         async private void DeclineButton_Click(object sender, RoutedEventArgs e)
         {
-            InfoBoxProgressBar.IsIndeterminate = true;
+            InfoBoxProgressBar.IsEnabled = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -315,7 +313,7 @@ namespace Event_Finder.Views
                 dialog.Content= "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-            InfoBoxProgressBar.IsIndeterminate = false;
+            InfoBoxProgressBar.IsEnabled = false;
         }
 
       

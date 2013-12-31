@@ -75,17 +75,18 @@
 		</Style>
 	</Page.Resources>
 
-    <Grid  Background="#FF0099CB">
-        <Image Source="ms-appx:///Assets/868splash.png" />
+    <Grid HorizontalAlignment="Left" Height="770" Margin="0,0,0,-2" VerticalAlignment="Top" Width="1366" Background="#FF0099CB">
 
-		<Grid >
-			
+		<Grid Margin="0,70,0,62">
+			<Grid.Background>
+				<ImageBrush ImageSource="ms-appx:/Assets/SplashScreen.scale-180.png" Stretch="UniformToFill"/>
+			</Grid.Background>
 
 			<Grid.RowDefinitions>
-				<RowDefinition Height="350*"/>
+				<RowDefinition Height="265*"/>
 				<RowDefinition Height="119*"/>
 			</Grid.RowDefinitions>
-			<Button Grid.Row="1"   Height="124" HorizontalAlignment="Center"  x:Name="btnFacebookLogin" VerticalAlignment="Center" Width="533" Click="btnFacebookLogin_Click" FontFamily="Global User Interface"  Style="{StaticResource fbLog}" BorderThickness="0" />
+			<Button Grid.Row="1"   Height="124" HorizontalAlignment="Center" Margin="393,115,440,-41" x:Name="btnFacebookLogin" VerticalAlignment="Center" Width="533" Click="btnFacebookLogin_Click" FontFamily="Global User Interface"  Style="{StaticResource fbLog}" BorderThickness="0" />
 		</Grid>
 	</Grid>
 </Page>

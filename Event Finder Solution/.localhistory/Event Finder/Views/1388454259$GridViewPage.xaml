@@ -35,7 +35,7 @@
         <GridView x:Name="EventsGridView" Grid.Row="1" SelectionMode="None"
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
-                  Padding="30,0,0,30" ItemClick="EventsGridView_ItemClick" >
+                  Padding="30,50,0,0" ItemClick="EventsGridView_ItemClick" >
 
             <GridView.ItemTemplate>
                 <DataTemplate>
