@@ -77,10 +77,7 @@
 
     <Grid  Background="#FF0099CB">
         <Image Source="ms-appx:///Assets/868splash.png" />
-
 		<Grid >
-			
-
 			<Grid.RowDefinitions>
 				<RowDefinition Height="350*"/>
 				<RowDefinition Height="119*"/>
