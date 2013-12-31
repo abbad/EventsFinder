@@ -85,9 +85,9 @@
                 </bm:MapItemsControl>
             </bm:MapLayer>
             <!-- Infobox map Layer -->
-            <bm:MapLayer Margin="0,100,0,0" >
+            <bm:MapLayer Margin="800,100,0,0">
 
-                <Grid  x:Name="Infobox" Visibility="Collapsed" Background="#FF0071BB" Height="500" Width="500">
+                <Grid x:Name="Infobox" Visibility="Collapsed" Background="#FF0071BB" Height="500" Width="500">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100"/>
                         <RowDefinition Height="*"/>
@@ -168,7 +168,7 @@
                         <Border Background="#FF262323" Grid.RowSpan="2"  />
                         <TextBlock Text=" DESCRIPTION:" Grid.Row="0"  VerticalAlignment="Center"  FontSize="25" FontFamily="Aharoni"/>
                         <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled">
-                            <TextBlock TextWrapping="Wrap" Width="210"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="20" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}" FontFamily="Aharoni"/>
+                            <TextBlock TextWrapping="Wrap" Width="210"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="15" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}" FontFamily="Aharoni"/>
                         </ScrollViewer>
 
                     </Grid>
