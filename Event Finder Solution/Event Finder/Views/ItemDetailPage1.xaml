@@ -203,11 +203,10 @@
                 </StackPanel>
                 <!--Location-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Bottom" Height="100" Width="361" HorizontalAlignment="Center" Background="DarkGray" >
-                    <TextBlock Text="Venue Name" FontFamily="Aharoni" FontSize="30" Margin="0,18,0,0" HorizontalAlignment="Center" />
-                    <TextBlock Text="{Binding venueName}" TextWrapping="Wrap" MaxWidth="280" MaxHeight="60" Foreground="#FF0E8AA6" FontFamily="Aharoni" FontSize="30" Margin="0" HorizontalAlignment="Center" Width="160" />
-
+                    <TextBlock Text="Venue Name" FontFamily="Aharoni" FontSize="30" Margin="0,18,0,0" HorizontalAlignment="Center" Foreground="#FF0E8AA6"/>
+                    <TextBlock Text="{Binding venueName}" TextWrapping="Wrap" MaxWidth="280" MaxHeight="60" FontFamily="Aharoni" FontSize="30" Margin="0" HorizontalAlignment="Center" Width="160" />
                 </StackPanel>
-
+              
             </Grid>
         </Grid>
 
