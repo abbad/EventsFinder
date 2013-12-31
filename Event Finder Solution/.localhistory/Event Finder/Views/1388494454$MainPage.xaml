@@ -130,26 +130,26 @@
                         </Grid.RowDefinitions>
                         <!--first left Gray Box-->
                         <StackPanel Grid.Row="0"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
-
+<<<<<<< HEAD
                             <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" Margin="0,15,0,0"  />
                             <TextBlock Text="{Binding start_date}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
                             <TextBlock Text="Friday"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
-
-                            <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" Margin="0,15,0,0"  />
+=======
+                            <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" Margin="0,15,0,0"  />
                             <TextBlock Text="{Binding startTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
-
+>>>>>>> 60e3d9542795cc150150adaeca2f488879a7f44f
                         </StackPanel>
 
 
                         <StackPanel Grid.Row="1"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
-
+<<<<<<< HEAD
                             <TextBlock Text="End Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" Margin="0,15,0,0"  />
                             <TextBlock Text="{Binding end_date}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
                             <TextBlock Text="Friday"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
-
+=======
                             <TextBlock Text="End Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" Margin="0,15,0,0"  />
                             <TextBlock Text="{Binding endTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
-
+>>>>>>> 60e3d9542795cc150150adaeca2f488879a7f44f
                         </StackPanel>
 
                         <StackPanel Grid.Row="2"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
