@@ -74,16 +74,6 @@
                             </Grid>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
-
-                    <GroupStyle.ContainerStyle>
-                        <Style TargetType="GroupItem">
-                            <Setter Property="MinWidth" Value="600"/>
-                            <Setter Property="BorderBrush" Value="DarkGray"/>
-                            <Setter Property="BorderThickness" Value="2"/>
-                            <Setter Property="Margin" Value="3,0"/>
-                        </Style>
-                    </GroupStyle.ContainerStyle>
-
                     <GroupStyle.Panel>
                         <ItemsPanelTemplate>
                             <VariableSizedWrapGrid/>
@@ -105,7 +95,7 @@
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button" Style="{StaticResource NavigationBackButtonNormalStyle}"/>
-            <TextBlock x:Name="pageTitle" Text="Events" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
+            <TextBlock x:Name="pageTitle" Text="Map View" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
 
