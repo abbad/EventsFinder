@@ -1,0 +1,2 @@
+MainPackage=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\bin\x64\Release\Event Finder_1.1.0.0_Bundle\Event Finder_1.1.0.0_x64.appx
+SymbolPackage=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\AppPackages\Event Finder_1.1.0.0_Test\Event Finder_1.1.0.0_x64.appxsym
