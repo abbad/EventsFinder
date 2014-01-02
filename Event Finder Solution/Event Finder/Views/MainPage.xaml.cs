@@ -39,7 +39,7 @@ namespace Event_Finder.Views
         MessageDialog dialog = new MessageDialog("Could not get city name!");
         private void addInitialChildrenToMap()
         {
-            MainMap.Children.Add(_locationIcon100m);  
+            PushPinMapLayer.Children.Add(_locationIcon100m);  
         }
 
         private void setInitialItemsToCollapsed() 
@@ -65,14 +65,14 @@ namespace Event_Finder.Views
         async private void PositionUserOnMap() 
         {   
             // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
-            double zoomLevel = 13.0f;
+           
             await App.GettingPositionFinished.Task;
             //PushPinMapLayer.
             //MapLayer.
             MapLayer.SetPosition(_locationIcon100m, App.myLocation);
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 
-            MainMap.SetView(App.myLocation, zoomLevel);
+            MainMap.SetView(App.myLocation, App.zoomLevel);
         }
 
         async private void OnLoad(object sender, RoutedEventArgs e)
@@ -157,8 +157,9 @@ namespace Event_Finder.Views
 
         async private void LoadInfoBox(Event selectedEvent) 
         {
+
             InfoBoxProgressBar.IsEnabled = true;
-            MainMap.SetView(selectedEvent.Location, 15.0f);
+            MainMap.SetView(selectedEvent.Location, App.zoomLevel);
             App.commonApiHandler.friendList.Clear();
             // see RSVP status of event.
             try
@@ -173,7 +174,7 @@ namespace Event_Finder.Views
                     // enable all buttons.
                     SetButtonToStatus(null);
                 }
-                // git list of friends.
+                
             }
             catch (System.Threading.Tasks.TaskCanceledException){ App.errorOccured = true;}
             catch (Facebook.WebExceptionWrapper) { App.errorOccured = true; }
@@ -206,9 +207,12 @@ namespace Event_Finder.Views
                 Infobox.Visibility = Visibility.Collapsed;
             }
             InfoBoxProgressBar.IsEnabled = false;
+            MainMap.IsEnabled = true;
         }
+
         private void CloseInfo(object sender, RoutedEventArgs e)
         {
+           
             Infobox.Visibility = Visibility.Collapsed;
         }
 

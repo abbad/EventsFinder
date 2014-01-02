@@ -123,9 +123,9 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Border Background="#FF262323" Grid.RowSpan="2"  Height="{Binding Height, ElementName=grid}" Width="{Binding Width, ElementName=grid}" />
-                <TextBlock Text="  DESCRIPTION:" Grid.Row="0"  VerticalAlignment="Center"  FontSize="40" FontFamily="Aharoni"/>
+                <TextBlock Text="  DESCRIPTION:" Grid.Row="0"  VerticalAlignment="Center"  FontSize="40" FontFamily=" segoe UI light "/>
                 <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled">
-                    <TextBlock TextWrapping="Wrap" Width="450" FontFamily="Aharoni"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="30" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}"/>
+                    <TextBlock TextWrapping="Wrap" Width="450" FontFamily=" segoe UI light "   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="30" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}"/>
                 </ScrollViewer>
             </Grid>
 
@@ -139,7 +139,7 @@
 
                 <Border Width="300" Grid.RowSpan="2" Background="#FF3C3838"/>
 
-                <TextBlock Text="Friends Going:" HorizontalAlignment="Center" Grid.Row="0"  VerticalAlignment="Center"  FontSize="40" FontFamily="Aharoni"/>
+                <TextBlock Text="Friends Going:" HorizontalAlignment="Center" Grid.Row="0"  VerticalAlignment="Center"  FontSize="40" FontFamily=" segoe UI light "/>
 
                 <!--Friends Attending ListView-->
                 <GridView     x:Name="attendFr" 
@@ -188,23 +188,22 @@
 
                 <!--start date-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="361" Background="DarkGray" >
-                    <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="30" Margin="0,7,0,0"  />
-                    <TextBlock Text="{Binding startTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="32" />
-                    <!--<TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="26.667" /> -->
+                    <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="30" Margin="0,7,0,0"  />
+                    <TextBlock Text="{Binding startTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="32" />
+                    <!--<TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="26.667" /> -->
 
                 </StackPanel>
 
                 <!--End Date-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Center" Height="100" Width="361" HorizontalAlignment="Left" Background="DarkGray" Margin="0,129" >
-                    <TextBlock Text="End Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="30" Margin="0,7,0,0"  />
-                    <TextBlock Text="{Binding endTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="29.333" />
-                    <!--<TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="26.667" /> -->
-
+                    <TextBlock Text="End Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="30" Margin="0,7,0,0"  />
+                    <TextBlock Text="{Binding endTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="29.333" />
+                    
                 </StackPanel>
                 <!--Location-->
                 <StackPanel Grid.Row="1"  VerticalAlignment="Bottom" Height="100" Width="361" HorizontalAlignment="Center" Background="DarkGray" >
-                    <TextBlock Text="Venue Name" FontFamily="Aharoni" FontSize="30" Margin="0,18,0,0" HorizontalAlignment="Center" Foreground="#FF0E8AA6"/>
-                    <TextBlock Text="{Binding venueName}" TextWrapping="Wrap" MaxWidth="280" MaxHeight="60" FontFamily="Aharoni" FontSize="30" Margin="0" HorizontalAlignment="Center" Width="160" />
+                    <TextBlock Text="Venue Name" FontFamily=" segoe UI light " FontSize="30" Margin="0,18,0,0" HorizontalAlignment="Center" Foreground="#FF0E8AA6"/>
+                    <TextBlock Text="{Binding venueName}" TextWrapping="Wrap" MaxWidth="280" MaxHeight="60" FontFamily=" segoe UI light " FontSize="30" Margin="0" HorizontalAlignment="Center" Width="160" />
                 </StackPanel>
               
             </Grid>
@@ -227,7 +226,7 @@
 
             <!--RSPV-->
             <StackPanel Grid.Column="0" Height="100" Width="300" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF262323"  >
-                <TextBlock Text="RSPV" FontFamily="Aharoni" Margin="0,30,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"/>
+                <TextBlock Text="RSPV" FontFamily=" segoe UI light " Margin="0,30,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"/>
             </StackPanel>
 
             <!--RSPV-->
