@@ -391,5 +391,10 @@ namespace Event_Finder.Views
             }
         }
 
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(Settings));
+        }
+
     }
 }

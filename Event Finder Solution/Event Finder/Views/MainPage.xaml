@@ -17,9 +17,10 @@
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="appBarNavigateButton" Label="Grid View" Icon="ViewAll" Click="appBarNavigateButton_Click"/>
                 <AppBarButton x:Name="setPositionButton" Label="Change Position" Icon="Pin"  Click="setPositionButton_Click"/>
+                <AppBarButton x:Name="myEventsButton" Label="My Events" Icon="Bookmarks"  Click="myEventsButton_Click"/>
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>
-                <AppBarButton x:Name="myEventsButton" Label="My Events" Icon="Bookmarks"  Click="myEventsButton_Click"/>
+                <AppBarButton x:Name="SettingsButton" Label="Settings" Icon="Setting"  Click="SettingsButton_Click"/>
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
