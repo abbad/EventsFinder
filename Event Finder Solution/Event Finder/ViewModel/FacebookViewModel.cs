@@ -108,9 +108,9 @@ namespace Event_Finder.ViewModel
         /// <param name="status"></param>
         /// <returns></returns>
         async public Task<bool> RSVPEvent(string eID, String status) {
-            var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
+            var fb = new Facebook.FacebookClient(App.AccessToken);
             var parameters = new Dictionary<string, object>();
-            parameters["access_token"] = App.FacebookSessionClient.CurrentSession.AccessToken;
+            parameters["access_token"] = App.AccessToken;
             bool result;
             try
             {
@@ -127,7 +127,7 @@ namespace Event_Finder.ViewModel
 
         async private Task<string> CallFacebookFQL(String Query)
         {
-            var fb = new Facebook.FacebookClient(App.FacebookSessionClient.CurrentSession.AccessToken);
+            var fb = new Facebook.FacebookClient(App.AccessToken);
 
             var result = await fb.GetTaskAsync("fql",
                 new

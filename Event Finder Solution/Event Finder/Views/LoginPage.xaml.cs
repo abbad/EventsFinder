@@ -21,22 +21,25 @@ namespace Event_Finder.Views
     /// </summary>
     public sealed partial class LoginPage : Page
     {
-        private FacebookSession session;
+        
         public LoginPage()
         {
             this.InitializeComponent();
         }
         private async Task<bool> Authenticate()
         {
+
             String errorMessage = "";
             Boolean errorOccured = false;
             MessageDialog dialog = new MessageDialog("");
             string message = String.Empty;
             try
             {
-                session = await App.FacebookSessionClient.LoginAsync("user_about_me, read_stream, user_events, user_friends, friends_events, rsvp_event");
-                App.AccessToken = session.AccessToken;
-                App.FacebookId = session.FacebookId;
+               
+                App.session = await App.FacebookSessionClient.LoginAsync("user_about_me, read_stream, user_events, user_friends, friends_events, rsvp_event");
+               
+                App.AccessToken = App.session.AccessToken;
+                App.FacebookId = App.session.FacebookId;
             }
             catch (InvalidOperationException e)
             {
@@ -117,6 +120,19 @@ namespace Event_Finder.Views
 
            
 
+        }
+
+        private void loginButton_SessionStateChanged(object sender, Facebook.Client.Controls.SessionStateChangedEventArgs e)
+        {
+            Facebook.Client.Controls.LoginButton x = (Facebook.Client.Controls.LoginButton)sender;
+            if (e.SessionState == Facebook.Client.Controls.FacebookSessionState.Opened) {
+                App.session = x.CurrentSession;
+                App.AccessToken = x.CurrentSession.AccessToken;
+                App.FacebookId = x.CurrentSession.FacebookId;
+                App.isAuthenticated = true;
+                Frame.Navigate(typeof(MainPage));
+               
+            }
         }
     }
 }

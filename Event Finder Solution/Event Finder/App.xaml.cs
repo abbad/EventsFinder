@@ -33,6 +33,9 @@ namespace Event_Finder
     /// </summary>
     sealed partial class App : Application
     {
+
+        internal static FacebookSession session;
+
         internal static TaskCompletionSource<bool> GettingPositionFinished = new TaskCompletionSource<bool>(); 
         // checking for error Occured value
         internal static TaskCompletionSource<bool> ErrorOccuredFinished = new TaskCompletionSource<bool>();

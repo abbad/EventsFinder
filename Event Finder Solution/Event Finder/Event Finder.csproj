@@ -266,8 +266,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Facebook.6.4.2\lib\win8\Facebook.dll</HintPath>
     </Reference>
-    <Reference Include="Facebook.Client">
-      <HintPath>..\packages\Facebook.Client.0.8.0-alpha\lib\win8\Facebook.Client.dll</HintPath>
+    <Reference Include="Facebook.Client, Version=0.8.5.0, Culture=neutral, PublicKeyToken=58cb4f2111d1e6de, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Facebook.Client.0.8.5-alpha\lib\win8\Facebook.Client.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
