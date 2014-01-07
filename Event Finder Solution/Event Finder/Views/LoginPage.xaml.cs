@@ -130,6 +130,7 @@ namespace Event_Finder.Views
                 App.AccessToken = x.CurrentSession.AccessToken;
                 App.FacebookId = x.CurrentSession.FacebookId;
                 App.isAuthenticated = true;
+                App.LoginButton = loginButton;
                 Frame.Navigate(typeof(MainPage));
                
             }

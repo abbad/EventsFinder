@@ -26,5 +26,16 @@ namespace Event_Finder.Views
         {
             this.InitializeComponent();
         }
+
+        private void backButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(MainPage));
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            loginButton = App.LoginButton;
+           
+        }
     }
 }

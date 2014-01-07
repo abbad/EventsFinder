@@ -33,6 +33,7 @@ namespace Event_Finder
     /// </summary>
     sealed partial class App : Application
     {
+        internal static Facebook.Client.Controls.LoginButton LoginButton = new Facebook.Client.Controls.LoginButton();
 
         internal static FacebookSession session;
 

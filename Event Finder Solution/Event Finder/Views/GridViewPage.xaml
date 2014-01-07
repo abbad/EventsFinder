@@ -10,7 +10,7 @@
     <Page.BottomAppBar>
         <CommandBar>
             <CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="appBarNavigateButton" Label="Map View" Icon="Globe" Click="appBarNavigateButton_Click"/>
+                <AppBarButton x:Name="appBarNavigateButton" Label="View Events" Icon="Globe" Click="appBarNavigateButton_Click"/>
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>
                 <AppBarButton x:Name="myEventsButton" Label="My Events" Icon="Bookmarks"  Click="myEventsButton_Click"/>
