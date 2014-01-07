@@ -109,7 +109,7 @@
                     </Border>
 
                     <!--CloseButton-->
-                    <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45"  FontSize="10" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Button_Click_1"/>
+                    <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45"  FontSize="10" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Button_Click"/>
 
                     <!--RSPV left-->
             <StackPanel Background="#FF262323"  Grid.Row="3">

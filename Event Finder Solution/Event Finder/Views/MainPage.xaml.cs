@@ -87,7 +87,7 @@ namespace Event_Finder.Views
                 catch (Exception){ }
             }
 
-            prog.IsActive = true;
+            prog.IsIndeterminate = true;
             PositionUserOnMap();
             
             if (App.myEventsSelected)
@@ -101,7 +101,7 @@ namespace Event_Finder.Views
                 myEventsButton.Label = "My Events";
             }
             await App.commonApiHandler.GettingEventsFinished.Task;
-            prog.IsActive = false;
+            prog.IsIndeterminate = false;
             
         }
 
@@ -114,7 +114,7 @@ namespace Event_Finder.Views
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
         {
             clearAllCollections();
-            prog.IsActive = true;
+            prog.IsIndeterminate = true;
             App.startRange = startRangeDateTimePicker.Date.Date;
             App.endRange = endRangeDateTimePicker.Date.Date;
 
@@ -136,7 +136,7 @@ namespace Event_Finder.Views
                 }
                 catch (Exception) { }
             }
-            prog.IsActive = false; 
+            prog.IsIndeterminate = false; 
         }
 
         
@@ -199,6 +199,7 @@ namespace Event_Finder.Views
             }
             
         }
+
         private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             Infobox.Visibility = Visibility.Collapsed;
@@ -344,7 +345,7 @@ namespace Event_Finder.Views
             if (x) {
                 App.ItemEventsList.Clear();
                 x = false;
-                prog.IsActive = true;
+                prog.IsIndeterminate = true;
                 setPositionButton.IsEnabled = true;
                 Location loc = new Location();
                 this.MainMap.TryPixelToLocation(e.GetCurrentPoint(MainMap).Position, out loc);
@@ -369,8 +370,13 @@ namespace Event_Finder.Views
                     catch (Exception) { }
 
                 }
-                prog.IsActive = false;
+                prog.IsIndeterminate = false;
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Infobox.Visibility = Visibility.Collapsed;
         }
 
     }
