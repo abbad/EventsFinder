@@ -9,21 +9,29 @@
     mc:Ignorable="d">
 
     <Grid Background="#0099CC" Loaded="Grid_Loaded">
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+        </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" 
-				VerticalAlignment="Top"
+            <Button x:Name="backButton" Margin="40"
+				VerticalAlignment="Center"
 				AutomationProperties.Name="Back"
 				AutomationProperties.AutomationId="BackButton"
 				AutomationProperties.ItemType="Navigation Button" Style="{StaticResource NavigationBackButtonNormalStyle}" Click="backButton_Click"/>
             <TextBlock x:Name="pageTitle" Text="Settings" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-				IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="20,0,10,669"/>
-            <Controls:LoginButton x:Name="loginButton" HorizontalAlignment="Right" ApplicationId="247592955394059" Permissions="user_about_me, read_stream, user_events, user_friends, friends_events, rsvp_event" Grid.Column="1" Margin="0,644,1086,74" />
+				IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
         </Grid>
-
+        <TextBlock Text="Set range on map" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15" FontSize="20"/>
+        <Slider x:Name="OffsetSlider" StepFrequency="0.1" Maximum="3" Minimum="0.1"  Width="100" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="206,30,1060,10"/>
+        <Controls:LoginButton Grid.Row="4" Margin="15" x:Name="loginButton"  HorizontalAlignment="Left" ApplicationId="247592955394059" Permissions="user_about_me, read_stream, user_events, user_friends, friends_events, rsvp_event"  Height="Auto"  />
+    
     </Grid>
 </Page>

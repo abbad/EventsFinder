@@ -25,17 +25,19 @@ namespace Event_Finder.Views
         public Settings()
         {
             this.InitializeComponent();
+            OffsetSlider.Value = App.offset;
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
+            App.offset = OffsetSlider.Value;
             Frame.Navigate(typeof(MainPage));
         }
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             loginButton = App.LoginButton;
-           
+            
         }
     }
 }
