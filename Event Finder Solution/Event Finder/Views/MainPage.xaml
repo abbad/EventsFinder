@@ -48,7 +48,7 @@
                 </UserControl>
             </ControlTemplate>
             <DataTemplate x:Key="PushPinTemplate">
-                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}"   Height="150" Width="150"  Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
+                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}"  Margin="0,0,100,120" Height="150" Width="150"  Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
                 </bm:Pushpin>
             </DataTemplate>
         </ResourceDictionary>
@@ -75,7 +75,7 @@
 
             <!-- list of pushpins maplayer -->
             <bm:MapLayer x:Name="PushPinMapLayer">
-                <bm:MapItemsControl x:Name="pushpinsItemsControl"  ItemTemplate="{StaticResource PushPinTemplate}">
+                <bm:MapItemsControl x:Name="pushpinsItemsControl"  ItemTemplate="{StaticResource PushPinTemplate}" Margin="0,-120,0,0">
                 </bm:MapItemsControl>
             </bm:MapLayer>
             <!-- Infobox map Layer -->
