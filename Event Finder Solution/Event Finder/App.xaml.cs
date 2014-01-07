@@ -36,10 +36,8 @@ namespace Event_Finder
         Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         
         Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-
-        internal static Facebook.Client.Controls.LoginButton LoginButton = new Facebook.Client.Controls.LoginButton();
-
-        internal static FacebookSession session;
+        internal static GraphUser CurrentUser;
+        internal static FacebookSession CurrentSession;
 
         internal static TaskCompletionSource<bool> GettingPositionFinished = new TaskCompletionSource<bool>(); 
         // checking for error Occured value

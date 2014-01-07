@@ -6,9 +6,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="using:Facebook.Client.Controls"
     x:Class="Event_Finder.Views.Settings"
+    xmlns:facebookControls="using:Facebook.Client.Controls"
     mc:Ignorable="d">
 
-    <Grid Background="#0099CC" Loaded="Grid_Loaded">
+    <Grid Background="#0099CC" >
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
             <RowDefinition Height="100"/>
@@ -21,17 +22,19 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="40"
+            <Button x:Name="backButton" Margin="40,40,0,30"
 				VerticalAlignment="Center"
 				AutomationProperties.Name="Back"
 				AutomationProperties.AutomationId="BackButton"
-				AutomationProperties.ItemType="Navigation Button" Style="{StaticResource NavigationBackButtonNormalStyle}" Click="backButton_Click"/>
+				AutomationProperties.ItemType="Navigation Button" Style="{StaticResource NavigationBackButtonNormalStyle}" Click="backButton_Click" Height="50"/>
             <TextBlock x:Name="pageTitle" Text="Settings" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
 				IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
         </Grid>
         <TextBlock Text="Set range on map" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15" FontSize="20"/>
-        <Slider x:Name="OffsetSlider" StepFrequency="0.1" Maximum="3" Minimum="0.1"  Width="100" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="206,30,1060,10"/>
-        <Controls:LoginButton Grid.Row="4" Margin="15" x:Name="loginButton"  HorizontalAlignment="Left" ApplicationId="247592955394059" Permissions="user_about_me, read_stream, user_events, user_friends, friends_events, rsvp_event"  Height="Auto"  />
+        <Slider x:Name="OffsetSlider" ValueChanged="OffsetSlider_ValueChanged" StepFrequency="0.1" Maximum="3" Minimum="0.1"  Width="100" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="206,30,1060,10" />
+        <facebookControls:LoginButton Grid.Row="2"  x:Name="loginButton" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Center" SessionStateChanged="loginButton_SessionStateChanged" />
     
     </Grid>
+
+    
 </Page>
