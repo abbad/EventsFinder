@@ -33,6 +33,10 @@ namespace Event_Finder
     /// </summary>
     sealed partial class App : Application
     {
+        Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        
+        Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+
         internal static Facebook.Client.Controls.LoginButton LoginButton = new Facebook.Client.Controls.LoginButton();
 
         internal static FacebookSession session;
@@ -109,7 +113,7 @@ namespace Event_Finder
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-
+            
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -132,7 +136,10 @@ namespace Event_Finder
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
-                    //TODO: Load state from previously suspended application
+                    if (localSettings.Values.ContainsKey("offset"))
+                    {
+                        offset = (double)localSettings.Values["offset"];
+                    }
                 }
 
                 // Place the frame in the current Window
@@ -169,8 +176,10 @@ namespace Event_Finder
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            var deferral = e.SuspendingOperation.GetDeferral();
+            localSettings.Values["offset"] = offset.ToString();
+           
             deferral.Complete();
         }
     }
