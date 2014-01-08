@@ -34,21 +34,20 @@ namespace Event_Finder.Views
 
         private void backButton_Click(object sender, RoutedEventArgs e)
         {
-           // 
             Frame.Navigate(typeof(MainPage));
         }
 
        async protected override void OnNavigatedTo(NavigationEventArgs e)
        {
- 	        base.OnNavigatedTo(e);
-            this.loginButton.ApplicationId = Constants.FacebookAppId;
-
-            App.CurrentSession = FacebookSessionCacheProvider.Current.GetSessionData();
-            if ((App.CurrentSession != null) && (App.CurrentSession.Expires <= DateTime.UtcNow))
-            {
+           base.OnNavigatedTo(e);
+           this.loginButton.ApplicationId = Constants.FacebookAppId;
+           
+           App.CurrentSession = FacebookSessionCacheProvider.Current.GetSessionData();
+           if ((App.CurrentSession != null) && (App.CurrentSession.Expires <= DateTime.UtcNow))
+           {
                 // User was previously logged in, but session expired.  Log them in again...
                 App.CurrentSession = await App.FacebookSessionClient.LoginAsync(Constants.Permissions);
-            }
+           }
 
             if (App.CurrentSession != null)
             {
@@ -100,9 +99,35 @@ namespace Event_Finder.Views
        private void OffsetSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
        {
            if (OffsetSlider != null) { 
-            App.offset = OffsetSlider.Value;
+                App.offset = OffsetSlider.Value;
            }
        }
-        
+
+       async protected override void OnNavigatedFrom(NavigationEventArgs e)
+       {
+           App.localSettings.Values["offset"] = App.offset.ToString();
+           base.OnNavigatedFrom(e);
+           App.ItemEventsList.Clear();
+           App.AttendingCollection.Clear();
+           
+          
+           // get list of atteneded events by user.by 
+           String error = await App.commonApiHandler.QueryForUserEvents();
+
+           // QueryForEventsWithinAnArea
+           try
+           {
+               error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
+                   DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
+           }
+           catch (Facebook.WebExceptionWrapper exception) { error = exception.Data.ToString(); }
+
+           if (error != null)
+           {
+               App.errorOccured = true;
+               App.errorMessage = error;
+               App.ErrorOccuredFinished.TrySetResult(true);
+           }
+       }
     }
 }

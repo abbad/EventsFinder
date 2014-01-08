@@ -52,8 +52,10 @@ namespace Event_Finder.Views
        
             _locationIcon100m = new LocationIcon100m();
             setInitialItemsToCollapsed();
+            
             addInitialChildrenToMap();
-            endRangeDateTimePicker.Date = DateTime.Today.AddDays(5);
+            endRangeDateTimePicker.Date = App.endRange;
+            startRangeDateTimePicker.Date = App.startRange;
             DataContext = this;
             
             dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
@@ -75,20 +77,20 @@ namespace Event_Finder.Views
             MainMap.SetView(App.myLocation, App.zoomLevel);
         }
 
-        async private void OnLoad(object sender, RoutedEventArgs e)
+        async private void map_loaded(object sender, RoutedEventArgs e)
         {
-            await App.ErrorOccuredFinished.Task; 
             prog.IsIndeterminate = true;
+            await App.ErrorOccuredFinished.Task;
             // check if error happend before.
             if (App.errorOccured) 
             {
                 try
                 {
-                    prog.IsIndeterminate = false;
                     dialog.Content = App.errorMessage;
                     await dialog.ShowAsync();
                     App.errorOccured = false;
                     App.GettingPositionFinished.TrySetResult(true);
+                    prog.IsIndeterminate = false;
                     return;
                 }
                 catch (Exception){ }
@@ -107,7 +109,9 @@ namespace Event_Finder.Views
                 pushpinsItemsControl.ItemsSource = App.ItemEventsList;
                 myEventsButton.Label = "My Events";
             }
+
             await App.commonApiHandler.GettingEventsFinished.Task;
+            
             prog.IsIndeterminate = false;
             
         }

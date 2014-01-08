@@ -33,7 +33,7 @@ namespace Event_Finder
     /// </summary>
     sealed partial class App : Application
     {
-        Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        public static Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
         
         Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
         internal static GraphUser CurrentUser;
@@ -111,7 +111,10 @@ namespace Event_Finder
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            
+            if (localSettings.Values.ContainsKey("offset"))
+            {
+                offset = Convert.ToDouble(localSettings.Values["offset"]);
+            }
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -134,10 +137,7 @@ namespace Event_Finder
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
-                    if (localSettings.Values.ContainsKey("offset"))
-                    {
-                        offset = (double)localSettings.Values["offset"];
-                    }
+                    
                 }
 
                 // Place the frame in the current Window
@@ -174,9 +174,10 @@ namespace Event_Finder
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
+            localSettings.Values["offset"] = offset.ToString();
             //TODO: Save application state and stop any background activity
             var deferral = e.SuspendingOperation.GetDeferral();
-            localSettings.Values["offset"] = offset.ToString();
+            
            
             deferral.Complete();
         }

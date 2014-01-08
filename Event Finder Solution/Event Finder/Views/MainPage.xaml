@@ -72,7 +72,7 @@
         <!--Progress Bar-->
         <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}"  />
 
-        <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  PointerPressedOverride="MainMap_PointerPressed"  x:Name="MainMap" Loaded="OnLoad" Grid.Row="1">
+        <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  PointerPressedOverride="MainMap_PointerPressed"  x:Name="MainMap" Loaded="map_loaded" Grid.Row="1">
 
             <!-- list of pushpins maplayer -->
             <bm:MapLayer x:Name="PushPinMapLayer">
@@ -96,23 +96,23 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
-
+                    
                     <!-- first row  name close button-->
-                    <TextBlock Text="{Binding name}" Grid.Row="0" Grid.ColumnSpan="3" TextWrapping="Wrap" FontSize="30"  HorizontalAlignment="Center"  VerticalAlignment="Center" FontFamily="segoe UI light" />
-
+                    <TextBlock x:Name="TitleName" Text="{Binding name}" Grid.Row="0" Grid.ColumnSpan="3" TextWrapping="Wrap" FontSize="25"  HorizontalAlignment="Center"  VerticalAlignment="Center" FontFamily="segoe UI light" />
+                    
                     <!--CloseButton-->
                     <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45"  FontSize="10" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseInfo" Height="32"/>
-                    <ProgressBar x:Name="InfoBoxProgressBar" Grid.Column="1"    HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" Foreground="Black" Background="Transparent"  Height="10" MinHeight="8" FontSize="14" Width="Auto" />
+                    <ProgressBar x:Name="InfoBoxProgressBar" Grid.Column="1"    HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" Background="Transparent"  Height="10" MinHeight="8" FontSize="14" Width="Auto" />
                     <!-- second row pic-->
                     <Image Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{Binding pic_big}" />
                     <StackPanel Grid.Row="2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="segoe UI light" FontSize="15"  />
+                        <TextBlock Text="Start Date"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="segoe UI light" FontSize="15"  />
                         <TextBlock Text="{Binding startTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="segoe UI light" FontSize="20" />
                     </StackPanel>
 
 
                     <StackPanel Grid.Row="3"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  >
-                        <TextBlock Text="End Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="segoe UI light " FontSize="15"  />
+                        <TextBlock Text="End Date"   HorizontalAlignment="Center" FontFamily="segoe UI light " FontSize="15"  />
                         <TextBlock Text="{Binding endTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="segoe UI light " FontSize="20" />
                     </StackPanel>
 
@@ -143,13 +143,13 @@
                             <RowDefinition Height="60"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-
                         <Border Background="#FF262323" Grid.RowSpan="2"  />
                         <TextBlock Text=" DESCRIPTION:" Grid.Row="0"  VerticalAlignment="Center"  FontSize="25" FontFamily="segoe UI light "/>
                         <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled">
                             <TextBlock TextWrapping="Wrap" Width="210"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="20" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}" FontFamily="segoe UI light "/>
                         </ScrollViewer>
                     </Grid>
+                    
                     <!--friends-->
                     <TextBlock  Text="Friends Going" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1"  FontSize="14"/>
                     <Border  Grid.Row="2" Grid.Column="2" />
@@ -157,8 +157,7 @@
                               Grid.Row="1"
                              Grid.RowSpan="5"
                               Grid.Column="2" 
-                              SelectionMode="None"
-                              >
+                              SelectionMode="None">
                         <GridView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapGrid MaximumRowsOrColumns="1" VerticalChildrenAlignment="Center"
@@ -180,7 +179,6 @@
                             </DataTemplate>
                         </GridView.ItemTemplate>
                     </GridView>
-
                     </Grid>
             </bm:MapLayer>
         </bm:Map>

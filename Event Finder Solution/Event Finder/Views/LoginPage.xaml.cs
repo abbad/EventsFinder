@@ -30,68 +30,10 @@ namespace Event_Finder.Views
             loginButton.Permissions = ViewModel.Constants.Permissions;
             
         }
-        /*
-      private async Task<bool> Authenticate()
-      {
-
-          String errorMessage = "";
-          Boolean errorOccured = false;
-          MessageDialog dialog = new MessageDialog("");
-          string message = String.Empty;
-          try
-          {
-               
-              App.CurrentSession = await App.FacebookSessionClient.LoginAsync("user_about_me, read_stream, user_events, user_friends, friends_events, rsvp_event");
-
-              App.AccessToken = App.CurrentSession.AccessToken;
-              App.FacebookId = App.CurrentSession.FacebookId;
-          }
-          catch (InvalidOperationException e)
-          {
-              errorMessage = "Login failed! Exception details:" + e.Message;
-               
-              btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Visible;
-              errorOccured = true;
-          } if (errorOccured) 
-          {
-              dialog.Content = errorMessage;
-              try
-              {
-                  await dialog.ShowAsync();
-                  return true;
-              }
-              catch (Exception) { }
-          }
-
-          return false;
-      }
-      
-      async private void btnFacebookLogin_Click(object sender, RoutedEventArgs e)
-      {
-          
-          bool error = false ;
-          if (!App.isAuthenticated)
-          {
-
-              error = await Authenticate();
-              App.isAuthenticated = !error;
-              if (App.isAuthenticated)
-              {
-                  Frame.Navigate(typeof(MainPage));
-              }
-              else
-              {
-                  App.isAuthenticated = false;
-                  btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Visible;
-              }
-          }
-          else {
-              Frame.Navigate(typeof(MainPage));
-          }
-      }
-      */
+ 
         async protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            App.GettingPositionFinished = new TaskCompletionSource<bool>();
             base.OnNavigatedFrom(e);
             App.ItemEventsList.Clear();
             App.AttendingCollection.Clear();
@@ -110,21 +52,23 @@ namespace Event_Finder.Views
                                                     return; }
             App.myLocation = new Location(App.myPosition.Coordinate.Point.Position.Latitude, App.myPosition.Coordinate.Point.Position.Longitude);
             App.GettingPositionFinished.TrySetResult(true);
+            
             // get list of atteneded events by user.by 
             String error = await App.commonApiHandler.QueryForUserEvents();
 
             // QueryForEventsWithinAnArea
-            error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
-                DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
-
+            try
+            {
+                error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
+                    DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
+            }catch(Facebook.WebExceptionWrapper exception) { error = exception.Data.ToString(); }
+            
             if (error != null)
             {
                 App.errorOccured = true;
                 App.errorMessage = error;
                 App.ErrorOccuredFinished.TrySetResult(true);
             }
-
-           
 
         }
 
@@ -150,8 +94,9 @@ namespace Event_Finder.Views
             }
         }
 
-       async protected override void OnNavigatedTo(NavigationEventArgs e)
+        async protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            prog.IsIndeterminate = true;
             base.OnNavigatedTo(e);
        
             this.loginButton.ApplicationId = Constants.FacebookAppId;
@@ -177,9 +122,8 @@ namespace Event_Finder.Views
               
                 App.AccessToken = App.CurrentSession.AccessToken;
                 App.FacebookId = App.CurrentSession.FacebookId;
-              
             }
-
+           
             if (App.CurrentUser != null)
             {
                 App.isAuthenticated = true;
@@ -190,6 +134,9 @@ namespace Event_Finder.Views
             {
                 Frame.Navigate(typeof(MainPage));
             }
+
+            prog.IsIndeterminate = false;
         }
+    
     }
 }
