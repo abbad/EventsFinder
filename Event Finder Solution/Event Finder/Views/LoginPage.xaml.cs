@@ -33,6 +33,7 @@ namespace Event_Finder.Views
  
         async protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            App.commonApiHandler.GettingEventsFinished = new TaskCompletionSource<bool>();
             App.GettingPositionFinished = new TaskCompletionSource<bool>();
             base.OnNavigatedFrom(e);
             App.ItemEventsList.Clear();
@@ -96,8 +97,16 @@ namespace Event_Finder.Views
 
         async protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            App.commonApiHandler.GettingEventsFinished = new TaskCompletionSource<bool>();
-            
+            while(!App.IsInternet())
+            {
+                MessageDialog msg = new MessageDialog("Please check your internet connection");
+                msg.Commands.Add(new UICommand("Retry", (uiCommand) => { }));
+                msg.CancelCommandIndex = 1;
+                try {
+                    await msg.ShowAsync();
+
+                }catch(Exception){}
+            }
             prog.IsIndeterminate = true;
             base.OnNavigatedTo(e);
        
@@ -118,8 +127,10 @@ namespace Event_Finder.Views
                 if (App.CurrentUser == null)
                 {
                     FacebookClient client = new FacebookClient(App.CurrentSession.AccessToken);
-                    dynamic result = await client.GetTaskAsync("me");
-                    App.CurrentUser = new GraphUser(result);
+                    App.CurrentUser = new GraphUser(await client.GetTaskAsync("me"));
+                    
+                    
+                    
                 }
               
                 App.AccessToken = App.CurrentSession.AccessToken;

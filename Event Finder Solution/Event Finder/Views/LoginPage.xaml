@@ -16,13 +16,12 @@
         <!--Progress Bar-->
         <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}"  />
 
-        <Image Source="ms-appx:///Assets/868splash.png" />
+        <Image Source="ms-appx:///Assets/SplashScreen.scale-180.png" />
 		<Grid >
 			<Grid.RowDefinitions>
 				<RowDefinition Height="350*"/>
 				<RowDefinition Height="119*"/>
 			</Grid.RowDefinitions>
-
             
             <facebookControls:LoginButton Grid.Row="1"  x:Name="loginButton"  HorizontalAlignment="Center" VerticalAlignment="Center" SessionStateChanged="loginButton_SessionStateChanged" />
         </Grid> 

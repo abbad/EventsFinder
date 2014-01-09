@@ -60,9 +60,25 @@ namespace Event_Finder.Views
 
         async void ItemDetailPage1_Loaded(object sender, RoutedEventArgs e)
         {
+            bool error = false; 
             progBar.IsIndeterminate = true;
             App.commonApiHandler.friendList.Clear();
-            FriendRoot vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
+            FriendRoot vsx= null;
+            try
+            {
+              vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
+            }
+            catch (Facebook.WebExceptionWrapper){error = true;}
+            if (error) 
+            {
+                try {
+                    MessageDialog msg = new MessageDialog("Connection Lost");
+                    await msg.ShowAsync();
+                    return;
+                }catch(Exception){}
+            
+            }
+            
             App.commonApiHandler.FillFriendsAttendingCollection(vsx);
             attendFr.ItemsSource = App.commonApiHandler.friendList;
 
