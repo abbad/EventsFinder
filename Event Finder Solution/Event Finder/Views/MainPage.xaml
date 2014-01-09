@@ -10,7 +10,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:bm="using:Bing.Maps"
-    mc:Ignorable="d" FontFamily="Global User Interface">
+    xmlns:ctrl="using:Event_Finder.Controls"
+    mc:Ignorable="d" FontFamily="Global User Interface"
+    >
 
     <Page.BottomAppBar>
         <CommandBar>
@@ -58,16 +60,16 @@
 
     <Grid x:Name="MainGrid" Background="#0099CC">
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="29*"/>
+            <RowDefinition Height="31*"/>
+            <RowDefinition Height="97*"/>
         </Grid.RowDefinitions>
 
-        <Image Source="/Assets/SmallLogo.scale-180.png" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Margin="6,0,0,0" />
+        <Image Source="/Assets/SmallLogo.scale-180.png" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Margin="6,68,0,58" Width="60" />
 
 
-        <Image Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill" Margin="589,10,589,633"/>
+        <Image  HorizontalAlignment="Center" VerticalAlignment="Center" Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill" Margin="589,119,589,14"/>
 
-        <Border Grid.Row="1" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="245,609,1121,87" Width="0"/>
+        <Border Grid.Row="1" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="245,557,1121,25" Width="0"/>
 
         <!--Progress Bar-->
         <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}"  />
@@ -96,10 +98,10 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
-                    
+
                     <!-- first row  name close button-->
                     <TextBlock x:Name="TitleName" Text="{Binding name}" Grid.Row="0" Grid.ColumnSpan="3" TextWrapping="Wrap" FontSize="25"  HorizontalAlignment="Center"  VerticalAlignment="Center" FontFamily="segoe UI light" />
-                    
+
                     <!--CloseButton-->
                     <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45"  FontSize="10" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseInfo" Height="32"/>
                     <ProgressBar x:Name="InfoBoxProgressBar" Grid.Column="1"    HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" Background="Transparent"  Height="10" MinHeight="8" FontSize="14" Width="Auto" />
@@ -149,7 +151,7 @@
                             <TextBlock TextWrapping="Wrap" Width="210"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="20" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}" FontFamily="segoe UI light "/>
                         </ScrollViewer>
                     </Grid>
-                    
+
                     <!--friends-->
                     <TextBlock  Text="Friends Going" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1"  FontSize="14"/>
                     <Border  Grid.Row="2" Grid.Column="2" />
@@ -179,15 +181,15 @@
                             </DataTemplate>
                         </GridView.ItemTemplate>
                     </GridView>
-                    </Grid>
+                </Grid>
             </bm:MapLayer>
         </bm:Map>
 
         <!--Header and DatePickers-->
-
-        <DatePicker  Header="To" x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Right" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" />
-        <DatePicker Header="From" x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Left" Margin="98,2,0,0" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" />
-        <TextBlock Text="Date Range" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"  Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Margin="575,18,573,6" />
+        <ctrl:SimpleSlider   Maximum="10" Minimum="1" LowerValue="1" UpperValue="7" Style="{StaticResource SimpleSliderStyle}" x:Name="DateSlider" IsEnabled="True" LowerValueChanged="PriceSlider_LowerValueChanged" UpperValueChanged="PriceSlider_UpperValueChanged" Margin="50,30,76,125" RenderTransformOrigin="0.5,0.5"/>
+        <DatePicker  Header="To" x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Right" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" Margin="0,63,0,53" />
+        <DatePicker Header="From" x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Left" Margin="98,64,0,52" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" />
+        <TextBlock Text="Date Range" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"  Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Margin="575,80,573,58" />
 
     </Grid>
 
