@@ -96,6 +96,8 @@ namespace Event_Finder.Views
 
         async protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            App.commonApiHandler.GettingEventsFinished = new TaskCompletionSource<bool>();
+            
             prog.IsIndeterminate = true;
             base.OnNavigatedTo(e);
        

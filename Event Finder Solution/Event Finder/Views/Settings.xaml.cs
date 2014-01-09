@@ -105,6 +105,7 @@ namespace Event_Finder.Views
 
        async protected override void OnNavigatedFrom(NavigationEventArgs e)
        {
+           App.commonApiHandler.GettingEventsFinished = new System.Threading.Tasks.TaskCompletionSource<bool>();
            App.localSettings.Values["offset"] = App.offset.ToString();
            base.OnNavigatedFrom(e);
            App.ItemEventsList.Clear();

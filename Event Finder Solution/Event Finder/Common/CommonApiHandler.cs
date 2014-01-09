@@ -21,7 +21,7 @@
         // controller for geolocation. 
         public LocationController lController;
         // application location
-        public TaskCompletionSource<bool> GettingEventsFinished = new TaskCompletionSource<bool>();
+        public TaskCompletionSource<bool> GettingEventsFinished;
        
 
         private String cityName = "";
@@ -66,7 +66,6 @@
         /// <param name="myPosition"></param>
         async public Task<String> QueryForEventsWithinAnArea(double offset, double startRange, double endRange)
         {
-            App.commonApiHandler.GettingEventsFinished = new TaskCompletionSource<bool>();
             List<Data> results;
             // get the city name from reverse geocodeing
             try
