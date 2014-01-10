@@ -145,8 +145,24 @@
                         if (itemEvent.start_time != null){itemEvent.startTimeObject = DateTime.Parse(itemEvent.start_time);}
                         if (itemEvent.end_time != null) { itemEvent.endTimeObject = DateTime.Parse(itemEvent.end_time); }
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
-                        // fill it in item lsit of events
-                        App.ItemEventsList.Add(itemEvent);
+
+                        // check for the events with the same title. 
+                        if (!App.ItemEventsList.Any(p => p.name.Contains(itemEvent.name)))
+                        {
+                            // if two events are having the same cordinates make them differ in location so they can show up on map. 
+                            if (App.ItemEventsList.Any(p => p.Location.Longitude == itemEvent.Location.Longitude &&
+                                                                p.Location.Latitude == itemEvent.Location.Latitude)) 
+                            {
+                                itemEvent.Location.Longitude += new Random().NextDouble() * 0.001; 
+                                itemEvent.Location.Latitude += new Random().NextDouble() * 0.001; 
+                            }
+
+                            // fill it in item lsit of events
+                            App.ItemEventsList.Add(itemEvent);
+                        }
+                       
+                        
+                     
                     }
 
                     }
@@ -195,6 +211,7 @@
                         // create the instance of location 
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
 
+                      
                         // fill it in the item list of users event.
                         App.AttendingCollection.Add(itemEvent);
 
