@@ -163,7 +163,7 @@ namespace Event_Finder.Views
         {
 
             InfoBoxProgressBar.IsEnabled = true;
-            MainMap.SetView(selectedEvent.Location, App.zoomLevel);
+            MainMap.SetView(selectedEvent.Location, MainMap.ZoomLevel);
             App.commonApiHandler.friendList.Clear();
             // see RSVP status of event.
             try
@@ -328,9 +328,9 @@ namespace Event_Finder.Views
             InfoBoxProgressBar.IsIndeterminate = false;
         }
 
-      
         private void appBarNavigateButton_Click(object sender, RoutedEventArgs e)
         {
+            App.zoomLevel = MainMap.ZoomLevel;
             Frame.Navigate(typeof(GridViewPage));
         }
 
@@ -362,7 +362,7 @@ namespace Event_Finder.Views
 
         async void MainMap_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-           
+            
             if (x) {
                 App.commonApiHandler.QueriedEvents.Clear();
                 x = false;
@@ -397,6 +397,7 @@ namespace Event_Finder.Views
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
+            App.zoomLevel = MainMap.ZoomLevel; 
             Frame.Navigate(typeof(Settings));
         }
 
