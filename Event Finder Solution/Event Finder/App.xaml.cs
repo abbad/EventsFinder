@@ -72,28 +72,7 @@ namespace Event_Finder
 
         internal static double zoomLevel = 15;
         // List of events attended by user.
-        internal static ObservableCollection<Event> AttendingCollection { get; set; }
-
-        public ObservableCollection<Event> attendingCollection
-        {
-            get
-            {
-                return AttendingCollection;
-            }
-        }
-
-        // List of events queried for. 
-        internal static ObservableCollection<Event> ItemEventsList { get; set; }
-
-        public  ObservableCollection<Event> itemEventsList
-        {
-            get
-            {
-                return ItemEventsList;
-            }
-        }
-
-
+        
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().

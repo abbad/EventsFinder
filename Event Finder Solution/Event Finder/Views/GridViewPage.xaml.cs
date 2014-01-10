@@ -32,12 +32,12 @@ namespace Event_Finder.Views
         {
             if (App.myEventsSelected)
             {
-                EventsGridView.ItemsSource = App.AttendingCollection;
+                EventsGridView.ItemsSource = App.commonApiHandler.UserEvents;
                 myEventsButton.Label = "View All Events";
             }
             else
             {
-                EventsGridView.ItemsSource = App.ItemEventsList;
+                EventsGridView.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
             }
         }
@@ -61,12 +61,12 @@ namespace Event_Finder.Views
             {
                 myEventsButton.Label = "View All Events";
 
-                EventsGridView.ItemsSource = App.AttendingCollection;
+                EventsGridView.ItemsSource = App.commonApiHandler.UserEvents;
                 App.myEventsSelected = true;
             }
             else
             {
-                EventsGridView.ItemsSource = App.ItemEventsList;
+                EventsGridView.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
                 App.myEventsSelected = false;
             }

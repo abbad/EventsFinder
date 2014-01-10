@@ -36,8 +36,8 @@ namespace Event_Finder.Views
             App.commonApiHandler.GettingEventsFinished = new TaskCompletionSource<bool>();
             App.GettingPositionFinished = new TaskCompletionSource<bool>();
             base.OnNavigatedFrom(e);
-            App.ItemEventsList.Clear();
-            App.AttendingCollection.Clear();
+            App.commonApiHandler.QueriedEvents.Clear();
+            App.commonApiHandler.UserEvents.Clear();
             try
             {
                 App.myPosition = await App.commonApiHandler.lController.GetCurrentLocation();

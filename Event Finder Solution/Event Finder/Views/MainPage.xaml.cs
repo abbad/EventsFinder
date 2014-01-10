@@ -101,12 +101,12 @@ namespace Event_Finder.Views
             
             if (App.myEventsSelected)
             {
-                pushpinsItemsControl.ItemsSource = App.AttendingCollection;
+                pushpinsItemsControl.ItemsSource = App.commonApiHandler.UserEvents;
                 myEventsButton.Label = "View All Events";
             }
             else 
             {
-                pushpinsItemsControl.ItemsSource = App.ItemEventsList;
+                pushpinsItemsControl.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
             }
 
@@ -118,8 +118,8 @@ namespace Event_Finder.Views
 
         private void clearAllCollections() 
         {
-            App.AttendingCollection.Clear();
-            App.ItemEventsList.Clear();
+            App.commonApiHandler.UserEvents.Clear();
+            App.commonApiHandler.QueriedEvents.Clear();
         }
         
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
@@ -264,9 +264,9 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "attending" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }else
             {
@@ -290,9 +290,9 @@ namespace Event_Finder.Views
 
                 SetButtonToStatus(new RSVP { rsvp_status = "unsure" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else 
@@ -315,9 +315,9 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "declined" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else
@@ -342,12 +342,12 @@ namespace Event_Finder.Views
             {
                 myEventsButton.Label = "View All Events";
 
-                pushpinsItemsControl.ItemsSource = App.AttendingCollection;
+                pushpinsItemsControl.ItemsSource = App.commonApiHandler.UserEvents;
                 App.myEventsSelected = true;
             }
             else 
             {
-                pushpinsItemsControl.ItemsSource = App.ItemEventsList;
+                pushpinsItemsControl.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
                 App.myEventsSelected = false;
             }
@@ -364,7 +364,7 @@ namespace Event_Finder.Views
         {
            
             if (x) {
-                App.ItemEventsList.Clear();
+                App.commonApiHandler.QueriedEvents.Clear();
                 x = false;
                 prog.IsIndeterminate = true;
                 setPositionButton.IsEnabled = true;

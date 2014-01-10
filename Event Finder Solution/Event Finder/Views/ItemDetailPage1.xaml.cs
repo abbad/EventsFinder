@@ -171,9 +171,9 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "attending" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else
@@ -200,9 +200,9 @@ namespace Event_Finder.Views
 
                 SetButtonToStatus(new RSVP { rsvp_status = "unsure" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else
@@ -228,9 +228,9 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "declined" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else

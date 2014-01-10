@@ -108,8 +108,8 @@ namespace Event_Finder.Views
            App.commonApiHandler.GettingEventsFinished = new System.Threading.Tasks.TaskCompletionSource<bool>();
            App.localSettings.Values["offset"] = App.offset.ToString();
            base.OnNavigatedFrom(e);
-           App.ItemEventsList.Clear();
-           App.AttendingCollection.Clear();
+           App.commonApiHandler.QueriedEvents.Clear();
+           App.commonApiHandler.UserEvents.Clear();
            
           
            // get list of atteneded events by user.by 
