@@ -29,7 +29,7 @@ namespace Event_Finder.Views
         public Settings()
         {
             this.InitializeComponent();
-            OffsetSlider.Value = App.offset;
+            OffsetSlider.Value = App.offset * 111.12;
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
@@ -98,8 +98,8 @@ namespace Event_Finder.Views
 
        private void OffsetSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
        {
-           if (OffsetSlider != null) { 
-                App.offset = OffsetSlider.Value;
+           if (OffsetSlider != null) {
+               App.offset = OffsetSlider.Value / 111.12;
            }
        }
 
@@ -129,6 +129,11 @@ namespace Event_Finder.Views
                App.errorMessage = error;
                App.ErrorOccuredFinished.TrySetResult(true);
            }
+       }
+
+       private void OffsetSlider_Loaded(object sender, RoutedEventArgs e)
+       {
+           OffsetSlider.DataContext = App.offset;
        }
     }
 }

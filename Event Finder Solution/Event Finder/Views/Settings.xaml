@@ -7,8 +7,12 @@
     xmlns:Controls="using:Facebook.Client.Controls"
     x:Class="Event_Finder.Views.Settings"
     xmlns:facebookControls="using:Facebook.Client.Controls"
+    xmlns:Converters="using:Event_Finder.Converters"
     mc:Ignorable="d">
-
+    <Page.Resources>
+        <Converters:LongLatConverter x:Key="Convert"/>
+        
+    </Page.Resources>
     <Grid Background="#0099CC" >
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
@@ -31,7 +35,8 @@
 				IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
         </Grid>
         <TextBlock Text="Set range on map" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15" FontSize="20"/>
-        <Slider x:Name="OffsetSlider" ValueChanged="OffsetSlider_ValueChanged" StepFrequency="0.1" Maximum="3" Minimum="0.1"  Width="100" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="206,30,1060,10" />
+        <Slider x:Name="OffsetSlider" Loaded="OffsetSlider_Loaded" ValueChanged="OffsetSlider_ValueChanged" StepFrequency="1" Maximum="110" Minimum="10"  Width="100" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="206,30,1060,10" />
+        <!--Value="{Binding offset, Converter={StaticResource Convert}}" -->
         <facebookControls:LoginButton Grid.Row="2"  x:Name="loginButton" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Center" SessionStateChanged="loginButton_SessionStateChanged" />
     
     </Grid>

@@ -122,6 +122,7 @@
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="Converters\LongLatConverter.cs" />
     <Compile Include="Icons\LocationIcon100m.xaml.cs">
       <DependentUpon>LocationIcon100m.xaml</DependentUpon>
     </Compile>
