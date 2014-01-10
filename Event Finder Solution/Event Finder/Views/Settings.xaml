@@ -34,12 +34,8 @@
             <TextBlock x:Name="pageTitle" Text="Settings" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
 				IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Center" />
         </Grid>
-        <TextBlock Text="Set range on map" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15" FontSize="20"/>
-        <Slider x:Name="OffsetSlider" ValueChanged="OffsetSlider_ValueChanged" StepFrequency="1" Maximum="110" Minimum="10"  Width="100" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="206,30,1060,10" />
-        <!--Value="{Binding offset, Converter={StaticResource Convert}}" -->
+        <TextBlock Text="Get events around me in km" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15" FontSize="20"/>
+        <Slider x:Name="OffsetSlider" ValueChanged="OffsetSlider_ValueChanged" StepFrequency="1" Maximum="110" Minimum="10"  Width="100" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="289,30,977,10" RenderTransformOrigin="-0.551,0.194" />
         <facebookControls:LoginButton Grid.Row="2"  x:Name="loginButton" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Center" SessionStateChanged="loginButton_SessionStateChanged" />
-    
     </Grid>
-
-    
 </Page>
