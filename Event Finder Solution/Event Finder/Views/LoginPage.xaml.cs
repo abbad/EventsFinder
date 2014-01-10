@@ -33,6 +33,7 @@ namespace Event_Finder.Views
  
         async protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            showMessageIfNoInternet();
             App.commonApiHandler.GettingEventsFinished = new TaskCompletionSource<bool>();
             App.GettingPositionFinished = new TaskCompletionSource<bool>();
             base.OnNavigatedFrom(e);
@@ -95,19 +96,26 @@ namespace Event_Finder.Views
             }
         }
 
-        async protected override void OnNavigatedTo(NavigationEventArgs e)
+       async private void showMessageIfNoInternet()
         {
-            while(!App.IsInternet())
+            while (!App.IsInternet())
             {
                 MessageDialog msg = new MessageDialog("Please check your internet connection");
                 msg.Commands.Add(new UICommand("Retry", (uiCommand) => { }));
                 msg.CancelCommandIndex = 1;
-                try {
+                try
+                {
                     await msg.ShowAsync();
 
-                }catch(Exception){}
+                }
+                catch (Exception) { }
             }
+        }
+
+        async protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
             prog.IsIndeterminate = true;
+            showMessageIfNoInternet();
             base.OnNavigatedTo(e);
        
             this.loginButton.ApplicationId = Constants.FacebookAppId;
@@ -127,9 +135,24 @@ namespace Event_Finder.Views
                 if (App.CurrentUser == null)
                 {
                     FacebookClient client = new FacebookClient(App.CurrentSession.AccessToken);
-                    App.CurrentUser = new GraphUser(await client.GetTaskAsync("me"));
-                    
-                    
+                    try
+                    {
+                        App.CurrentUser = new GraphUser(await client.GetTaskAsync("me"));
+                    }
+                    catch (Facebook.WebExceptionWrapper) { App.errorOccured = true; }
+                    if (App.errorOccured) 
+                    {
+                        MessageDialog msg = new MessageDialog("Please check your internet connection");
+                        msg.Commands.Add(new UICommand("Retry", (uiCommand) => { }));
+                        msg.CancelCommandIndex = 1;
+                        try
+                        {
+                            await msg.ShowAsync();
+                            App.errorOccured = false ;
+                            OnNavigatedTo(e);
+                        }
+                        catch (Exception) {  }
+                    }
                     
                 }
               

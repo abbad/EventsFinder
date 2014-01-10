@@ -26,9 +26,12 @@ namespace Event_Finder.Views
     /// </summary>
     public sealed partial class Settings : Page
     {
+
+        private double oldOffset;
         public Settings()
         {
             this.InitializeComponent();
+            oldOffset = App.offset;
             OffsetSlider.Value = App.offset * 111.12;
         }
 
@@ -100,40 +103,40 @@ namespace Event_Finder.Views
        {
            if (OffsetSlider != null) {
                App.offset = OffsetSlider.Value / 111.12;
+               
            }
        }
 
        async protected override void OnNavigatedFrom(NavigationEventArgs e)
        {
-           App.commonApiHandler.GettingEventsFinished = new System.Threading.Tasks.TaskCompletionSource<bool>();
-           App.localSettings.Values["offset"] = App.offset.ToString();
            base.OnNavigatedFrom(e);
-           App.commonApiHandler.QueriedEvents.Clear();
-           App.commonApiHandler.UserEvents.Clear();
-           
-          
-           // get list of atteneded events by user.by 
-           String error = await App.commonApiHandler.QueryForUserEvents();
-
-           // QueryForEventsWithinAnArea
-           try
+           if (oldOffset != App.offset)
            {
-               error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
-                   DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
-           }
-           catch (Facebook.WebExceptionWrapper exception) { error = exception.Data.ToString(); }
+               App.commonApiHandler.GettingEventsFinished = new System.Threading.Tasks.TaskCompletionSource<bool>();
+               App.localSettings.Values["offset"] = App.offset.ToString();
 
-           if (error != null)
-           {
-               App.errorOccured = true;
-               App.errorMessage = error;
-               App.ErrorOccuredFinished.TrySetResult(true);
-           }
-       }
+               App.commonApiHandler.QueriedEvents.Clear();
+               App.commonApiHandler.UserEvents.Clear();
 
-       private void OffsetSlider_Loaded(object sender, RoutedEventArgs e)
-       {
-           OffsetSlider.DataContext = App.offset;
+
+               // get list of atteneded events by user.by 
+               String error = await App.commonApiHandler.QueryForUserEvents();
+
+               // QueryForEventsWithinAnArea
+               try
+               {
+                   error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
+                       DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
+               }
+               catch (Facebook.WebExceptionWrapper exception) { error = exception.Data.ToString(); }
+
+               if (error != null)
+               {
+                   App.errorOccured = true;
+                   App.errorMessage = error;
+                   App.ErrorOccuredFinished.TrySetResult(true);
+               }
+           }
        }
     }
 }

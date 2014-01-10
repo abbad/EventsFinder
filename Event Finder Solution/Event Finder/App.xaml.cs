@@ -162,6 +162,7 @@ namespace Event_Finder
             deferral.Complete();
         }
 
+    
         public static bool IsInternet()
         {
             ConnectionProfile connections = NetworkInformation.GetInternetConnectionProfile();

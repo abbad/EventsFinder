@@ -108,6 +108,7 @@ namespace Event_Finder.Views
             {
                 pushpinsItemsControl.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
+               
             }
 
             await App.commonApiHandler.GettingEventsFinished.Task;
@@ -344,12 +345,18 @@ namespace Event_Finder.Views
 
                 pushpinsItemsControl.ItemsSource = App.commonApiHandler.UserEvents;
                 App.myEventsSelected = true;
+                if (App.commonApiHandler.UserEvents.Count != 0) { 
+                    MainMap.SetView(App.commonApiHandler.UserEvents[0].Location);
+                }
             }
             else 
             {
                 pushpinsItemsControl.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
                 App.myEventsSelected = false;
+                if (App.commonApiHandler.QueriedEvents.Count != 0) { 
+                    MainMap.SetView(App.commonApiHandler.QueriedEvents[0].Location);
+                }
             }
             
         }
