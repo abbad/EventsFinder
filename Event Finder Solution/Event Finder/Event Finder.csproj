@@ -16,7 +16,7 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>Event Finder_StoreKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
-    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <PackageCertificateThumbprint>A9E350AD994E9F33FBF185C84891D5D02502ADF8</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -123,12 +123,6 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Converters\LongLatConverter.cs" />
-    <Compile Include="Icons\LocationIcon100m.xaml.cs">
-      <DependentUpon>LocationIcon100m.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Icons\LocationIcon10m.xaml.cs">
-      <DependentUpon>LocationIcon10m.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Models\FriendRoot.cs" />
     <Compile Include="Models\RSVP.cs" />
     <Compile Include="Models\Event.cs" />
@@ -189,38 +183,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\BadgeLogo.scale-100.png" />
-    <Content Include="Assets\BadgeLogo.scale-140.png" />
-    <Content Include="Assets\BadgeLogo.scale-180.png" />
-    <Content Include="Assets\fblog.png" />
-    <Content Include="Assets\pushpin.png" />
-    <Content Include="Assets\pushpinleft.png" />
-    <Content Include="Assets\rect248-120.png" />
     <Content Include="Assets\rect310-150.scale-100.png" />
-    <Content Include="Assets\rect310-150.scale-80.png" />
-    <Content Include="Assets\SmallLogo.scale-140.png" />
-    <Content Include="Assets\SmallLogo.scale-180.png" />
-    <Content Include="Assets\SmallLogo.scale-80.png" />
-    <Content Include="Assets\SmallLogo.targetsize-16.png" />
-    <Content Include="Assets\SmallLogo.targetsize-256.png" />
-    <Content Include="Assets\SmallLogo.targetsize-32.png" />
-    <Content Include="Assets\SmallLogo.targetsize-48.png" />
-    <Content Include="Assets\SplashScreen.scale-100.png" />
-    <Content Include="Assets\SplashScreen.scale-140.png" />
-    <Content Include="Assets\SplashScreen.scale-180.png" />
-    <Content Include="Assets\square150.scale-100.png" />
-    <Content Include="Assets\square310.scale-100.png" />
-    <Content Include="Assets\square310.scale-140.png" />
-    <Content Include="Assets\square310.scale-180.png" />
-    <Content Include="Assets\square310.scale-80.png" />
-    <Content Include="Assets\storelogo-50.png" />
-    <Content Include="Assets\storelogo-70.scale-100.png" />
-    <Content Include="Assets\storelogo-90.png" />
-    <Content Include="Assets\StoreLogo.scale-140.png" />
-    <Content Include="Assets\StoreLogo.scale-180.png" />
-    <Content Include="Icons\button.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
-    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-140.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\square310.scale-100.png" />
+    <Content Include="Assets\storelogo-70.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-140.png" />
+    <Content Include="Icons\button.png" />
     <Content Include="Icons\pushpinleft.png" />
     <None Include="Package.StoreAssociation.xml" />
     <None Include="Service References\geocodeservice\Reference.svcmap">
@@ -236,12 +206,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Icons\LocationIcon100m.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Icons\LocationIcon10m.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\GridViewPage.xaml">
       <SubType>Designer</SubType>
@@ -287,6 +257,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\geocodeservice\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

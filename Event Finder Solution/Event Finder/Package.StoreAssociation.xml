@@ -354,9 +354,6 @@
       <ReservedName>Events Finder</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
-  <AccountPackageIdentityNames>
-    <MainPackageIdentityName>30301Abbad.EventFinder1</MainPackageIdentityName>
-    <MainPackageIdentityName>30301Abbad.EventzFinder</MainPackageIdentityName>
-  </AccountPackageIdentityNames>
+  <AccountPackageIdentityNames />
   <PackageInfoList LandingUrl="https://appdev.microsoft.com:443/StorePortals/Developer/Catalog/ReleaseAnchor/4a7440f9-e664-4a39-8e84-2c3fbc573d2a" />
 </StoreAssociation>
