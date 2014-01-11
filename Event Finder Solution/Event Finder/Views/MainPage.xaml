@@ -13,7 +13,7 @@
     mc:Ignorable="d" FontFamily="Global User Interface">
 
     <Page.BottomAppBar>
-        <CommandBar Background="#FF0071BB"  >
+        <CommandBar Background="#0071BB"  >
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="appBarNavigateButton" Label="Grid View" Icon="ViewAll" Click="appBarNavigateButton_Click"/>
                 <AppBarButton x:Name="setPositionButton" Label="Change Position" Icon="Pin"  Click="setPositionButton_Click"/>
@@ -89,7 +89,7 @@
             </bm:MapLayer>
             <!-- Infobox map Layer -->
             <bm:MapLayer>
-                <Border x:Name="Infobox" Background="#FF0071BB"  Margin="800, 50, 0,0" Visibility="Collapsed" BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="30,30,30,30" Height="500" Width="500">
+                <Border x:Name="Infobox" Background="#0071BB"  Margin="800, 50, 0,0" Visibility="Collapsed" BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="30,30,30,30" Height="500" Width="500">
                     <Grid   Height="499" Width="499" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="85"/>
