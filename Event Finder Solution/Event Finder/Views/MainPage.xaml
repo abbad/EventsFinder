@@ -111,7 +111,7 @@
                                 <ColumnDefinition Width="450"/>
                             </Grid.ColumnDefinitions>
                             <!-- first row  name close button-->
-                            <TextBlock  Text="{Binding name}" Grid.ColumnSpan="1" TextWrapping="Wrap"  FontSize="30"  HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" FontFamily="segoe UI light" Margin="0,0,10,0" />
+                            <TextBlock  Text="{Binding name}" Grid.ColumnSpan="1" TextWrapping="Wrap"  FontSize="30"  HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" FontFamily="segoe UI light" Margin="0,0,0,0" />
 
                             <!--CloseButton-->
                             <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseInfo" Height="32" RenderTransformOrigin="0.144,0.875" Margin="0,7,-42,0"/>
