@@ -99,20 +99,21 @@ namespace Event_Finder.Views
 
             PositionUserOnMap();
             
+            
+
+            await App.commonApiHandler.GettingEventsFinished.Task;
+            
             if (App.myEventsSelected)
             {
                 pushpinsItemsControl.ItemsSource = App.commonApiHandler.UserEvents;
                 myEventsButton.Label = "View All Events";
             }
-            else 
+            else
             {
                 pushpinsItemsControl.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
-               
-            }
 
-            await App.commonApiHandler.GettingEventsFinished.Task;
-            
+            }
             prog.IsIndeterminate = false;
             
         }
