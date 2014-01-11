@@ -6,17 +6,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:facebookControls="using:Facebook.Client.Controls"
-    mc:Ignorable="d" Background="#FF9E6868">
+    mc:Ignorable="d" Background="#0071BB">
     
     <Page.Resources>
 		
 	</Page.Resources>
-     
-    <Grid  Background="#FF0099CB">
+
+    <Grid  Background="#0071BB">
         <!--Progress Bar-->
         <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}"  />
 
-        <Image Source="ms-appx:///Assets/SplashScreen.scale-180.png" />
+        
+       <!-- <Image Source="ms-appx:///Assets/SplashScreen.scale-180.png" /> -->
 		<Grid >
 			<Grid.RowDefinitions>
 				<RowDefinition Height="350*"/>

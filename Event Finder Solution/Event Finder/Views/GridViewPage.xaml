@@ -8,7 +8,7 @@
     mc:Ignorable="d">
     <!--Bottom App BAR-->
     <Page.BottomAppBar>
-        <CommandBar Background="#FF0071BB">
+        <CommandBar Background="#0071BB">
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="appBarNavigateButton" Label="View Events" Icon="Globe" Click="appBarNavigateButton_Click"/>
             </CommandBar.SecondaryCommands>
@@ -19,7 +19,7 @@
     </Page.BottomAppBar>
 
     <!--Grid Defintions-->
-    <Grid Background="#FF0071BB">
+    <Grid Background="#0071BB">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
