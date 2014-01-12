@@ -14,6 +14,28 @@
     class CommonApiHandler
     {
 
+        private static ObservableCollection<Event> _userEvents { get; set; }
+
+        public ObservableCollection<Event> UserEvents
+        {
+            get
+            {
+                return _userEvents;
+            }
+        }
+
+        // List of events queried for. 
+        private ObservableCollection<Event> _queriedEvents { get; set; }
+
+        public ObservableCollection<Event> QueriedEvents
+        {
+            get
+            {
+                return _queriedEvents;
+            }
+        }
+
+
         public ObservableCollection<Friend> friendList = new ObservableCollection<Friend>();
         
         // controller for facebook functions
@@ -21,7 +43,7 @@
         // controller for geolocation. 
         public LocationController lController;
         // application location
-        public TaskCompletionSource<bool> GettingEventsFinished = new TaskCompletionSource<bool>();
+        public TaskCompletionSource<bool> GettingEventsFinished;
        
 
         private String cityName = "";
@@ -39,8 +61,8 @@
 
         private void initializeCollections()
         {
-            App.AttendingCollection = new ObservableCollection<Event>();
-            App.ItemEventsList = new ObservableCollection<Event>();
+            _userEvents = new ObservableCollection<Event>();
+            _queriedEvents = new ObservableCollection<Event>();
         }
 
         async public Task<String> QueryForUserEvents()
@@ -66,7 +88,6 @@
         /// <param name="myPosition"></param>
         async public Task<String> QueryForEventsWithinAnArea(double offset, double startRange, double endRange)
         {
-         
             List<Data> results;
             // get the city name from reverse geocodeing
             try
@@ -119,7 +140,7 @@
             
             for (i = 0; i < fr.data.Count; i++)
             {
-                friendList.Add(fr.data[0]);
+                friendList.Add(fr.data[i]);
             }
             
         }
@@ -131,18 +152,46 @@
             {
                 foreach (var itemEvent in result.data)
                 {
+                    if (itemEvent.venue != null) { 
 
                     if (CheckEventForLatitudeAndLongitude(itemEvent))
                     {
+                        if (CheckEventForVenueName(itemEvent))
+                        {
+                            itemEvent.venueName = itemEvent.venue["name"];
+                        }
+                        else 
+                        {
+                            itemEvent.venueName = "Unknown";
+                        }
+                        if (itemEvent.start_time != null){itemEvent.startTimeObject = DateTime.Parse(itemEvent.start_time);}
+                        if (itemEvent.end_time != null) { itemEvent.endTimeObject = DateTime.Parse(itemEvent.end_time); }
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
-                        // fill it in item lsit of events
-                        App.ItemEventsList.Add(itemEvent);
+
+                        // check for the events with the same title. 
+                        if (!_queriedEvents.Any(p => p.name.Contains(itemEvent.name)))
+                        {
+                            // if two events are having the same cordinates make them differ in location so they can show up on map. 
+                            if (_queriedEvents.Any(p => p.Location.Longitude == itemEvent.Location.Longitude &&
+                                                                p.Location.Latitude == itemEvent.Location.Latitude)) 
+                            {
+                                itemEvent.Location.Longitude += new Random().NextDouble() * 0.001; 
+                                itemEvent.Location.Latitude += new Random().NextDouble() * 0.001; 
+                            }
+
+                            // fill it in item lsit of events
+                            _queriedEvents.Add(itemEvent);
+                        }
+                       
+                        
+                     
+                    }
+
                     }
                 }
 
             }
           
-
         }
 
         private bool CheckEventForLatitudeAndLongitude(Event Item) 
@@ -150,7 +199,11 @@
             return (Item.venue.ContainsKey("latitude") && Item.venue.ContainsKey("longitude"));
         }
 
-    
+        private bool CheckEventForVenueName(Event Item) 
+        {
+            return Item.venue.ContainsKey("name");
+        }
+
 
         private void FillAttendedEventsByUserInCollection(List<Data> attendedEvents)
         {
@@ -161,14 +214,30 @@
             {
                 foreach (var itemEvent in result.data)
                 {
+                    if (itemEvent.venue != null) { 
                     if (CheckEventForLatitudeAndLongitude(itemEvent))
                     {
+                        // check for venue name
+                        if (CheckEventForVenueName(itemEvent)) 
+                        {
+                            itemEvent.venueName = itemEvent.venue["name"];
+                        }
+                        else
+                        {
+                            itemEvent.venueName = "Unknown";
+                        }
+
+                        if (itemEvent.start_time != null) { itemEvent.startTimeObject = DateTime.Parse(itemEvent.start_time); }
+                        if (itemEvent.end_time != null) { itemEvent.endTimeObject = DateTime.Parse(itemEvent.end_time); }
+
                         // create the instance of location 
                         itemEvent.Location = new Location(Convert.ToDouble(itemEvent.venue["latitude"]), Convert.ToDouble(itemEvent.venue["longitude"]));
 
+                      
                         // fill it in the item list of users event.
-                        App.AttendingCollection.Add(itemEvent);
+                        _userEvents.Add(itemEvent);
 
+                    }
                     }
                 }
             }

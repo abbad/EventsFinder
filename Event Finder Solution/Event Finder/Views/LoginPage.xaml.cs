@@ -1,6 +1,8 @@
 ﻿using Bing.Maps;
 using Event_Finder.ViewModel;
+using Facebook;
 using Facebook.Client;
+using Facebook.Client.Controls;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -21,89 +23,156 @@ namespace Event_Finder.Views
     /// </summary>
     public sealed partial class LoginPage : Page
     {
-        private FacebookSession session;
+        
         public LoginPage()
         {
             this.InitializeComponent();
+            loginButton.Permissions = ViewModel.Constants.Permissions;
+            
         }
-        private async Task<bool> Authenticate()
-        {
-            String errorMessage = "";
-            Boolean errorOccured = false;
-            MessageDialog dialog = new MessageDialog("");
-            string message = String.Empty;
-            try
-            {
-                session = await App.FacebookSessionClient.LoginAsync("user_about_me, read_stream, user_events, user_friends, friends_events, rsvp_event");
-                App.AccessToken = session.AccessToken;
-                App.FacebookId = session.FacebookId;
-            }
-            catch (InvalidOperationException e)
-            {
-                errorMessage = "Login failed! Exception details:" + e.Message;
-               
-                btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                errorOccured = true;
-            } if (errorOccured) 
-            {
-                dialog.Content = errorMessage;
-                try
-                {
-                    await dialog.ShowAsync();
-                    return false;
-                }
-                catch (Exception) { }
-            }
-
-            return false;
-        }
-
-        async private void btnFacebookLogin_Click(object sender, RoutedEventArgs e)
-        {
-          
-            bool error = false ;
-            if (!App.isAuthenticated)
-            {
-                try
-                {
-                    btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
-                    error = await Authenticate();
-                    App.isAuthenticated = error;
-                    if (!error)
-                    { 
-                        Frame.Navigate(typeof(MainPage));
-                    }
-                }
-                catch (Exception ) 
-                {
-                    App.isAuthenticated = false;
-                    btnFacebookLogin.Visibility = Windows.UI.Xaml.Visibility.Visible;
-                
-                }
-            }
-        }
-
+ 
         async protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            showMessageIfNoInternet();
+            App.commonApiHandler.GettingEventsFinished = new TaskCompletionSource<bool>();
+            App.GettingPositionFinished = new TaskCompletionSource<bool>();
             base.OnNavigatedFrom(e);
-
-            App.myPosition = await App.commonApiHandler.lController.GetCurrentLocation();
+            App.commonApiHandler.QueriedEvents.Clear();
+            App.commonApiHandler.UserEvents.Clear();
+            try
+            {
+                App.myPosition = await App.commonApiHandler.lController.GetCurrentLocation();
+                App.ErrorOccuredFinished.TrySetResult(false);
+            }
+            catch (System.UnauthorizedAccessException) { App.errorOccured = true; 
+                                                            App.errorMessage = "Could not find your location. Please set your location on the map using app bar.";
+                                                            App.ErrorOccuredFinished.TrySetResult(true);
+                                                            return; }
+            catch (System.Exception) { App.errorOccured = true; 
+                                                    App.errorMessage = "Could not find your location. Please set your location on the map using app bar.";
+                                                    App.ErrorOccuredFinished.TrySetResult(true);   
+                                                    return; }
             App.myLocation = new Location(App.myPosition.Coordinate.Point.Position.Latitude, App.myPosition.Coordinate.Point.Position.Longitude);
-            App.GettingPositionFinished.SetResult(true);
-            // get list of atteneded events by user.
+            App.GettingPositionFinished.TrySetResult(true);
+            
+            // get list of atteneded events by user.by 
             String error = await App.commonApiHandler.QueryForUserEvents();
 
             // QueryForEventsWithinAnArea
-            error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
-                DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
-
+            try
+            {
+                error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
+                    DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
+            }catch(Facebook.WebExceptionWrapper exception) { error = exception.Data.ToString(); }
+            
             if (error != null)
             {
                 App.errorOccured = true;
                 App.errorMessage = error;
+                App.ErrorOccuredFinished.TrySetResult(true);
             }
-           
 
         }
+
+        private void loginButton_SessionStateChanged(object sender, Facebook.Client.Controls.SessionStateChangedEventArgs e)
+        {
+            Facebook.Client.Controls.LoginButton x = (Facebook.Client.Controls.LoginButton)sender;
+            if (e.SessionState == Facebook.Client.Controls.FacebookSessionState.Opened) {
+                App.CurrentSession = x.CurrentSession;
+                App.AccessToken = x.CurrentSession.AccessToken;
+                App.FacebookId = x.CurrentSession.FacebookId;
+                App.CurrentUser = x.CurrentUser;
+                App.isAuthenticated = true;
+                Frame.Navigate(typeof(MainPage));
+
+            }
+            else if (e.SessionState == Facebook.Client.Controls.FacebookSessionState.Closed)
+            {
+                App.CurrentSession = null;
+
+                // The control signals when user info is set (handled in OnUserInfoChanged below), but not when it
+                // is cleared (probably a bug), so we clear our reference here when the session ends.
+                App.CurrentUser = null;
+            }
+        }
+
+       async private void showMessageIfNoInternet()
+        {
+            while (!App.IsInternet())
+            {
+                MessageDialog msg = new MessageDialog("Please check your internet connection");
+                msg.Commands.Add(new UICommand("Retry", (uiCommand) => { }));
+                msg.CancelCommandIndex = 1;
+                try
+                {
+                    await msg.ShowAsync();
+
+                }
+                catch (Exception) { }
+            }
+        }
+
+        async protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            prog.IsIndeterminate = true;
+            showMessageIfNoInternet();
+            base.OnNavigatedTo(e);
+       
+            this.loginButton.ApplicationId = Constants.FacebookAppId;
+
+            App.CurrentSession = FacebookSessionCacheProvider.Current.GetSessionData();
+            if ((App.CurrentSession != null) && (App.CurrentSession.Expires <= DateTime.UtcNow))
+            {
+                // User was previously logged in, but session expired.  Log them in again...
+                App.CurrentSession = await App.FacebookSessionClient.LoginAsync(Constants.Permissions);
+                App.isAuthenticated = true;
+            }
+
+            if (App.CurrentSession != null)
+            {
+                App.isAuthenticated = true;
+                this.loginButton.SetValue(LoginButton.CurrentSessionProperty, App.CurrentSession);
+                if (App.CurrentUser == null)
+                {
+                    FacebookClient client = new FacebookClient(App.CurrentSession.AccessToken);
+                    try
+                    {
+                        App.CurrentUser = new GraphUser(await client.GetTaskAsync("me"));
+                    }
+                    catch (Facebook.WebExceptionWrapper) { App.errorOccured = true; }
+                    if (App.errorOccured) 
+                    {
+                        MessageDialog msg = new MessageDialog("Please check your internet connection");
+                        msg.Commands.Add(new UICommand("Retry", (uiCommand) => { }));
+                        msg.CancelCommandIndex = 1;
+                        try
+                        {
+                            await msg.ShowAsync();
+                            App.errorOccured = false ;
+                            OnNavigatedTo(e);
+                        }
+                        catch (Exception) {  }
+                    }
+                    
+                }
+              
+                App.AccessToken = App.CurrentSession.AccessToken;
+                App.FacebookId = App.CurrentSession.FacebookId;
+            }
+           
+            if (App.CurrentUser != null)
+            {
+                App.isAuthenticated = true;
+                this.loginButton.SetValue(LoginButton.CurrentUserProperty, App.CurrentUser);
+            }
+
+            if (App.isAuthenticated) 
+            {
+                Frame.Navigate(typeof(MainPage));
+            }
+
+            prog.IsIndeterminate = false;
+        }
+    
     }
 }

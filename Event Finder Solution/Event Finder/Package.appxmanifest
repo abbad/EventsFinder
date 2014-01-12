@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="c3d99ef9-3c56-48f4-9b1c-a465e201e2b1" Publisher="CN=abbad" Version="1.0.0.1" />
+  <Identity Name="30301Abbad.EventsFinder" Publisher="CN=D5C0DD53-135A-496C-A64A-AC530F65410B" Version="1.1.0.0" />
   <Properties>
-    <DisplayName>Event Finder</DisplayName>
-    <PublisherDisplayName>abbad</PublisherDisplayName>
+    <DisplayName>Events Finder</DisplayName>
+    <PublisherDisplayName>Abbad</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>
@@ -15,11 +15,17 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Event_Finder.App">
-      <m2:VisualElements DisplayName="Event Finder" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Event Finder" ForegroundText="light" BackgroundColor="#464646">
-        <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#2d64f5" />
+      <m2:VisualElements DisplayName="Events Finder" Square150x150Logo="Assets\Square150x150Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="An application that will find events from Facebook. First login to facebook and then it will get events depending on your location. You will see a description, start time, end time and friends going to the event. You can select your RSVP status: Going, Maybe, Decline. The application has two ways for viewing the events, map and menu based. Perhaps you want to check for events in another city. All you have to do is to select &quot;change location&quot; from the app bar and double tap on the map." ForegroundText="light" BackgroundColor="#0071BB" ToastCapable="false">
+        <m2:DefaultTile Square310x310Logo="Assets\square310.png" Wide310x150Logo="Assets\rect310-150.png" Square70x70Logo="Assets\storelogo-70.png">
+          <m2:ShowNameOnTiles>
+            <m2:ShowOn Tile="square150x150Logo" />
+            <m2:ShowOn Tile="wide310x150Logo" />
+            <m2:ShowOn Tile="square310x310Logo" />
+          </m2:ShowNameOnTiles>
+        </m2:DefaultTile>
+        <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#0071BB" />
         <m2:InitialRotationPreference>
           <m2:Rotation Preference="landscape" />
-          <m2:Rotation Preference="landscapeFlipped" />
         </m2:InitialRotationPreference>
       </m2:VisualElements>
     </Application>

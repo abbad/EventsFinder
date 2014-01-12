@@ -16,6 +16,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Networking.Connectivity;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,7 +34,15 @@ namespace Event_Finder
     /// </summary>
     sealed partial class App : Application
     {
-        internal static TaskCompletionSource<bool> GettingPositionFinished = new TaskCompletionSource<bool>();
+        public static Windows.Storage.ApplicationDataContainer localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+        
+        Windows.Storage.StorageFolder localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
+        internal static GraphUser CurrentUser;
+        internal static FacebookSession CurrentSession;
+
+        internal static TaskCompletionSource<bool> GettingPositionFinished = new TaskCompletionSource<bool>(); 
+        // checking for error Occured value
+        internal static TaskCompletionSource<bool> ErrorOccuredFinished = new TaskCompletionSource<bool>();
             
         internal static Geoposition myPosition;
         internal static string AccessToken = String.Empty;
@@ -61,29 +70,9 @@ namespace Event_Finder
             get { return myLocation; }
         }
 
+        internal static double zoomLevel = 10;
         // List of events attended by user.
-        internal static ObservableCollection<Event> AttendingCollection { get; set; }
-
-        public ObservableCollection<Event> attendingCollection
-        {
-            get
-            {
-                return AttendingCollection;
-            }
-        }
-
-        // List of events queried for. 
-        internal static ObservableCollection<Event> ItemEventsList { get; set; }
-
-        public  ObservableCollection<Event> itemEventsList
-        {
-            get
-            {
-                return ItemEventsList;
-            }
-        }
-
-
+        
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -102,7 +91,10 @@ namespace Event_Finder
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-
+            if (localSettings.Values.ContainsKey("offset"))
+            {
+                offset = Convert.ToDouble(localSettings.Values["offset"]);
+            }
 #if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
@@ -125,7 +117,7 @@ namespace Event_Finder
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
-                    //TODO: Load state from previously suspended application
+                    
                 }
 
                 // Place the frame in the current Window
@@ -162,9 +154,20 @@ namespace Event_Finder
         /// <param name="e">Details about the suspend request.</param>
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
-            var deferral = e.SuspendingOperation.GetDeferral();
+            localSettings.Values["offset"] = offset.ToString();
             //TODO: Save application state and stop any background activity
+            var deferral = e.SuspendingOperation.GetDeferral();
+            
+           
             deferral.Complete();
+        }
+
+    
+        public static bool IsInternet()
+        {
+            ConnectionProfile connections = NetworkInformation.GetInternetConnectionProfile();
+            bool internet = connections != null && connections.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess;
+            return internet;
         }
     }
 }

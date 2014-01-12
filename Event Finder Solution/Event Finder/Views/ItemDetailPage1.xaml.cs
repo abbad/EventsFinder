@@ -60,7 +60,25 @@ namespace Event_Finder.Views
 
         async void ItemDetailPage1_Loaded(object sender, RoutedEventArgs e)
         {
-            FriendRoot vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
+            bool error = false; 
+            progBar.IsIndeterminate = true;
+            App.commonApiHandler.friendList.Clear();
+            FriendRoot vsx= null;
+            try
+            {
+              vsx = await App.commonApiHandler.facebookApi.GetFriendsAttendingEvent(selectedEvent.eid);
+            }
+            catch (Facebook.WebExceptionWrapper){error = true;}
+            if (error) 
+            {
+                try {
+                    MessageDialog msg = new MessageDialog("Connection Lost");
+                    await msg.ShowAsync();
+                    return;
+                }catch(Exception){}
+            
+            }
+            
             App.commonApiHandler.FillFriendsAttendingCollection(vsx);
             attendFr.ItemsSource = App.commonApiHandler.friendList;
 
@@ -77,6 +95,8 @@ namespace Event_Finder.Views
                 // enable all buttons.
                 SetButtonToStatus(null);
             }
+
+            progBar.IsIndeterminate = false;
         }
 
         /// <summary>
@@ -98,8 +118,6 @@ namespace Event_Finder.Views
                 navigationParameter = (Event)e.PageState["SelectedItem"];
                  
             }
-            /*
-           */
            
             // TODO: Assign a bindable group to this.DefaultViewModel["Group"]
             // TODO: Assign a collection of bindable items to this.DefaultViewModel["Items"]
@@ -110,7 +128,6 @@ namespace Event_Finder.Views
 
         private void SetButtonToStatus(RSVP rsvp)
         {
-
             if (rsvp != null)
             {
                 if (rsvp.rsvp_status == "attending")
@@ -144,6 +161,8 @@ namespace Event_Finder.Views
 
         async private void AttendButton_Click(object sender, RoutedEventArgs e)
         {
+            progBar.IsIndeterminate = true;
+
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -152,9 +171,9 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "attending" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else
@@ -162,10 +181,14 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
+
+            progBar.IsIndeterminate = false;
         }
 
         async private void MaybeButton_Click(object sender, RoutedEventArgs e)
         {
+            progBar.IsIndeterminate = true;
+
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
             bool maybe = false;
@@ -177,9 +200,9 @@ namespace Event_Finder.Views
 
                 SetButtonToStatus(new RSVP { rsvp_status = "unsure" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else
@@ -188,10 +211,14 @@ namespace Event_Finder.Views
                 await dialog.ShowAsync();
             }
 
+            progBar.IsIndeterminate = false;
+
         }
 
         async private void DeclineButton_Click(object sender, RoutedEventArgs e)
         {
+            progBar.IsIndeterminate = true;
+
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -201,9 +228,9 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "declined" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else
@@ -211,6 +238,8 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
+
+            progBar.IsIndeterminate = false;
 
         }
 

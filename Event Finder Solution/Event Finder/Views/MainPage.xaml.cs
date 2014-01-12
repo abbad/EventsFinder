@@ -39,7 +39,7 @@ namespace Event_Finder.Views
         MessageDialog dialog = new MessageDialog("Could not get city name!");
         private void addInitialChildrenToMap()
         {
-            MainMap.Children.Add(_locationIcon100m);  
+            PushPinMapLayer.Children.Add(_locationIcon100m);  
         }
 
         private void setInitialItemsToCollapsed() 
@@ -52,8 +52,10 @@ namespace Event_Finder.Views
        
             _locationIcon100m = new LocationIcon100m();
             setInitialItemsToCollapsed();
+            
             addInitialChildrenToMap();
-            endRangeDateTimePicker.Date = DateTime.Today.AddDays(5);
+            endRangeDateTimePicker.Date = App.endRange;
+            startRangeDateTimePicker.Date = App.startRange;
             DataContext = this;
             
             dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
@@ -65,17 +67,20 @@ namespace Event_Finder.Views
         async private void PositionUserOnMap() 
         {   
             // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
-            double zoomLevel = 13.0f;
-            await App.GettingPositionFinished.Task; 
+           
+            await App.GettingPositionFinished.Task;
+            //PushPinMapLayer.
+            //MapLayer.
             MapLayer.SetPosition(_locationIcon100m, App.myLocation);
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 
-            MainMap.SetView(App.myLocation, zoomLevel);
+            MainMap.SetView(App.myLocation, App.zoomLevel);
         }
 
-        async private void OnLoad(object sender, RoutedEventArgs e)
+        async private void map_loaded(object sender, RoutedEventArgs e)
         {
-
+            prog.IsIndeterminate = true;
+            await App.ErrorOccuredFinished.Task;
             // check if error happend before.
             if (App.errorOccured) 
             {
@@ -83,32 +88,40 @@ namespace Event_Finder.Views
                 {
                     dialog.Content = App.errorMessage;
                     await dialog.ShowAsync();
+                    App.errorOccured = false;
+                    App.GettingPositionFinished.TrySetResult(true);
+                    prog.IsIndeterminate = false;
+                    return;
                 }
                 catch (Exception){ }
+               
             }
 
-            prog.IsIndeterminate = true;
             PositionUserOnMap();
+            
+            
+
+            await App.commonApiHandler.GettingEventsFinished.Task;
             
             if (App.myEventsSelected)
             {
-                pushpinsItemsControl.ItemsSource = App.AttendingCollection;
+                pushpinsItemsControl.ItemsSource = App.commonApiHandler.UserEvents;
                 myEventsButton.Label = "View All Events";
             }
-            else 
+            else
             {
-                pushpinsItemsControl.ItemsSource = App.ItemEventsList;
+                pushpinsItemsControl.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
+
             }
-            await App.commonApiHandler.GettingEventsFinished.Task;
             prog.IsIndeterminate = false;
             
         }
 
         private void clearAllCollections() 
         {
-            App.AttendingCollection.Clear();
-            App.ItemEventsList.Clear();
+            App.commonApiHandler.UserEvents.Clear();
+            App.commonApiHandler.QueriedEvents.Clear();
         }
         
         async private void DatePicker_DateChanged(object sender, DatePickerValueChangedEventArgs e)
@@ -150,7 +163,9 @@ namespace Event_Finder.Views
 
         async private void LoadInfoBox(Event selectedEvent) 
         {
-            MainMap.SetView(selectedEvent.Location, 15.0f);
+
+            InfoBoxProgressBar.IsEnabled = true;
+            MainMap.SetView(selectedEvent.Location, MainMap.ZoomLevel);
             App.commonApiHandler.friendList.Clear();
             // see RSVP status of event.
             try
@@ -165,7 +180,7 @@ namespace Event_Finder.Views
                     // enable all buttons.
                     SetButtonToStatus(null);
                 }
-                // git list of friends.
+                
             }
             catch (System.Threading.Tasks.TaskCanceledException){ App.errorOccured = true;}
             catch (Facebook.WebExceptionWrapper) { App.errorOccured = true; }
@@ -197,11 +212,13 @@ namespace Event_Finder.Views
             {
                 Infobox.Visibility = Visibility.Collapsed;
             }
-            
+            InfoBoxProgressBar.IsEnabled = false;
+            MainMap.IsEnabled = true;
         }
 
-        private void CloseInfobox_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void CloseInfo(object sender, RoutedEventArgs e)
         {
+           
             Infobox.Visibility = Visibility.Collapsed;
         }
 
@@ -234,10 +251,13 @@ namespace Event_Finder.Views
                 AttendButton.IsEnabled = true;
                 MaybeButton.IsEnabled = true;
             }
+
+            
         }
 
         async private void AttendButton_Click(object sender, RoutedEventArgs e)
         {
+            InfoBoxProgressBar.IsIndeterminate = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -246,19 +266,21 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "attending" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }else
             {
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
+            InfoBoxProgressBar.IsIndeterminate = false;
         }
 
         async private void MaybeButton_Click(object sender, RoutedEventArgs e)
         {
+            InfoBoxProgressBar.IsIndeterminate = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
             bool maybe = false;
@@ -270,9 +292,9 @@ namespace Event_Finder.Views
 
                 SetButtonToStatus(new RSVP { rsvp_status = "unsure" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else 
@@ -280,11 +302,12 @@ namespace Event_Finder.Views
                 dialog.Content = "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-
+            InfoBoxProgressBar.IsIndeterminate = false;
         }
 
         async private void DeclineButton_Click(object sender, RoutedEventArgs e)
         {
+            InfoBoxProgressBar.IsIndeterminate = true;
             Button btn = (Button)sender;
             Event selectedEvent = (Event)btn.DataContext;
 
@@ -294,9 +317,9 @@ namespace Event_Finder.Views
             {
                 SetButtonToStatus(new RSVP { rsvp_status = "declined" });
                 // check if the event is in the list of the attended events.
-                if (!App.AttendingCollection.Contains(selectedEvent))
+                if (!App.commonApiHandler.UserEvents.Contains(selectedEvent))
                 {
-                    App.AttendingCollection.Add(selectedEvent);
+                    App.commonApiHandler.UserEvents.Add(selectedEvent);
                 }
             }
             else
@@ -304,12 +327,12 @@ namespace Event_Finder.Views
                 dialog.Content= "Could not RSVP for Event";
                 await dialog.ShowAsync();
             }
-
+            InfoBoxProgressBar.IsIndeterminate = false;
         }
 
-      
         private void appBarNavigateButton_Click(object sender, RoutedEventArgs e)
         {
+            App.zoomLevel = MainMap.ZoomLevel;
             Frame.Navigate(typeof(GridViewPage));
         }
 
@@ -321,14 +344,20 @@ namespace Event_Finder.Views
             {
                 myEventsButton.Label = "View All Events";
 
-                pushpinsItemsControl.ItemsSource = App.AttendingCollection;
+                pushpinsItemsControl.ItemsSource = App.commonApiHandler.UserEvents;
                 App.myEventsSelected = true;
+                if (App.commonApiHandler.UserEvents.Count != 0) { 
+                    MainMap.SetView(App.commonApiHandler.UserEvents[0].Location);
+                }
             }
             else 
             {
-                pushpinsItemsControl.ItemsSource = App.ItemEventsList;
+                pushpinsItemsControl.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
                 App.myEventsSelected = false;
+                if (App.commonApiHandler.QueriedEvents.Count != 0) { 
+                    MainMap.SetView(App.commonApiHandler.QueriedEvents[0].Location);
+                }
             }
             
         }
@@ -341,9 +370,9 @@ namespace Event_Finder.Views
 
         async void MainMap_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-           
+            
             if (x) {
-                App.ItemEventsList.Clear();
+                App.commonApiHandler.QueriedEvents.Clear();
                 x = false;
                 prog.IsIndeterminate = true;
                 setPositionButton.IsEnabled = true;
@@ -374,9 +403,10 @@ namespace Event_Finder.Views
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
-            Infobox.Visibility = Visibility.Collapsed;
+            App.zoomLevel = MainMap.ZoomLevel; 
+            Frame.Navigate(typeof(Settings));
         }
 
     }

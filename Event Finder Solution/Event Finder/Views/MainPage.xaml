@@ -13,32 +13,34 @@
     mc:Ignorable="d" FontFamily="Global User Interface">
 
     <Page.BottomAppBar>
-        <CommandBar>
+        <CommandBar Background="#0071BB"  >
             <CommandBar.SecondaryCommands>
                 <AppBarButton x:Name="appBarNavigateButton" Label="Grid View" Icon="ViewAll" Click="appBarNavigateButton_Click"/>
                 <AppBarButton x:Name="setPositionButton" Label="Change Position" Icon="Pin"  Click="setPositionButton_Click"/>
+                <AppBarButton x:Name="myEventsButton" Label="My Events" Icon="Bookmarks"  Click="myEventsButton_Click"/>
             </CommandBar.SecondaryCommands>
             <CommandBar.PrimaryCommands>
-                <AppBarButton x:Name="myEventsButton" Label="My Events" Icon="Bookmarks"  Click="myEventsButton_Click"/>
+                <AppBarButton x:Name="SettingsButton" Label="Settings" Icon="Setting"  Click="SettingsButton_Click"/>
             </CommandBar.PrimaryCommands>
         </CommandBar>
     </Page.BottomAppBar>
     <Page.Resources>
+
+
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <model:Event x:Key="Event" />
-
+            <viewModel:DateConverter x:Key="Convert" />
 
             <ControlTemplate x:Key="PushPinStyle">
                 <UserControl  Height="150"  Width="150"  >
-
-                    <Border Height="130" Width="130" >
+                    <Border Height="111" Width="111" >
                         <Border.Background>
                             <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Icons/pushpinleft.png"/>
                         </Border.Background>
-                        <Border Width="108.1" Height="106" Margin="0,0,-3,5"  CornerRadius="48" BorderThickness="7"  >
+                        <Border Width="110" Height="110" Margin="0,0,-3,5"  CornerRadius="48" BorderThickness="7"  >
                             <Border.Background>
                                 <ImageBrush ImageSource="{Binding pic_big}"/>
                             </Border.Background>
@@ -47,176 +49,160 @@
                 </UserControl>
             </ControlTemplate>
             <DataTemplate x:Key="PushPinTemplate">
-                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}" Margin="0,0,100,120"  Height="150" Width="150"  Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
+                <bm:Pushpin  bm:MapLayer.Position="{Binding Location}"  Margin="0,0,100,120" Height="150" Width="150"  Template="{StaticResource PushPinStyle}" PointerPressed="Pushpin_PointerPressed" >
+                    <ToolTipService.ToolTip>
+                        <ToolTip>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="{Binding name}" />
+                          <!--      <TextBlock Text="{Binding Description}" TextWrapping="Wrap" /> -->
+                            </StackPanel>
+                        </ToolTip>
+                    </ToolTipService.ToolTip>
+
                 </bm:Pushpin>
             </DataTemplate>
         </ResourceDictionary>
     </Page.Resources>
 
 
-    <Grid x:Name="MainGrid" Background="#FF0071BB">
+    <Grid x:Name="MainGrid" Background="#0071BB">
         <Grid.RowDefinitions>
-            <RowDefinition Height="72*"/>
-            <RowDefinition Height="72*"/>
-            <RowDefinition Height="624*" />
-
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="29*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
 
-        </Grid.ColumnDefinitions>
+        <Image Source="/Assets/SmallLogo.scale-180.png" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Margin="6,0,0,0" />
 
 
-        <!-- row 0 logo, name, search, toggle buttons -->
-        <TextBlock Text="EVENT FINDER" Grid.Row="0" FontSize="50" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Margin="0,6" Width="324"  />
+        <Image Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill" Margin="589,10,589,633"/>
 
-        <!-- row 1 Categories, Event labels  -->
-        <Image Grid.Row="1" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"    Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill"/>
-
-      
-        
-        <Border Grid.Row="2" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="100,537,976,87" Width="0"/>
+        <Border Grid.Row="1" Grid.Column="0" Background="#0071BB" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="245,609,1121,87" Width="0"/>
         <!--Progress Bar-->
         <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}"  />
 
+        <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  PointerPressedOverride="MainMap_PointerPressed"  x:Name="MainMap" Loaded="map_loaded" Grid.Row="1">
 
-        <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  PointerPressedOverride="MainMap_PointerPressed"  x:Name="MainMap" Loaded="OnLoad" Grid.RowSpan="2" Grid.Row="2">
-
-            <!-- <ProgressBar x:Name="prog" Height="200" Width="200" Margin="590,210,0,0" Foreground="#FF0025BB"  IsIndeterminate="True" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
             <!-- list of pushpins maplayer -->
             <bm:MapLayer x:Name="PushPinMapLayer">
-                <bm:MapItemsControl x:Name="pushpinsItemsControl"  ItemTemplate="{StaticResource PushPinTemplate}" Margin="0,-120,0,0" >
+                <bm:MapItemsControl x:Name="pushpinsItemsControl"  ItemTemplate="{StaticResource PushPinTemplate}" Margin="0,-120,0,0">
                 </bm:MapItemsControl>
             </bm:MapLayer>
             <!-- Infobox map Layer -->
-            <bm:MapLayer Margin="100,100,0,0">
-                <Grid x:Name="Infobox" Visibility="Collapsed" Background="#FF0071BB" Height="500" Width="500">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="100"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="100"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="130"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="130"/>
-                    </Grid.ColumnDefinitions>
-                    <!--pic-->
-                    <Image Source="{Binding pic_big}" Height="100" Width="100"/>
-                    <!--Event Name-->
-                    <Border Background="#FF3C3838" Grid.Column="1" Grid.ColumnSpan="2">
-                        <TextBlock Text="{Binding name}" MaxHeight="60" MaxWidth="240" TextWrapping="Wrap" FontSize="30"  HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="Aharoni" />
-                    </Border>
-
-                    <!--CloseButton-->
-                    <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45"  FontSize="10" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Button_Click"/>
-
-                    <!--RSPV left-->
-            <StackPanel Background="#FF262323"  Grid.Row="3">
-                
-                <TextBlock Text="RSPV" Height="100" VerticalAlignment="Center" Padding="0,35,0,0" HorizontalAlignment="Center" FontSize="25"/>
-            </StackPanel>
-                    
-                    <!--Lefy square Elements-->
-                    <Grid Grid.Row="1">
+            <bm:MapLayer>
+                <Border x:Name="Infobox" Background="#0071BB"  Margin="800, 50, 0,0" Visibility="Collapsed" BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="30,30,30,30" Height="500" Width="500">
+                    <Grid   Height="499" Width="499" >
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="100"/>
-                            <RowDefinition Height="100"/>
-                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="85"/>
+                            <RowDefinition Height="85"/>
+                            <RowDefinition Height="85"/>
+                            <RowDefinition Height="85"/>
+                            <RowDefinition Height="85"/>
+                            <RowDefinition Height="72"/>
                         </Grid.RowDefinitions>
-                        <!--first left Gray Box-->
-                        <StackPanel Grid.Row="0"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
-                            <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" Margin="0,15,0,0"  />
-                            <TextBlock Text="27/12/2013" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
-                            <TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
-                        </StackPanel>
 
-
-                        <StackPanel Grid.Row="1"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
-                            <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" Margin="0,15,0,0"  />
-                            <TextBlock Text="27/12/2013" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" />
-                            <TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="2"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="130" Background="#FF3C3838" >
-                            <TextBlock Text="Location"   HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="20" Margin="0,10,0,0" />
-                            <TextBlock Text="Friday" MaxHeight="70" TextWrapping="Wrap" MaxWidth="120" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily="Aharoni" FontSize="25" />
-                        </StackPanel>
-                    </Grid>
-
-                    <!--buttons on the bottom-->
-                    <Grid Grid.Row="2" Grid.Column="1">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
-                        <Border Background="#FF3C3838" Grid.ColumnSpan="3"/>
-                        <Button x:Name="AttendButton" Style="{StaticResource DetButton}" Content="ATTEND" Height="100" FontSize="12.5" FontFamily="Aharoni" Click="AttendButton_Click" />
-                        <Button x:Name="DeclineButton" Style="{StaticResource DetButton}" Content="MAYBE" Height="100" FontSize="12.6" Grid.Column="1" FontFamily="Aharoni" Click="MaybeButton_Click" />
-                        <Button x:Name="MaybeButton" Style="{StaticResource DetButton}" Content="DECLINE" Height="100" FontSize="11.68" Grid.Column="2" FontFamily="Aharoni" Click="DeclineButton_Click"/>
 
-                    </Grid>
+                        <Grid Grid.Column="0" Grid.ColumnSpan="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="450"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- first row  name close button-->
+                            <TextBlock  Text="{Binding name}" Grid.ColumnSpan="1" TextWrapping="Wrap"  FontSize="30"  HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" FontFamily="segoe UI light" Margin="0,0,0,0" />
 
-                    <!--Description-->
-                    <Grid Grid.Column="1" Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="60"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                            <!--CloseButton-->
+                            <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseInfo" Height="32" RenderTransformOrigin="0.144,0.875" Margin="0,7,-42,0"/>
+                            <ProgressBar x:Name="InfoBoxProgressBar" Grid.Column="1"    HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" Foreground="Black" Background="Transparent"  Height="10" MinHeight="8" FontSize="14" Width="Auto" />
+                        </Grid>
+                        <!-- second row pic-->
+                        <Image Grid.Column="0" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{Binding pic_big}" />
+                        <StackPanel Grid.Row="2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                            <TextBlock Text="Start Date"  HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="segoe UI light" FontSize="15"  />
+                            <TextBlock Text="{Binding startTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="segoe UI light" FontSize="20" />
+                        </StackPanel>
 
-                        <Border Background="#FF262323" Grid.RowSpan="2"  />
-                        <TextBlock Text=" DESCRIPTION:" Grid.Row="0"  VerticalAlignment="Center"  FontSize="25" FontFamily="Aharoni"/>
-                        <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled">
-                            <TextBlock TextWrapping="Wrap" Width="210"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="15" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}" FontFamily="Aharoni"/>
-                        </ScrollViewer>
 
-                    </Grid>
+                        <StackPanel Grid.Row="3"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  >
+                            <TextBlock Text="End Date"   HorizontalAlignment="Center" FontFamily="segoe UI light " FontSize="15"  />
+                            <TextBlock Text="{Binding endTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily="segoe UI light " FontSize="20" />
+                        </StackPanel>
 
-                    <!--friends-->
-                    <TextBlock  Text="Friends Going" HorizontalAlignment="Center" Grid.Column="2"  VerticalAlignment="Center"  FontSize="14"/>
-                    <Border Background="#FF3C3838" Grid.Row="1" Grid.Column="2" />
-                    <GridView 
-                              x:Name="attendFr" 
-                              Width="120"  
-                              ScrollViewer.HorizontalScrollMode="Disabled"
-                              ScrollViewer.VerticalScrollMode="Enabled"
-                              Grid.Row="1" 
+                        <StackPanel Grid.Row="4"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+                            <TextBlock Text="Venue Name" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontFamily="segoe UI light " FontSize="17" />
+                            <TextBlock Text="{Binding venueName}" MaxHeight="70" TextWrapping="Wrap" MaxWidth="120"  HorizontalAlignment="Center" FontFamily="segoe UI light " FontSize="20" />
+                        </StackPanel>
+
+                        <!--RSPV left-->
+                        <TextBlock Text="RSPV" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="25" />
+
+                        <!--buttons on the bottom-->
+                        <Grid Grid.Row="5" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.ColumnSpan="3"/>
+                            <Button x:Name="AttendButton"  Grid.Column="0" Content="Attend" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="12.5" FontFamily="segoe UI light "  Click="AttendButton_Click" />
+                            <Button x:Name="MaybeButton" Grid.Column="1"  Content="Maybe" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="12.5" FontFamily="segoe UI light" Click="MaybeButton_Click" />
+                            <Button x:Name="DeclineButton" Grid.Column="2" Content="Decline" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="12.5" FontFamily="segoe UI light" Click="DeclineButton_Click"/>
+                        </Grid>
+
+                        <!--Description-->
+                        <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="4">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="60"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Background="#0071BB" Grid.RowSpan="2"  />
+                            <TextBlock Text=" DESCRIPTION:" Grid.Row="0"  VerticalAlignment="Center"  FontSize="25" FontFamily="segoe UI light "/>
+                            <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled">
+                                <TextBlock TextWrapping="Wrap" Width="210"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="20" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}" FontFamily="segoe UI light "/>
+                            </ScrollViewer>
+                        </Grid>
+
+                        <!--friends-->
+                        <TextBlock  Text="Friends Going" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1"  FontSize="14"/>
+                        <Border  Grid.Row="2" Grid.Column="2" />
+                        <GridView x:Name="attendFr" ScrollViewer.HorizontalScrollMode="Disabled" ScrollViewer.VerticalScrollMode="Enabled"
+                              Grid.Row="1"
+                             Grid.RowSpan="5"
                               Grid.Column="2" 
-                              SelectionMode="None"
-                              >
-                        <GridView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapGrid MaximumRowsOrColumns="1" VerticalChildrenAlignment="Center"
+                              SelectionMode="None">
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapGrid MaximumRowsOrColumns="1" VerticalChildrenAlignment="Center"
 					  HorizontalChildrenAlignment="Center" Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </GridView.ItemsPanel>
-                        <GridView.ItemTemplate>
-                            <DataTemplate>
-                                <Border Height="80" Width="80" >
-                                    <Image Source="{Binding pic_big}" Width="80" Height="80"  Stretch="UniformToFill">
-                                        <ToolTipService.ToolTip>
-                                            <TextBlock>
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Height="80" Width="80" >
+                                        <Image Source="{Binding pic_big}" Width="80" Height="80"  Stretch="UniformToFill">
+                                            <ToolTipService.ToolTip>
+                                                <TextBlock>
                                                 <Run Text="{Binding first_name}"/>
                                                 <Run Text="{Binding last_name}"/>
-                                            </TextBlock>
-                                        </ToolTipService.ToolTip>
-                                    </Image>
-                                </Border>
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-                        
-                    </GridView>
-                </Grid>
+                                                </TextBlock>
+                                            </ToolTipService.ToolTip>
+                                        </Image>
+                                    </Border>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                    </Grid>
+                </Border>
             </bm:MapLayer>
         </bm:Map>
-        
+
         <!--Header and DatePickers-->
 
-        <DatePicker  Header="To" x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Right" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" Grid.Row="1" />
-        <DatePicker Header="From" x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Left" Margin="20,0,0,0" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" Grid.Row="1" />
-        <TextBlock Text="Date Range" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"  Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Grid.Row="1" />
-
+        <DatePicker  Header="To" x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Right" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" />
+        <DatePicker Header="From" x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Left" Margin="98,2,0,0" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" />
+        <TextBlock Text="Date Range" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"  Height="48" Width="218" RenderTransformOrigin="-0.699,0.51" Margin="575,18,573,6" />
 
     </Grid>
 
