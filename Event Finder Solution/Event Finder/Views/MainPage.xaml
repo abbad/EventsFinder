@@ -36,11 +36,11 @@
 
             <ControlTemplate x:Key="PushPinStyle">
                 <UserControl  Height="150"  Width="150"  >
-                    <Border Height="130" Width="130" >
+                    <Border Height="111" Width="111" >
                         <Border.Background>
                             <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Icons/pushpinleft.png"/>
                         </Border.Background>
-                        <Border Width="108.1" Height="106" Margin="0,0,-3,5"  CornerRadius="48" BorderThickness="7"  >
+                        <Border Width="110" Height="110" Margin="0,0,-3,5"  CornerRadius="48" BorderThickness="7"  >
                             <Border.Background>
                                 <ImageBrush ImageSource="{Binding pic_big}"/>
                             </Border.Background>
@@ -65,7 +65,7 @@
     </Page.Resources>
 
 
-    <Grid x:Name="MainGrid" Background="#0099CC">
+    <Grid x:Name="MainGrid" Background="#0071BB">
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="29*"/>
@@ -76,7 +76,7 @@
 
         <Image Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill" Margin="589,10,589,633"/>
 
-        <Border Grid.Row="1" Grid.Column="0" Background="#FF1551C9" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="245,609,1121,87" Width="0"/>
+        <Border Grid.Row="1" Grid.Column="0" Background="#0071BB" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="245,609,1121,87" Width="0"/>
         <!--Progress Bar-->
         <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}"  />
 
@@ -157,7 +157,7 @@
                                 <RowDefinition Height="60"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <Border Background="#FF262323" Grid.RowSpan="2"  />
+                            <Border Background="#0071BB" Grid.RowSpan="2"  />
                             <TextBlock Text=" DESCRIPTION:" Grid.Row="0"  VerticalAlignment="Center"  FontSize="25" FontFamily="segoe UI light "/>
                             <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled">
                                 <TextBlock TextWrapping="Wrap" Width="210"   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="20" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}" FontFamily="segoe UI light "/>

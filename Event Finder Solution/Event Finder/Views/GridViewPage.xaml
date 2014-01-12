@@ -39,7 +39,7 @@
 
             <GridView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Background="#FF939598" Height="250" Width="250">
+                    <Grid Background="#0071BB" Height="250" Width="250">
                         <Image Source="{Binding pic_big}"  Stretch="UniformToFill"/>
                         <StackPanel Orientation="Vertical" Background="#CC000000" 
                     Height="90" VerticalAlignment="Bottom">
@@ -56,8 +56,6 @@
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid MaximumRowsOrColumns="2" VerticalAlignment="Center" HorizontalAlignment="Center" />
-
-
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
 

@@ -137,7 +137,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <Border Width="300" Grid.RowSpan="2" Background="#FF3C3838"/>
+                <Border Width="300" Grid.RowSpan="2" Background="#0071BB"/>
 
                 <TextBlock Text="Friends Going:" HorizontalAlignment="Center" Grid.Row="0"  VerticalAlignment="Center"  FontSize="40" FontFamily=" segoe UI light "/>
 
