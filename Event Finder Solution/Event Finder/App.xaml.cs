@@ -24,6 +24,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.ApplicationSettings;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -119,6 +120,13 @@ namespace Event_Finder
                 {
                     
                 }
+                
+                
+                //settings
+
+                // Register handler for CommandsRequested events from the settings pane
+                SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
+                
 
                 // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
@@ -134,6 +142,49 @@ namespace Event_Finder
             // Ensure the current window is active
             Window.Current.Activate();
         }
+        
+        
+        private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            //if you want to put settings in the settings chart , just remove the slashes and add usercontrol called MyUserControl1,MyUserControl2 and put what ever controls you want
+            //becuase i read that you have to put the settings in the settings chart not in the bottom bar.
+
+
+            //var chng = new SettingsCommand("Settings", "Settings", (handler) =>
+            //{
+                //var settings = new Windows.UI.Xaml.Controls.SettingsFlyout();
+                //settings.Content = new MyUserControl1();
+                //settings.HeaderBackground = new SolidColorBrush(Windows.UI.Color.FromArgb(50, 10, 10, 150));
+                //settings.HeaderForeground = new SolidColorBrush(Windows.UI.Color.FromArgb(100, 0, 0, 0));
+                //settings.Title = "Settings";
+                //settings.Visibility = Visibility.Visible;
+              //  settings.Show();
+            //});
+
+            //args.Request.ApplicationCommands.Add(chng);
+
+
+
+
+
+            // Add an About command
+
+            //var about = new SettingsCommand("about", "About", (handler) =>
+            //{
+
+              //var settings = new Windows.UI.Xaml.Controls.SettingsFlyout();
+                //settings.Content = new MyUserControl2();
+                //settings.HeaderBackground = new SolidColorBrush(Windows.UI.Color.FromArgb(50, 10, 10, 150));
+                //settings.HeaderForeground = new SolidColorBrush(Windows.UI.Color.FromArgb(100, 0, 0, 0));
+                //settings.Title = "About";
+                //settings.Visibility = Visibility.Visible;
+                //settings.Show();
+            //});
+
+            //args.Request.ApplicationCommands.Add(about);
+
+        }
+        
 
         /// <summary>
         /// Invoked when Navigation to a certain page fails
