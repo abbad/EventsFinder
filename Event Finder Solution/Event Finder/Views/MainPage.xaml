@@ -10,6 +10,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:bm="using:Bing.Maps"
+    xmlns:facebookControls="using:Facebook.Client.Controls"
     mc:Ignorable="d" FontFamily="Global User Interface">
 
     <Page.BottomAppBar>
@@ -71,8 +72,15 @@
             <RowDefinition Height="29*"/>
         </Grid.RowDefinitions>
 
-        <Image Source="/Assets/SmallLogo.scale-180.png" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Margin="6,0,0,0" />
-
+        //fbuser pic and name
+       <facebookControls:ProfilePicture x:Name="profpic" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Height="60" Width="60" Margin="15,0,0,0" >
+            <ToolTipService.ToolTip>
+                <TextBlock>
+                    <Run x:Name="fnfb"/>
+                    <Run x:Name="lnfb"/>
+                </TextBlock>
+            </ToolTipService.ToolTip>
+        </facebookControls:ProfilePicture>
 
         <Image Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill" Margin="589,10,589,633"/>
 
