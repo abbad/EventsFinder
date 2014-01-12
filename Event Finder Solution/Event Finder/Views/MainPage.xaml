@@ -40,7 +40,7 @@
                         <Border.Background>
                             <ImageBrush Stretch="Fill" ImageSource="ms-appx:///Icons/pushpinleft.png"/>
                         </Border.Background>
-                        <Border Width="110" Height="110" Margin="0,0,-3,5"  CornerRadius="48" BorderThickness="7"  >
+                        <Border Width="105" Height="105" Margin="0,-7,-6,0"  CornerRadius="48" BorderThickness="6" >
                             <Border.Background>
                                 <ImageBrush ImageSource="{Binding pic_big}"/>
                             </Border.Background>
