@@ -60,8 +60,26 @@ namespace Event_Finder.Views
             
             dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
             dialog.CancelCommandIndex = 1;
+            
+            RetriveUserInfo();
 
         }
+        
+        
+        
+        private async System.Threading.Tasks.Task RetriveUserInfo()
+        {
+            profpic.ProfileId = App.FacebookId;
+            var cli = new Facebook.FacebookClient(App.AccessToken);
+            dynamic result = await cli.GetTaskAsync("me");
+            var currentUser = new Facebook.Client.GraphUser(result);
+
+            fnfb.Text = currentUser.FirstName;
+            lnfb.Text = currentUser.LastName;
+        }
+        
+        
+        
 
         
         async private void PositionUserOnMap() 
