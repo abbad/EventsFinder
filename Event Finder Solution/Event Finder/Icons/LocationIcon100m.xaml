@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
- 
-        <Image Height="55" Width="55" Source="/Icons/button.png"  Margin="-27.5,-27.5,0,0"></Image>
-      
+    <Canvas>
+        <Image HorizontalAlignment="Center" Width="20" Height="30"  VerticalAlignment="Center"  Source="/Icons/button.png"/>
+    </Canvas>
 
 </UserControl>

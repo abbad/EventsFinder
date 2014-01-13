@@ -123,6 +123,12 @@
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Converters\LongLatConverter.cs" />
+    <Compile Include="Icons\LocationIcon100m.xaml.cs">
+      <DependentUpon>LocationIcon100m.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Icons\LocationIcon10m.xaml.cs">
+      <DependentUpon>LocationIcon10m.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\FriendRoot.cs" />
     <Compile Include="Models\RSVP.cs" />
     <Compile Include="Models\Event.cs" />

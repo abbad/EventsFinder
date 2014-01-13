@@ -25,8 +25,6 @@
         </CommandBar>
     </Page.BottomAppBar>
     <Page.Resources>
-
-
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml" />
@@ -91,7 +89,7 @@
                 <Border x:Name="Infobox" Background="#0071BB"  Margin="800, 50, 0,0" Visibility="Collapsed" BorderBrush="Black" BorderThickness="1,1,1,1" CornerRadius="30,30,30,30" Height="500" Width="500">
                     <Grid   Height="499" Width="499" >
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="85"/>
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="85"/>
                             <RowDefinition Height="85"/>
                             <RowDefinition Height="85"/>
@@ -110,7 +108,7 @@
                                 <ColumnDefinition Width="450"/>
                             </Grid.ColumnDefinitions>
                             <!-- first row  name close button-->
-                            <TextBlock  Text="{Binding name}" Grid.ColumnSpan="1" TextWrapping="Wrap"  FontSize="30"  HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" FontFamily="segoe UI light" Margin="0,0,0,0" />
+                            <TextBlock  Text="{Binding name}" Margin="10, 0, 0, 0"  Grid.ColumnSpan="1" TextWrapping="Wrap"  FontSize="30"  HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" FontFamily="segoe UI light"/>
 
                             <!--CloseButton-->
                             <Button  Content="&#xe10a;" FontFamily="Segoe UI Symbol" Width="45" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Top" Click="CloseInfo" Height="32" RenderTransformOrigin="0.144,0.875" Margin="0,7,-42,0"/>
