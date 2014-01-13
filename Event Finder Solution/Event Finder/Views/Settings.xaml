@@ -11,7 +11,7 @@
     mc:Ignorable="d">
     <Page.Resources>
         <Converters:LongLatConverter x:Key="Convert"/>
-        
+
     </Page.Resources>
     <Grid Background="#0099CC" >
         <Grid.RowDefinitions>
@@ -38,14 +38,12 @@
         <Slider x:Name="OffsetSlider" ValueChanged="OffsetSlider_ValueChanged" StepFrequency="1" Maximum="110" Minimum="10"  Width="100" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="289,30,977,10" RenderTransformOrigin="-0.551,0.194" />
         <!--fbuser pic and name -->
         <Controls:ProfilePicture Margin="0, 0, 16, 0" x:Name="profpic" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right" Height="80" Width="80" >
-            <ToolTipService.ToolTip>
-                <TextBlock>
-                    <Run x:Name="fnfb"/>
-                    <Run x:Name="lnfb"/>
-                </TextBlock>
-            </ToolTipService.ToolTip>
         </Controls:ProfilePicture>
-
+        <TextBlock Grid.Row="0" Width="Auto"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,42,157,42"  FontSize="30" >
+            <Run Text="Logged in as:" />
+            <Run  x:Name="fnfb" />
+            <Run x:Name="lnfb"/>
+        </TextBlock>
         <Controls:LoginButton Grid.Row="2"  x:Name="loginButton" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Center" SessionStateChanged="loginButton_SessionStateChanged" />
     </Grid>
 </Page>
