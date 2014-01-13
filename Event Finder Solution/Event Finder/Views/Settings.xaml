@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Controls="using:Facebook.Client.Controls"
     x:Class="Event_Finder.Views.Settings"
-    xmlns:facebookControls="using:Facebook.Client.Controls"
+    
     xmlns:Converters="using:Event_Finder.Converters"
     mc:Ignorable="d">
     <Page.Resources>
@@ -36,6 +36,16 @@
         </Grid>
         <TextBlock Text="Get events around me in km" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="15" FontSize="20"/>
         <Slider x:Name="OffsetSlider" ValueChanged="OffsetSlider_ValueChanged" StepFrequency="1" Maximum="110" Minimum="10"  Width="100" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Margin="289,30,977,10" RenderTransformOrigin="-0.551,0.194" />
-        <facebookControls:LoginButton Grid.Row="2"  x:Name="loginButton" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Center" SessionStateChanged="loginButton_SessionStateChanged" />
+        <!--fbuser pic and name -->
+        <Controls:ProfilePicture Margin="0, 0, 16, 0" x:Name="profpic" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right" Height="80" Width="80" >
+            <ToolTipService.ToolTip>
+                <TextBlock>
+                    <Run x:Name="fnfb"/>
+                    <Run x:Name="lnfb"/>
+                </TextBlock>
+            </ToolTipService.ToolTip>
+        </Controls:ProfilePicture>
+
+        <Controls:LoginButton Grid.Row="2"  x:Name="loginButton" Margin="15" HorizontalAlignment="Left" VerticalAlignment="Center" SessionStateChanged="loginButton_SessionStateChanged" />
     </Grid>
 </Page>

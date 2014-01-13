@@ -33,6 +33,7 @@ namespace Event_Finder.Views
             this.InitializeComponent();
             oldOffset = App.offset;
             OffsetSlider.Value = App.offset * 111.12;
+            RetriveUserInfo();
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e)
@@ -99,6 +100,17 @@ namespace Event_Finder.Views
        }
 
 
+       private async System.Threading.Tasks.Task RetriveUserInfo()
+       {
+           
+           profpic.ProfileId = App.FacebookId;
+           var cli = new Facebook.FacebookClient(App.AccessToken);
+           dynamic result = await cli.GetTaskAsync("me");
+           var currentUser = new Facebook.Client.GraphUser(result);
+
+           fnfb.Text = currentUser.FirstName;
+           lnfb.Text = currentUser.LastName;
+       }
        private void OffsetSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
        {
            if (OffsetSlider != null) {
