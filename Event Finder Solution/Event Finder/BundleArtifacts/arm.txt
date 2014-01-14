@@ -1,4 +1,2 @@
-MainPackage=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\bin\ARM\Release\Event Finder_1.1.0.0_Bundle\Event Finder_1.1.0.0_ARM.appx
-SymbolPackage=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\AppPackages\Event Finder_1.1.0.0_Test\Event Finder_1.1.0.0_ARM.appxsym
-ResourcePack=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\bin\ARM\Release\Event Finder_1.1.0.0_Bundle\Event Finder_1.1.0.0_scale-140.appx
-ResourcePack=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\bin\ARM\Release\Event Finder_1.1.0.0_Bundle\Event Finder_1.1.0.0_scale-180.appx
+MainPackage=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\bin\ARM\Release\Event Finder_0.0.0.9_Bundle\Event Finder_0.0.0.9_ARM.appx
+SymbolPackage=C:\Users\abbad\Documents\GitHub\EventFinder\Event Finder Solution\Event Finder\AppPackages\Event Finder_0.0.0.9_Test\Event Finder_0.0.0.9_ARM.appxsym

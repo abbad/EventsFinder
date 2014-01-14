@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="30301Abbad.EventsFinder" Publisher="CN=D5C0DD53-135A-496C-A64A-AC530F65410B" Version="1.1.0.0" />
+  <Identity Name="30301Abbad.EventsFinder" Publisher="CN=D5C0DD53-135A-496C-A64A-AC530F65410B" Version="0.0.0.9" />
   <Properties>
     <DisplayName>Events Finder</DisplayName>
     <PublisherDisplayName>Abbad</PublisherDisplayName>

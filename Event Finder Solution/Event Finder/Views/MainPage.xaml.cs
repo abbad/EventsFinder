@@ -20,7 +20,6 @@ using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using System.Threading.Tasks;
 using Event_Finder.Common;
-using Event_Finder.Icons;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Event_Finder.Views

@@ -68,17 +68,13 @@
             <RowDefinition Height="3*"/>
             <RowDefinition Height="29*"/>
         </Grid.RowDefinitions>
-
-       
-
         <Image Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill" Margin="589,10,589,633"/>
 
         <Border Grid.Row="1" Grid.Column="0" Background="#0071BB" VerticalAlignment="Center" HorizontalAlignment="Center" Height="0" Margin="245,609,1121,87" Width="0"/>
         <!--Progress Bar-->
         <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}"  />
-
+        
         <bm:Map ShowScaleBar="True" Credentials="AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h"  PointerPressedOverride="MainMap_PointerPressed"  x:Name="MainMap" Loaded="map_loaded" Grid.Row="1">
-
             <!-- list of pushpins maplayer -->
             <bm:MapLayer x:Name="PushPinMapLayer">
                 <bm:MapItemsControl x:Name="pushpinsItemsControl"  ItemTemplate="{StaticResource PushPinTemplate}" Margin="0,-120,0,0">

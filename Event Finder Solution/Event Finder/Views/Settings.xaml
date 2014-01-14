@@ -9,10 +9,7 @@
     
     xmlns:Converters="using:Event_Finder.Converters"
     mc:Ignorable="d">
-    <Page.Resources>
-        <Converters:LongLatConverter x:Key="Convert"/>
-
-    </Page.Resources>
+    
     <Grid Background="#0099CC" >
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>

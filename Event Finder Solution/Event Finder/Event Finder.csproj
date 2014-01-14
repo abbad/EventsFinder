@@ -18,6 +18,8 @@
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <PackageCertificateThumbprint>A9E350AD994E9F33FBF185C84891D5D02502ADF8</PackageCertificateThumbprint>
+    <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
+    <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -189,13 +191,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\150 X 150.png" />
+    <Content Include="Assets\30 X 30.png" />
+    <Content Include="Assets\310 X 150.png" />
+    <Content Include="Assets\310 X 310.png" />
+    <Content Include="Assets\70 X 70.png" />
     <Content Include="Assets\rect310-150.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-140.png" />
     <Content Include="Assets\Square150x150Logo.scale-100.png" />
     <Content Include="Assets\square310.scale-100.png" />
+    <Content Include="Assets\STORE LOGO.png" />
     <Content Include="Assets\storelogo-70.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-140.png" />
+    <Content Include="Assets\StoreLogo.scale-180.png" />
     <Content Include="Icons\button.png" />
     <Content Include="Icons\pushpinleft.png" />
     <None Include="Package.StoreAssociation.xml" />
