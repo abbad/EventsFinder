@@ -14,9 +14,9 @@ double tap on the map.
 
 Contributors: 
 
- Ahmad Abbad: Main architect developer for the application, idea holder. 
- Omar Al-Hakimi: Front end development using XAML. 
- Kamel Al-Mani: Logos and Graphic Design. 
+- Ahmad Abbad: Main architect developer for the application, idea holder.
+- Omar Al-Hakimi: Front end development using XAML. 
+- Kamel Al-Mani: Logos and Graphic Design. 
 
 
 © [Outercurve Foundation] [2013] Facebook SDK for .NET under Apache License v2.0.
