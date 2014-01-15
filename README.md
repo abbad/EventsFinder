@@ -1,5 +1,5 @@
 Events Finder
-===========
+=============
 
 An application for discovering new events. 
 
@@ -10,6 +10,7 @@ An application for discovering new events.
 -If you want to check for events in another city, press on the appbar and select "change location" and 
 double tap on the map.
 
+- check the presentation for more information about the application. 
 
 © [Outercurve Foundation] [2013] Facebook SDK for .NET under Apache License v2.0.
 
@@ -19,4 +20,4 @@ Ahmad Abbad: Main architect developer for the application, idea holder.
 Omar Al-Hakimi: Front end development using XAML. 
 Kamel Al-Mani: Logos and Graphic Design. 
 
-Enjoy!!
+Enjoy!
