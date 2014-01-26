@@ -159,7 +159,7 @@ namespace Event_Finder.ViewModel
 
         private String MakeQueryForMeAndFriendsEvents(double offset, double latitude, double longitude, double dt, double dtEndRange)
         {
-            return String.Format(@"SELECT eid, start_time, end_time, pic_big,pic_square, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) OR uid = me()) AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time >= ""{4}"" and start_time <= ""{5}""  ORDER BY start_time ASC LIMIT 50 ", 
+            return String.Format(@"SELECT eid, start_time, end_time, pic_big,pic_square, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) OR uid = me() limit 4000) AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time >= ""{4}"" and start_time <= ""{5}""  ORDER BY start_time ASC LIMIT 50 ", 
                                        (latitude - offset).ToString(),
                                        (latitude + offset).ToString(),
                                        (longitude - offset).ToString(),
