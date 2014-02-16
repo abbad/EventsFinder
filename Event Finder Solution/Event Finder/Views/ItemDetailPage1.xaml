@@ -226,7 +226,7 @@
 
             <!--RSPV-->
             <StackPanel Grid.Column="0" Height="100" Width="300" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF262323"  >
-                <TextBlock Text="RSPV" FontFamily=" segoe UI light " Margin="0,30,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"/>
+                <TextBlock Text="RSVP" FontFamily=" segoe UI light " Margin="0,30,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"/>
             </StackPanel>
 
             <!--RSPV-->
