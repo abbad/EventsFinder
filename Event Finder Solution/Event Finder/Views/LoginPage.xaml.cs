@@ -33,6 +33,7 @@ namespace Event_Finder.Views
  
         async protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            String error = String.Empty;
             showMessageIfNoInternet();
             App.commonApiHandler.GettingEventsFinished = new TaskCompletionSource<bool>();
             App.GettingPositionFinished = new TaskCompletionSource<bool>();
@@ -56,7 +57,7 @@ namespace Event_Finder.Views
             App.GettingPositionFinished.TrySetResult(true);
             
             // get list of atteneded events by user.by 
-            String error = await App.commonApiHandler.QueryForUserEvents();
+            error = await App.commonApiHandler.QueryForUserEvents();
 
             // QueryForEventsWithinAnArea
             try
@@ -64,8 +65,8 @@ namespace Event_Finder.Views
                 error = await App.commonApiHandler.QueryForEventsWithinAnArea(App.offset, DateTimeConverter.DateTimeToUnixTimestamp(App.startRange),
                     DateTimeConverter.DateTimeToUnixTimestamp(App.endRange));
             }catch(Facebook.WebExceptionWrapper exception) { error = exception.Data.ToString(); }
-            
-            if (error != null)
+
+            if (error != null || error == string.Empty) 
             {
                 App.errorOccured = true;
                 App.errorMessage = error;

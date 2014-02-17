@@ -36,7 +36,7 @@ namespace Event_Finder.Views
         // icons for the locaition
         LocationIcon100m _locationIcon100m;
 
-        MessageDialog dialog = new MessageDialog("Could not get city name!");
+        MessageDialog dialog = new MessageDialog("");
         private void addInitialChildrenToMap()
         {
             MainMap.Children.Add(_locationIcon100m);  
@@ -61,8 +61,6 @@ namespace Event_Finder.Views
             dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
             dialog.CancelCommandIndex = 1;
             
-          
-
         }
         
         

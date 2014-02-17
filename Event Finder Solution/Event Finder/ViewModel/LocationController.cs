@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Geolocation;
 using Event_Finder.geocodeservice;
+using System.Net;
+using System.Xml.Linq;
 
 namespace Event_Finder.ViewModel
 {
@@ -23,9 +25,27 @@ namespace Event_Finder.ViewModel
             
         }
 
+        async public Task<String> ReverseGeocodeGoogle(double longitude, double latitude) 
+        {
+            string key = "AIzaSyBPZWRyiAem6zsb2b08dzNS-O0A0n-NTkQ";
+            
+            var requestUri = string.Format("https://maps.googleapis.com/maps/api/geocode/xml?latlng={0},{1}&sensor=true&key={2}", longitude.ToString(), latitude.ToString(), key);
+            
+            var request = WebRequest.Create(requestUri);
+            var response = await request.GetResponseAsync();
+            var xdoc = XDocument.Load(response.ToString());
+
+            var result = xdoc.Element("GeocodeResponse").Element("result");
+            var locationElement = result.Element("long_name");
+            //var lat = locationElement.Element("lat");
+            //var lng = locationElement.Element("lng");
+            
+            return null;
+        }
+
         async public Task<String> ReverseGeocodePoint(Bing.Maps.Location l)
         {
-          
+            //return await ReverseGeocodeGoogle(l.Longitude, l.Latitude);
             
             string key = "AqzQTQg1GrHIoL2a5Ycf08czzcxAooMpXiADdOgZQYPBtwpuSSf8Fd4y7MUTJo-h";
             ReverseGeocodeRequest reverseGeocodeRequest = new ReverseGeocodeRequest();
@@ -44,8 +64,18 @@ namespace Event_Finder.ViewModel
             
             // Make the reverse geocode request
             GeocodeServiceClient geocodeService = new GeocodeServiceClient(geocodeservice.GeocodeServiceClient.EndpointConfiguration.BasicHttpBinding_IGeocodeService);
-            GeocodeResponse geocodeResponse = await geocodeService.ReverseGeocodeAsync(reverseGeocodeRequest);
            
+            // sometimes reverseGeocode is not getting me the right location so we will try to call the service a couple of times until it works, after a bit of tryouts we just return an error. 
+            int numberOfTries = 10;
+            GeocodeResponse geocodeResponse = await geocodeService.ReverseGeocodeAsync(reverseGeocodeRequest);
+            
+            while (geocodeResponse.Results.Count == 0) {
+                geocodeResponse = await geocodeService.ReverseGeocodeAsync(reverseGeocodeRequest);
+                
+                if (numberOfTries == 0)
+                    break;
+                numberOfTries--;
+            }
             return geocodeResponse.Results[0].Address.Locality;
         }
 
