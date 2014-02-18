@@ -163,7 +163,18 @@ namespace Event_Finder.Views
 
         async private void LoadInfoBox(Event selectedEvent) 
         {
-
+            if (!App.IsInternet()) 
+            {
+                try
+                {
+                    dialog.Content = "Internet connection lost";
+                    await dialog.ShowAsync();
+                    return; 
+                }
+                catch (Exception) { }
+                App.errorOccured = false;
+            }
+            //Facebook.WebExceptionWrapper
             InfoBoxProgressBar.IsEnabled = true;
             MainMap.SetView(selectedEvent.Location, MainMap.ZoomLevel);
             App.commonApiHandler.friendList.Clear();
