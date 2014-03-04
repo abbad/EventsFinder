@@ -24,6 +24,8 @@ namespace Event_Finder.Models
 
         public String pic_big { get; set; }
 
+        public Dictionary<string, string> pic_cover { get; set; }
+
         public String start_time { get; set; }
         public Dictionary<string, string> venue {get; set;}
 

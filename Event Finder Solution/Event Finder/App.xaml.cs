@@ -71,7 +71,7 @@ namespace Event_Finder
             get { return myLocation; }
         }
 
-        internal static double zoomLevel = 10;
+        internal static double zoomLevel = 15;
         // List of events attended by user.
         
         /// <summary>

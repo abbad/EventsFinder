@@ -33,9 +33,10 @@ namespace Event_Finder.Views
         // x bool for enabling positioning
         bool x = false;
 
+       
         // icons for the locaition
         LocationIcon100m _locationIcon100m;
-
+        
         MessageDialog dialog = new MessageDialog("");
         private void addInitialChildrenToMap()
         {
@@ -69,8 +70,6 @@ namespace Event_Finder.Views
             // Default to IP level accuracy. We only show the region at this level - No icon is displayed.
            
             await App.GettingPositionFinished.Task;
-            //PushPinMapLayer.
-            //MapLayer.
             MapLayer.SetPosition(_locationIcon100m, App.myLocation);
             _locationIcon100m.Visibility = Windows.UI.Xaml.Visibility.Visible;
                 
@@ -158,6 +157,14 @@ namespace Event_Finder.Views
         {
             Pushpin selectedPushpin = (Pushpin)sender;
             Event selectedEvent = (Event)selectedPushpin.DataContext;
+                
+            if (Infobox.Visibility != Windows.UI.Xaml.Visibility.Visible)
+            {
+                MainMap.Width = MainMap.ActualWidth / 2;
+                MainMap.HorizontalAlignment = HorizontalAlignment.Left;
+                Infobox.Width = MainMap.Width;
+            }
+
             LoadInfoBox(selectedEvent);
         }
 
@@ -229,7 +236,7 @@ namespace Event_Finder.Views
 
         private void CloseInfo(object sender, RoutedEventArgs e)
         {
-           
+            MainMap.Width = MainMap.Width * 2;
             Infobox.Visibility = Visibility.Collapsed;
         }
 
