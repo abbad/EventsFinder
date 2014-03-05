@@ -20,6 +20,8 @@ using System.Collections.ObjectModel;
 using Windows.UI.Popups;
 using System.Threading.Tasks;
 using Event_Finder.Common;
+using Windows.UI.ApplicationSettings;
+using Windows.System;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Event_Finder.Views
@@ -60,7 +62,17 @@ namespace Event_Finder.Views
             
             dialog.Commands.Add(new UICommand("Cancel", (uiCommand) => { }));
             dialog.CancelCommandIndex = 1;
-            
+
+            SettingsPane.GetForCurrentView().CommandsRequested += SettingsCommandsRequested;    
+        }
+
+        
+        private void SettingsCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            var privacyStatement = new SettingsCommand("privacy", "Privacy Statement", async x => await Launcher.LaunchUriAsync(new Uri("http://eventsfinderprivacypolicy.wordpress.com/2014/03/01/events-finder-privacy-policy-2/")));
+
+            args.Request.ApplicationCommands.Clear();
+            args.Request.ApplicationCommands.Add(privacyStatement);
         }
         
         

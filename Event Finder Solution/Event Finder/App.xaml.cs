@@ -25,6 +25,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.ApplicationSettings;
+using Windows.System;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 
@@ -82,8 +83,9 @@ namespace Event_Finder
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-         
+            
         }
+
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
