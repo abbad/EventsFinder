@@ -29,6 +29,7 @@ namespace Event_Finder.Models
         public String start_time { get; set; }
         public Dictionary<string, string> venue {get; set;}
 
+        public String host { get; set; }
         public String venueName {get; set;}
 
         public Location Location { get; set; }

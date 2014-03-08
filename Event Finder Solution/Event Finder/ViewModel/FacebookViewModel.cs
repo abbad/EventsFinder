@@ -141,7 +141,7 @@ namespace Event_Finder.ViewModel
 
         private String MakeQueryWithContains(double offset, double latitude, double longitude, double dt, double dtEndRange, String searchString)
         {
-            return String.Format(@"SELECT eid, start_time, end_time, pic_big, pic_square, name, description, venue FROM event WHERE contains('""{5}""') AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time >= ""{4}"" and start_time <= ""{6}"" ORDER BY start_time ASC",
+            return String.Format(@"SELECT eid, start_time, end_time, pic_big, pic_square, name, host, description, venue FROM event WHERE contains('""{5}""') AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time >= ""{4}"" and start_time <= ""{6}"" ORDER BY start_time ASC",
                                        (latitude - offset).ToString(),
                                        (latitude + offset).ToString(),
                                        (longitude- offset).ToString(),
@@ -159,7 +159,7 @@ namespace Event_Finder.ViewModel
 
         private String MakeQueryForMeAndFriendsEvents(double offset, double latitude, double longitude, double dt, double dtEndRange)
         {
-            return String.Format(@"SELECT eid, start_time, end_time, pic_big, pic_square, pic_cover, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me() limit 300) limit 2500) AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time >= ""{4}"" and start_time <= ""{5}""  ORDER BY start_time ASC LIMIT 100", 
+            return String.Format(@"SELECT eid, start_time, end_time, host, pic_big, pic_square, pic_cover, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me() limit 300) limit 2500) AND venue.latitude > ""{0}"" AND venue.latitude < ""{1}"" AND venue.longitude > ""{2}"" AND venue.longitude < ""{3}"" AND start_time >= ""{4}"" and start_time <= ""{5}""  ORDER BY start_time ASC LIMIT 100", 
                                        (latitude - offset).ToString(),
                                        (latitude + offset).ToString(),
                                        (longitude - offset).ToString(),
@@ -171,7 +171,7 @@ namespace Event_Finder.ViewModel
 
         private String MakeQueryForUserEvents(double dt, double dtEndRange) 
         {
-            return String.Format(@"SELECT eid, start_time, end_time, pic_cover,pic_big, pic_square, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid = me()) and start_time >= {0} and start_time <= {1}", dt.ToString(),
+            return String.Format(@"SELECT eid, start_time, end_time, host, pic_cover,pic_big, pic_square, name, description, venue FROM event WHERE eid IN (SELECT eid FROM event_member WHERE uid = me()) and start_time >= {0} and start_time <= {1}", dt.ToString(),
                                        dtEndRange.ToString());
         }
 

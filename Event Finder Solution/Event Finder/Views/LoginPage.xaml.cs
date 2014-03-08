@@ -57,8 +57,14 @@ namespace Event_Finder.Views
             App.GettingPositionFinished.TrySetResult(true);
             
             // get list of atteneded events by user.by 
-            error = await App.commonApiHandler.QueryForUserEvents();
-
+            try
+            {
+                error = await App.commonApiHandler.QueryForUserEvents();
+            }
+            catch (System.Net.WebException) 
+            {
+                error = "Internet connection error";
+            }
             // QueryForEventsWithinAnArea
             try
             {
@@ -73,6 +79,7 @@ namespace Event_Finder.Views
                 App.ErrorOccuredFinished.TrySetResult(true);
             }
 
+            App.errorOccured = false;
         }
 
         private void loginButton_SessionStateChanged(object sender, Facebook.Client.Controls.SessionStateChangedEventArgs e)

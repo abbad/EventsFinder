@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using Event_Finder.Common;
 using Windows.UI.ApplicationSettings;
 using Windows.System;
+using Windows.UI.Xaml.Documents;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace Event_Finder.Views
@@ -437,6 +438,37 @@ namespace Event_Finder.Views
         {
             App.zoomLevel = MainMap.ZoomLevel; 
             Frame.Navigate(typeof(Settings));
+        }
+
+        async private void UIElement_OnTapped(object sender, TappedRoutedEventArgs e)
+        {
+            var richTB = sender as RichTextBlock;
+            var textPointer = richTB.GetPositionFromPoint(e.GetPosition(richTB));
+            Event selectEvent = (Event)richTB.DataContext;
+            var element = textPointer.Parent as TextElement;
+            while (element != null && !(element is Underline))
+            {
+                if (element.ContentStart != null
+                    && element != element.ElementStart.Parent)
+                {
+                    element = element.ElementStart.Parent as TextElement;
+                    
+                }
+                else
+                {
+                    element = null;
+                }
+            }
+
+            if (element == null) return;
+
+            var underline = element as Underline;
+            if (underline.Name == "LinkToEventsPage")
+            {
+                
+                await Launcher.LaunchUriAsync(new Uri(String.Format("https://www.facebook.com/{0}", selectEvent.eid)));
+            }
+
         }
 
     }
