@@ -245,5 +245,20 @@
 
 
         }
+
+        internal double SetZoomLevel()
+        {
+            List<double> distance = new List<double>();
+            
+            //QueriedEvents.
+            foreach (Event data in QueriedEvents) 
+            {
+                distance.Add(Math.Sqrt(Math.Pow(App.MyLocation.Longitude - data.Location.Longitude, 2) + Math.Pow(App.myLocation.Latitude - data.Location.Latitude, 2)));
+            }
+
+            distance.Sort();
+
+            return distance[4] ;
+        }
     }
     }

@@ -119,15 +119,47 @@ namespace Event_Finder.Views
             {
                 pushpinsItemsControl.ItemsSource = App.commonApiHandler.UserEvents;
                 myEventsButton.Label = "View All Events";
+                setMapZoomForUserEvents();
             }
             else
             {
                 pushpinsItemsControl.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
-
+                setMapZoomForQueriedEvents();
             }
+
+            // set zoom level while considering nearest 5 places. 
+            
             prog.IsIndeterminate = false;
             
+        }
+
+        private void setMapZoomForUserEvents() 
+        {
+            Bing.Maps.LocationCollection locationCollection = new Bing.Maps.LocationCollection();
+            locationCollection.Add(App.myLocation);
+
+            foreach (Event selectedEvent in App.commonApiHandler.UserEvents) {
+                locationCollection.Add(selectedEvent.Location);
+            }
+
+            Bing.Maps.LocationRect locationRect = new Bing.Maps.LocationRect(locationCollection);
+            MainMap.SetView(locationRect);
+        }
+
+
+        private void setMapZoomForQueriedEvents() {
+            Bing.Maps.LocationCollection locationCollection = new Bing.Maps.LocationCollection();
+            locationCollection.Add(App.myLocation);
+
+            foreach (Event selectedEvent in App.commonApiHandler.QueriedEvents)
+            {
+                locationCollection.Add(selectedEvent.Location);
+            }
+            Bing.Maps.LocationRect locationRect = new Bing.Maps.LocationRect(locationCollection);
+          
+            MainMap.SetView(locationRect);
+        
         }
 
         private void clearAllCollections() 
@@ -377,8 +409,8 @@ namespace Event_Finder.Views
 
                 pushpinsItemsControl.ItemsSource = App.commonApiHandler.UserEvents;
                 App.myEventsSelected = true;
-                if (App.commonApiHandler.UserEvents.Count != 0) { 
-                    MainMap.SetView(App.commonApiHandler.UserEvents[0].Location);
+                if (App.commonApiHandler.UserEvents.Count != 0) {
+                    setMapZoomForUserEvents();
                 }
             }
             else 
@@ -386,8 +418,8 @@ namespace Event_Finder.Views
                 pushpinsItemsControl.ItemsSource = App.commonApiHandler.QueriedEvents;
                 myEventsButton.Label = "My Events";
                 App.myEventsSelected = false;
-                if (App.commonApiHandler.QueriedEvents.Count != 0) { 
-                    MainMap.SetView(App.commonApiHandler.QueriedEvents[0].Location);
+                if (App.commonApiHandler.QueriedEvents.Count != 0) {
+                    setMapZoomForQueriedEvents();
                 }
             }
             

@@ -33,7 +33,7 @@ namespace Event_Finder.ViewModel
                 return "Not specified";
             }
             DateTime date = (DateTime)value;
-            return date.ToString("dd, MM, yy \n HH:mm.ff");
+            return date.ToString("ddd, d, MM \nhh:mm.f tt");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
