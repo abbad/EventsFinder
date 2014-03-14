@@ -50,11 +50,12 @@ namespace Event_Finder
         internal static string AccessToken = String.Empty;
         internal static string FacebookId = String.Empty;
         public static bool isAuthenticated = false;
+        
         public static FacebookSessionClient FacebookSessionClient = new FacebookSessionClient(Constants.FacebookAppId);
-
+        
         internal static bool myEventsSelected = false;
+        
         internal static string errorMessage = "";
-
         internal static bool errorOccured = false;
 
         internal static CommonApiHandler commonApiHandler = new CommonApiHandler();

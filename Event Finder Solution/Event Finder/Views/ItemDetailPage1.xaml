@@ -96,162 +96,132 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="120"/>
         </Grid.RowDefinitions>
-
-
-
-        <!--
-            TODO: Content should be placed within the following grid 
-                  to show details for the current item
-        -->
-        <!--Middle Content-->
-        <Grid x:Name="contentRegion" Margin="0,135,0,5" Grid.RowSpan="2">
-
+        <Grid Grid.Row="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="250" />
+                <!-- image -->
+                <RowDefinition Height="45"/>
+                <!-- Date time -->
+                <RowDefinition Height="15" />
+                <!--Description Header -->
+                <RowDefinition Height="350*" MinHeight="180" />
+                <!-- Description-->
+                <RowDefinition Height="80" />
+                <!-- Friends Going -->
+                <RowDefinition Height="100"/>
+                <!-- buttons for reservation -->
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="400"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="600*" />
             </Grid.ColumnDefinitions>
+            
 
-            <!--Description grid-->
-            <Grid x:Name="grid" Grid.Column="1" >
+            <!-- Back button and page title -->
+
+            <Grid Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0"  Background="Gray" HorizontalAlignment="Stretch" >
+                <Button x:Name="backButton" Margin="39,59,39,0" VerticalAlignment="Top" HorizontalAlignment="Left" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                        Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        AutomationProperties.Name="Back"
+                        AutomationProperties.AutomationId="BackButton"
+                        AutomationProperties.ItemType="Navigation Button" RenderTransformOrigin="0.463,1.805" />
+                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{Binding Path=pic_cover[source]}" />
+                <StackPanel Orientation="Vertical" Background="#CC000000" 
+                    Height="90" VerticalAlignment="Bottom">
+                    <TextBlock FontSize="15" Text="{Binding name}" Margin="10,3,0,0" Height="62" TextTrimming="WordEllipsis" TextWrapping="Wrap" HorizontalAlignment="Left" FontFamily="Segoe UI Symbol"/>
+                    <TextBlock FontSize="12" Margin="10,-2,0,0" Height="62" TextTrimming="WordEllipsis" TextWrapping="Wrap" HorizontalAlignment="Left" FontFamily="Segoe UI Symbol">
+                        <Run Text="Hosted By:"/>
+                        <Run Text="{Binding host}"/>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+            <ProgressBar x:Name="InfoBoxProgressBar" Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0"  HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" Foreground="Black" Background="Transparent"  Height="10" MinHeight="8" FontSize="14" Width="200"/>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Grid>
+                    <TextBlock Text="Start Date"  HorizontalAlignment="Left"  VerticalAlignment="Top" FontFamily="segoe UI light" FontSize="10"  />
+                    <TextBlock Text="{Binding startTimeObject, Converter={StaticResource Convert}}" VerticalAlignment="Top" Margin="0,10" HorizontalAlignment="Left" FontFamily="Segoe UI light" FontSize="12" />
+                </Grid>
+                <Grid>
+                    <TextBlock Text="End Date" HorizontalAlignment="Left" FontFamily="segoe UI light " FontSize="10" Margin="5,0,0,0"  />
+                    <TextBlock HorizontalAlignment="Left" Text="{Binding endTimeObject, Converter={StaticResource Convert}}" Margin="5,10" VerticalAlignment="Top" FontFamily="Segoe UI light " FontSize="12" />
+                </Grid>
+            </StackPanel>
+
+
+            <!--Description-->
+            <TextBlock Grid.Row="2" HorizontalAlignment="Left" Grid.ColumnSpan="2" FontSize="12"  VerticalAlignment="Top" Text="Description:" />
+            <Grid Grid.Row="3"  HorizontalAlignment="Stretch" Grid.ColumnSpan="2" VerticalAlignment="Stretch" >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="255*"/>
                 </Grid.RowDefinitions>
-                <Border Background="#FF262323" Grid.RowSpan="2"  Height="{Binding Height, ElementName=grid}" Width="{Binding Width, ElementName=grid}" />
-                <TextBlock Text="  DESCRIPTION:" Grid.Row="0"  VerticalAlignment="Center"  FontSize="40" FontFamily=" segoe UI light "/>
-                <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled">
-                    <TextBlock TextWrapping="Wrap" Width="450" FontFamily=" segoe UI light "   VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="30" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}"/>
+                <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto">
+                    <TextBlock  TextAlignment="Justify" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="12" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}" FontFamily="Segoe UI Light"/>
                 </ScrollViewer>
             </Grid>
 
+            <!-- Friends going -->
 
-            <!--Right Element-->
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Border Width="300" Grid.RowSpan="2" Background="#0071BB"/>
-
-                <TextBlock Text="Friends Going:" HorizontalAlignment="Center" Grid.Row="0"  VerticalAlignment="Center"  FontSize="40" FontFamily=" segoe UI light "/>
-
-                <!--Friends Attending ListView-->
-                <GridView     x:Name="attendFr" 
-                              Width="300"  
-                              ScrollViewer.HorizontalScrollMode="Disabled"
-                              ScrollViewer.VerticalScrollMode="Enabled"
-                              Grid.Row="1" 
-                              SelectionMode="None"
-                              >
-                    <GridView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapGrid MaximumRowsOrColumns="2" VerticalChildrenAlignment="Center"
-					  HorizontalChildrenAlignment="Center" Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>
-                    <GridView.ItemTemplate>
-                        <DataTemplate>
-                            <Border Height="80" Width="80" >
-                                <Image Source="{Binding pic_big}" Width="80" Height="80"  Stretch="UniformToFill">
-                                    <ToolTipService.ToolTip>
-                                        <TextBlock>
+            <ListView Grid.ColumnSpan="2" VerticalAlignment="Top" Grid.Row="4" BorderBrush="Gray" x:Name="attendFr" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollMode="Disabled"
+                              SelectionMode="None" CanDragItems="False" Header="Friends Going">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapGrid MaximumRowsOrColumns="1" VerticalChildrenAlignment="Center"
+					  HorizontalChildrenAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Height="60" Width="60" >
+                            <Image Source="{Binding pic_big}" Width="60" Height="60"  Stretch="UniformToFill">
+                                <ToolTipService.ToolTip>
+                                    <TextBlock>
                                                 <Run Text="{Binding first_name}"/>
                                                 <Run Text="{Binding last_name}"/>
-                                        </TextBlock>
-                                    </ToolTipService.ToolTip>
-                                </Image>
-                            </Border>
-                        </DataTemplate>
-                    </GridView.ItemTemplate>
+                                    </TextBlock>
+                                </ToolTipService.ToolTip>
+                            </Image>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
-                </GridView>
+            <Grid Grid.Row="5" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                <RichTextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsTextSelectionEnabled="False" Margin="2" 
+                        TextAlignment="Justify" FontSize="12" TextWrapping="Wrap"  Tapped="UIElement_OnTapped">
+                    <Paragraph>
+                        <Underline x:Name="LinkToEventsPage"
+                   Foreground="White">
+                            <Run Text="Go to events page" />
+                        </Underline>
+
+                    </Paragraph>
+                </RichTextBlock>
             </Grid>
 
-
-            <!--Left Element-->
-            <Grid Grid.Column="0" Margin="0,0,39,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="150"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <!--Picture-->
-                <StackPanel Grid.Row="0" HorizontalAlignment="Left" Height="130" Width="361" Margin="0,10" >
-                    <Image Height="130" Source="{Binding pic_big}" Margin="0" Width="130" HorizontalAlignment="Center"/>
-                </StackPanel>
-
-                <!--start date-->
-                <StackPanel Grid.Row="1"  VerticalAlignment="Top" HorizontalAlignment="Left" Height="100" Width="361" Background="DarkGray" >
-                    <TextBlock Text="Start Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="30" Margin="0,7,0,0"  />
-                    <TextBlock Text="{Binding startTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="25" />
-                    <!--<TextBlock Text="Friday" Foreground="#FF0E8AA6" HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="26.667" /> -->
-
-                </StackPanel>
-
-                <!--End Date-->
-                <StackPanel Grid.Row="1"  VerticalAlignment="Center" Height="100" Width="361" HorizontalAlignment="Left" Background="DarkGray" Margin="0,129" >
-                    <TextBlock Text="End Date" Foreground="#FF0E8AA6"  HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="30" Margin="0,7,0,0"  />
-                    <TextBlock Text="{Binding endTimeObject, Converter={StaticResource Convert}}" HorizontalAlignment="Center" FontFamily=" segoe UI light " FontSize="25" />
-                    
-                </StackPanel>
-                <!--Location-->
-                <StackPanel Grid.Row="1"  VerticalAlignment="Bottom" Height="100" Width="361" HorizontalAlignment="Center" Background="DarkGray" >
-                    <TextBlock Text="Venue Name" FontFamily=" segoe UI light " FontSize="30" Margin="0,18,0,0" HorizontalAlignment="Center" Foreground="#FF0E8AA6"/>
-                    <TextBlock Text="{Binding venueName}" TextWrapping="Wrap" MaxWidth="280" MaxHeight="60" FontFamily=" segoe UI light " FontSize="30" Margin="0" HorizontalAlignment="Center" Width="160" />
-                </StackPanel>
-              
+            <!--buttons on the bottom-->
+            <Grid Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.ColumnSpan="3" Grid.Row="1"/>
+                <Button x:Name="AttendButton"  Grid.Column="1" Content="Attend" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="12.5" FontFamily="segoe UI light "  Click="AttendButton_Click" />
+                <Button x:Name="MaybeButton" Grid.Column="2"  Content="Maybe" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="12.5" FontFamily="segoe UI light" Click="MaybeButton_Click" />
+                <Button x:Name="DeclineButton" Grid.Column="3" Content="Add to my events" HorizontalAlignment="Left" VerticalAlignment="Center"  FontSize="12.5" FontFamily="Segoe UI Light" Click="DeclineButton_Click"/>
             </Grid>
         </Grid>
 
-        <!--Bottom Content -->
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="1.2*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <!--buttons-->
-            <StackPanel Background="#FF3C3838" VerticalAlignment="Bottom" MaxWidth="520"  Height="100" Orientation="Horizontal"  Grid.Column="1 ">
-                <Button x:Name="AttendButton" Content="Attend" Height="100" Width="170"  FontSize="30" HorizontalAlignment="Left" Style="{StaticResource DetButton}" Click="AttendButton_Click"/>
-                <Button x:Name="MaybeButton" Content="Maybe" Height="100" Width="170" FontSize="30" HorizontalAlignment="Center" Style="{StaticResource DetButton }" Click="MaybeButton_Click"/>
-                <Button x:Name="DeclineButton" Content="Decline" Height="100" Width="170" FontSize="30" HorizontalAlignment="Right" Style="{StaticResource DetButton}" Click="DeclineButton_Click"/>
-            </StackPanel>
-
-            <!--RSPV-->
-            <StackPanel Grid.Column="0" Height="100" Width="300" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="#FF262323"  >
-                <TextBlock Text="RSVP" FontFamily=" segoe UI light " Margin="0,30,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"/>
-            </StackPanel>
-
-            <!--RSPV-->
-
-        </Grid>
 
 
 
 
 
-        <!-- Back button and page title -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
-                        Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
-                        AutomationProperties.Name="Back"
-                        AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{Binding name}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
-        </Grid>
 
         <!--Progress Bar-->
         <ProgressBar x:Name="progBar"  MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding  ActualWidth, ElementName=grid1, Mode=OneWay}"  />

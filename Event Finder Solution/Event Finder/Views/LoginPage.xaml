@@ -15,7 +15,7 @@
     <Grid  Background="#0071BB">
         <!--Progress Bar-->
         <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}"  />
-        <Image Source="ms-appx:///Assets/SplashScreen.scale-140.png" Height="300" Margin="308,209,333,209"/>
+        <Image Source="ms-appx:///Assets/SplashScreen.scale-140.png" Height="300" Margin="314,234,327,234"/>
         <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="350*"/>

@@ -21,9 +21,9 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+                    <DatePicker Margin="10, 0, 0, 0" Header="From" x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Left" VerticalAlignment="Center"  DateChanged="DatePicker_DateChanged"  Height="70" Width="376" />
+                   <TextBlock Text="Date Range" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="20"  Margin="0,12,0,0"/>
                     <DatePicker Margin="10,0,0,0" Header="To" x:Name="endRangeDateTimePicker" DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Right" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" />
-                    <DatePicker Header="From" x:Name="startRangeDateTimePicker"  DayFormat="{}{day.integer} {dayofweek.full}" HorizontalAlignment="Left" Margin="98,2,0,0" DateChanged="DatePicker_DateChanged"  Height="70" Width="376" />
-                    <TextBlock Text="Date Range" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="40"  Height="48" Width="218" />
                 </StackPanel>
                 <SearchBox Grid.Column="1" Width="300" Height="50" HorizontalAlignment="Right"/>
             </Grid>
@@ -49,7 +49,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <model:Event x:Key="Event" />
             <viewModel:DateConverter x:Key="Convert" />
 
@@ -102,7 +102,7 @@
             </bm:MapLayer>
             <!-- Infobox map Layer -->
             <bm:MapLayer>
-                <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MapLayer, Mode=OneWay}"  />
+                <ProgressBar x:Name="prog" MinWidth="1000"  HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="Gray" Background="Transparent"  Height="20" MinHeight="8" FontSize="14" Width="{Binding ActualWidth, ElementName=MapLayer, Mode=OneWay}"  />
                 <Image Grid.Row="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Height="53" Width="188" Source="ms-appx:///Icons/event_icon-01.png" Stretch="UniformToFill" Margin="589,10,589,633"/>
             </bm:MapLayer>
         </bm:Map>
@@ -110,24 +110,30 @@
         <Border x:Name="Infobox" Visibility="Collapsed" VerticalAlignment="Stretch" HorizontalAlignment="Right" Background="#0071BB" BorderBrush="Black" BorderThickness="1,1,1,1">
             <Grid >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="250" /> <!-- image -->
-                    <RowDefinition Height="45"/> <!-- Date time -->
-                    <RowDefinition Height="15" /> <!--Description Header -->
-                    <RowDefinition Height="180*" MinHeight="180" /> <!-- Description-->
-                    <RowDefinition Height="80" /> <!-- Friends Going -->
-                    <RowDefinition Height="100"/> <!-- buttons for reservation -->
+                    <RowDefinition Height="250" />
+                    <!-- image -->
+                    <RowDefinition Height="45"/>
+                    <!-- Date time -->
+                    <RowDefinition Height="15" />
+                    <!--Description Header -->
+                    <RowDefinition Height="180*" MinHeight="180" />
+                    <!-- Description-->
+                    <RowDefinition Height="100" />
+                    <!-- Friends Going -->
+                    <RowDefinition Height="100"/>
+                    <!-- buttons for reservation -->
                 </Grid.RowDefinitions>
-                
-                <Grid Grid.Row="0" Background="White" >
-                <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{Binding Path=pic_cover[source]}" />
-                <StackPanel Orientation="Vertical" Background="#CC000000" 
+
+                <Grid Grid.Row="0" Background="Gray" >
+                    <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="{Binding Path=pic_cover[source]}" />
+                    <StackPanel Orientation="Vertical" Background="#CC000000" 
                     Height="90" VerticalAlignment="Bottom">
-                    <TextBlock FontSize="15" Text="{Binding name}" Margin="10,3,0,0" Height="62" TextTrimming="WordEllipsis" TextWrapping="Wrap" HorizontalAlignment="Left" FontFamily="Segoe UI Symbol"/>
-                    <TextBlock FontSize="12" Margin="10,-2,0,0" Height="62" TextTrimming="WordEllipsis" TextWrapping="Wrap" HorizontalAlignment="Left" FontFamily="Segoe UI Symbol">
+                        <TextBlock FontSize="15" Text="{Binding name}" Margin="10,3,0,0" Height="62" TextTrimming="WordEllipsis" TextWrapping="Wrap" HorizontalAlignment="Left" FontFamily="Segoe UI Symbol"/>
+                        <TextBlock FontSize="12" Margin="10,0,0,0" TextTrimming="WordEllipsis" TextWrapping="Wrap" HorizontalAlignment="Left" FontFamily="Segoe UI Symbol">
                         <Run Text="Hosted By:"/>
                         <Run Text="{Binding host}"/>
-                    </TextBlock>
-                </StackPanel>
+                        </TextBlock>
+                    </StackPanel>
                 </Grid>
                 <ProgressBar x:Name="InfoBoxProgressBar" Grid.Row="0"    HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" Foreground="Black" Background="Transparent"  Height="10" MinHeight="8" FontSize="14" Width="200" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
 
@@ -144,55 +150,55 @@
 
 
                 <!--Description-->
-                <TextBlock Grid.Row="2" HorizontalAlignment="Left" FontSize="12"  VerticalAlignment="Top" Text="Description:" />
+                <TextBlock Grid.Row="2" Margin="10,0,0,0"  HorizontalAlignment="Left" FontSize="14"  VerticalAlignment="Top" Text="Event Details:" />
                 <Grid Grid.Row="3"  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="255*"/>
                     </Grid.RowDefinitions>
-                    <ScrollViewer  Grid.Row="1" HorizontalScrollMode="Disabled" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer  Margin="10,10,0,0" Grid.Row="1" HorizontalScrollMode="Disabled" VerticalAlignment="Center" VerticalScrollBarVisibility="Auto">
                         <TextBlock  TextAlignment="Justify" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"  FontSize="12" ScrollViewer.VerticalScrollBarVisibility="Auto" Text="{Binding description}" FontFamily="Segoe UI Light"/>
                     </ScrollViewer>
                 </Grid>
 
                 <!-- Friends going -->
-
-                <ListView VerticalAlignment="Top" Grid.Row="4" BorderBrush="Gray" x:Name="attendFr" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollMode="Disabled"
-                              SelectionMode="None" CanDragItems="False" Header="Friends Going">
+                <TextBlock Grid.Row="4" VerticalAlignment="Top" ScrollViewer.HorizontalScrollBarVisibility="Visible" ScrollViewer.VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" FontFamily="Segoe UI Light" FontSize="14" Text="Friends Going:" />
+                <ListView Grid.Row="4" BorderBrush="Gray" BorderThickness="1" x:Name="attendFr" ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.VerticalScrollMode="Disabled"
+                              SelectionMode="None" CanDragItems="False">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapGrid MaximumRowsOrColumns="1" VerticalChildrenAlignment="Center"
+                            <WrapGrid  MaximumRowsOrColumns="1" VerticalChildrenAlignment="Center"
 					  HorizontalChildrenAlignment="Center" VerticalAlignment="Center" Orientation="Vertical"/>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                                <Border Height="60" Width="60" >
-                                    <Image Source="{Binding pic_big}" Width="60" Height="60"  Stretch="UniformToFill">
-                                        <ToolTipService.ToolTip>
-                                            <TextBlock>
+                            <Border Height="60" Width="60" >
+                                <Image Source="{Binding pic_big}" Width="60" Height="60"  Stretch="UniformToFill">
+                                    <ToolTipService.ToolTip>
+                                        <TextBlock>
                                                 <Run Text="{Binding first_name}"/>
                                                 <Run Text="{Binding last_name}"/>
-                                            </TextBlock>
-                                        </ToolTipService.ToolTip>
-                                    </Image>
-                                </Border>
-                            </DataTemplate>
+                                        </TextBlock>
+                                    </ToolTipService.ToolTip>
+                                </Image>
+                            </Border>
+                        </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-           
+
                 <Grid Grid.Row="5" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                        <RichTextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsTextSelectionEnabled="False" Margin="2" 
+                    <RichTextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" IsTextSelectionEnabled="False" Margin="2" 
                         TextAlignment="Justify" FontSize="12" TextWrapping="Wrap"  Tapped="UIElement_OnTapped">
                         <Paragraph>
                             <Underline x:Name="LinkToEventsPage"
                    Foreground="White">
-                            <Run Text="Go to events page" />
-                        </Underline>
+                                <Run Text="Go to events page" />
+                            </Underline>
 
-                    </Paragraph>
-                </RichTextBlock>
+                        </Paragraph>
+                    </RichTextBlock>
                 </Grid>
-                
+
                 <!--buttons on the bottom-->
                 <Grid Grid.Row="5" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid.ColumnDefinitions>

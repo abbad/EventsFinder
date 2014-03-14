@@ -45,7 +45,7 @@
                     Height="90" VerticalAlignment="Bottom">
                             <TextBlock Text="{Binding name}" 
                        Margin="10,3,0,0" Width="242" Height="62" 
-                       TextTrimming="WordEllipsis" TextWrapping="Wrap" HorizontalAlignment="Left" FontFamily="Global User Interface"/>
+                       TextTrimming="WordEllipsis" TextWrapping="Wrap" HorizontalAlignment="Left" FontFamily="Segoe UI Symbol"/>
                             <TextBlock Text="{Binding description}" 
                        Margin="10,2,0,0" Width="186" Height="14" 
                        TextTrimming="WordEllipsis" HorizontalAlignment="Left" FontSize="9" Opacity="0.49"/>

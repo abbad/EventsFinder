@@ -82,11 +82,24 @@ namespace Event_Finder.Views
             App.errorOccured = false;
         }
 
-        private void loginButton_SessionStateChanged(object sender, Facebook.Client.Controls.SessionStateChangedEventArgs e)
+        async private void loginButton_SessionStateChanged(object sender, Facebook.Client.Controls.SessionStateChangedEventArgs e)
         {
             Facebook.Client.Controls.LoginButton x = (Facebook.Client.Controls.LoginButton)sender;
             if (e.SessionState == Facebook.Client.Controls.FacebookSessionState.Opened) {
+                this.loginButton.IsEnabled = false;
+
+                var fb = new FacebookClient(App.AccessToken);
+                
+                dynamic result = await fb.GetTaskAsync("oauth/access_token", new
+                {
+                    client_id = Constants.FacebookAppId,
+                    client_secret = "1995a3dd2cedde3cf1bb3fe6e27eaf53",
+                    grant_type = "fb_exchange_token",
+                    fb_exchange_token = x.CurrentSession.AccessToken
+                });
+
                 App.CurrentSession = x.CurrentSession;
+                
                 App.AccessToken = x.CurrentSession.AccessToken;
                 App.FacebookId = x.CurrentSession.FacebookId;
                 App.CurrentUser = x.CurrentUser;
@@ -96,6 +109,7 @@ namespace Event_Finder.Views
             }
             else if (e.SessionState == Facebook.Client.Controls.FacebookSessionState.Closed)
             {
+                this.loginButton.IsEnabled = true;
                 App.CurrentSession = null;
 
                 // The control signals when user info is set (handled in OnUserInfoChanged below), but not when it

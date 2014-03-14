@@ -193,6 +193,9 @@ namespace Event_Finder.Views
                 }
                 catch (Exception) { }
             }
+
+            setMapZoomForQueriedEvents();
+
             prog.IsIndeterminate = false; 
         }
 
@@ -428,6 +431,7 @@ namespace Event_Finder.Views
         private void setPositionButton_Click(object sender, RoutedEventArgs e)
         {
             x = true;
+            
             setPositionButton.IsEnabled = false;
         }
 
@@ -462,6 +466,7 @@ namespace Event_Finder.Views
                     catch (Exception) { }
 
                 }
+                setMapZoomForQueriedEvents();
                 prog.IsIndeterminate = false;
             }
         }
