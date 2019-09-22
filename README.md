@@ -1,4 +1,4 @@
-Events Finder
+[2014] Events Finder
 =============
 
 An application for discovering new events. 
